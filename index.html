@@ -557,15 +557,16 @@
                     <div class="category-arrow"><i class="fas fa-chevron-right"></i></div>
                 </div>
                 
-                <div class="category-card" onclick="selectCategory('Smoking Products')">
-                    <div class="category-icon">🚬</div>
-                    <div class="category-info">
-                        <div class="category-name">Smoking Products</div>
-                        <div class="category-desc">Cigarettes, tobacco products</div>
-                    </div>
-                    <div class="category-arrow"><i class="fas fa-chevron-right"></i></div>
-                </div>
-            </div>
+                <div class="category-card" onclick="selectCategory('Biscuits')">
+    <div class="category-icon">🍪</div>
+    <div class="category-info">
+        <div class="category-name">Biscuits</div>
+        <div class="category-desc">Cookies, biscuits & bakery products</div>
+    </div>
+    <div class="category-arrow">
+        <i class="fas fa-chevron-right"></i>
+    </div>
+</div>
             
             <button class="add-new-btn" onclick="openDirectAddModal()">
                 <i class="fas fa-plus-circle"></i> Add New Product
@@ -655,7 +656,7 @@
             <option value="Namkeen">🥨 Namkeen</option>
             <option value="Tofi">🍬 Toffees & Candies</option>
             <option value="Sweet">🍰 Sweets</option>
-            <option value="Smoking">🚬 Smoking Products</option>
+            <option value="Biscuits">🍪 Biscuits</option>
         </select>
         <input type="number" id="customPurchasePrice" placeholder="💰 Purchase Price (₹)">
         <input type="number" id="customSellingPrice" placeholder="💸 Selling Price (₹)">
@@ -884,7 +885,7 @@
         else if(category === "Namkeen") internalCat = "Namkeen";
         else if(category === "Toffees & Candies") internalCat = "Tofi";
         else if(category === "Sweets") internalCat = "Sweet";
-        else if(category === "Smoking Products") internalCat = "Smoking";
+        else if(category === "Biscuits") internalCat = "Biscuits";
         
         document.getElementById("selectedCategoryBadge").innerText = category;
         document.getElementById("categorySelectionView").style.display = "none";
@@ -922,7 +923,7 @@
         else if(category === "Namkeen") internalCategory = "Namkeen";
         else if(category === "Toffees & Candies") internalCategory = "Tofi";
         else if(category === "Sweets") internalCategory = "Sweet";
-        else if(category === "Smoking Products") internalCategory = "Smoking";
+        else if(category === "Biscuits") internalCategory = "Biscuits";
         
         const purchasePrice = parseFloat(document.getElementById("prodPurchasePrice").value);
         const salmanPrice = parseFloat(document.getElementById("prodSalmanPrice").value);
@@ -1032,7 +1033,7 @@
             else if(p.category === "Namkeen") currentSelectedCategory = "Namkeen";
             else if(p.category === "Tofi") currentSelectedCategory = "Toffees & Candies";
             else if(p.category === "Sweet") currentSelectedCategory = "Sweets";
-            else if(p.category === "Smoking") currentSelectedCategory = "Smoking Products";
+           else if(p.category === "Biscuits") currentSelectedCategory = "Biscuits";
             document.getElementById("selectedCategoryBadge").innerText = currentSelectedCategory;
             document.getElementById("categorySelectionView").style.display = "none";
             document.getElementById("addProductFormView").classList.add("active");
@@ -1124,7 +1125,7 @@
     }
 
     function renderCategoryChips() {
-        let cats = ["All", "Chips", "Colddrink", "Namkeen", "Tofi", "Sweet", "Smoking"];
+       let cats = ["All", "Chips", "Colddrink", "Namkeen", "Tofi", "Sweet", "Biscuits"];
         const container = document.getElementById("categoryChips");
         container.innerHTML = cats.map(cat => `<div class="chip ${currentCategory === cat ? 'active' : ''}" data-cat="${cat}">${cat}</div>`).join('');
         document.querySelectorAll(".chip").forEach(chip => {
