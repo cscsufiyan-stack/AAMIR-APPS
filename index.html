@@ -3,494 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
-    <title>Aamir Trading - Inventory</title>
+    <title>Aamir Trading - Inventory Manager</title>
     <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#001B7A">
+    <meta name="theme-color" content="#001B7A">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f5f7fb;
-            padding-bottom: 75px;
-        }
-        .app-main {
-            max-width: 500px;
-            margin: 0 auto;
-            background: #ffffff;
-            min-height: 100vh;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-        }
-        
-        .simple-header {
-            background: linear-gradient(135deg, #020B4E, #001B7A);
-            padding: 25px 20px 30px 20px;
-            border-radius: 0 0 30px 30px;
-        }
-        .company-name {
-            font-size: 22px;
-            font-weight: 700;
-            color: white;
-            text-align: center;
-        }
-        .tagline {
-            font-size: 12px;
-            color: rgba(255,255,255,0.7);
-            text-align: center;
-            margin-top: 5px;
-        }
-        
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            max-width: 500px;
-            width: 100%;
-            background: rgba(255,255,255,0.96);
-            backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 16px 20px;
-            border-top: 1px solid #eef2ff;
-            z-index: 100;
-        }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-            font-size: 10px;
-            color: #94a3b8;
-            cursor: pointer;
-            transition: 0.2s;
-            font-weight: 500;
-        }
+        body { font-family: 'Inter', sans-serif; background: #f5f7fb; padding-bottom: 75px; }
+        .app-main { max-width: 500px; margin: 0 auto; background: #ffffff; min-height: 100vh; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
+        .simple-header { background: linear-gradient(135deg, #020B4E, #001B7A); padding: 25px 20px 30px 20px; border-radius: 0 0 30px 30px; }
+        .company-name { font-size: 22px; font-weight: 700; color: white; text-align: center; }
+        .tagline { font-size: 12px; color: rgba(255,255,255,0.7); text-align: center; margin-top: 5px; }
+        .bottom-nav { position: fixed; bottom: 0; max-width: 500px; width: 100%; background: rgba(255,255,255,0.96); backdrop-filter: blur(20px); display: flex; justify-content: space-around; padding: 8px 16px 20px; border-top: 1px solid #eef2ff; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: #94a3b8; cursor: pointer; font-weight: 500; }
         .nav-item i { font-size: 20px; }
         .nav-item.active { color: #001B7A; }
-        
-        .screen {
-            display: none;
-            padding: 20px 16px 80px 16px;
-        }
+        .screen { display: none; padding: 20px 12px 80px 12px; }
         .screen.active-screen { display: block; }
         
-        .category-selection {
-            text-align: center;
-        }
-        .selection-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1a1a2e;
-            margin-bottom: 8px;
-        }
-        .selection-subtitle {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 30px;
-        }
-        .categories-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 30px;
-        }
-        .category-card {
-            background: white;
-            border-radius: 20px;
-            padding: 18px 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .category-card:hover {
-            transform: translateX(5px);
-            border-color: #001B7A;
-        }
-        .category-icon {
-            width: 50px;
-            height: 50px;
-            background: #eef2ff;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-        .category-info {
-            flex: 1;
-            text-align: left;
-        }
-        .category-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1e293b;
-        }
-        .category-desc {
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 4px;
-        }
-        .category-arrow {
-            color: #94a3b8;
-            font-size: 18px;
-        }
+        .search-bar { background: #f1f5f9; border-radius: 30px; padding: 12px 18px; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .search-bar i { color: #94a3b8; font-size: 16px; }
+        .search-bar input { background: none; border: none; flex: 1; font-size: 15px; outline: none; font-family: 'Inter', sans-serif; }
         
-        .add-new-btn {
-            background: linear-gradient(135deg, #020B4E, #001B7A);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 40px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            margin-top: 20px;
-        }
+        .category-chips { display: flex; gap: 10px; overflow-x: auto; padding: 0 0 16px 0; margin-bottom: 8px; white-space: nowrap; }
+        .category-chips::-webkit-scrollbar { display: none; }
+        .chip { background: #f1f5f9; padding: 8px 20px; border-radius: 40px; font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+        .chip.active { background: #001B7A; color: white; }
+        .chip .delete-chip { background: none; border: none; cursor: pointer; font-size: 11px; color: inherit; opacity: 0.6; margin-left: 4px; }
         
-        .add-product-form {
-            display: none;
-        }
-        .add-product-form.active {
-            display: block;
-        }
-        .back-btn {
-            background: none;
-            border: none;
-            font-size: 16px;
-            color: #001B7A;
-            cursor: pointer;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-        }
-        .selected-category-badge {
-            background: #eef2ff;
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 14px;
-            color: #001B7A;
-            margin-bottom: 20px;
-            display: inline-block;
-        }
+        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+        .product-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; }
+        .product-card:active { transform: scale(0.98); }
+        .product-image-container { width: 100%; height: 140px; background: #f8fafc; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .product-image { width: 100%; height: 100%; object-fit: contain; }
+        .product-info { padding: 12px; flex: 1; display: flex; flex-direction: column; }
+        .product-name { font-weight: 700; font-size: 14px; color: #1e293b; margin-bottom: 6px; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .sell-price { font-weight: 800; color: #001B7A; font-size: 20px; margin: 4px 0 2px 0; }
+        .mrp { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-bottom: 6px; }
+        .purchase-badge { background: #FFF4CC; padding: 4px 10px; border-radius: 20px; display: inline-block; align-self: flex-start; margin-top: 6px; }
+        .purchase-badge span { font-size: 11px; color: #b45309; font-weight: 500; }
         
+        .product-detail-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 400; align-items: center; justify-content: center; }
+        .product-detail-container { background: white; margin: 20px; border-radius: 32px; max-width: 380px; width: 90%; overflow: hidden; }
+        .detail-image-container { width: 100%; height: 180px; background: linear-gradient(135deg, #001B7A, #020B4E); display: flex; align-items: center; justify-content: center; }
+        .detail-image { height: 140px; width: 140px; object-fit: contain; border-radius: 20px; background: white; padding: 10px; }
+        .detail-content { padding: 24px 20px; }
+        .detail-title { font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
+        .detail-subtitle { font-size: 13px; color: #64748b; margin-bottom: 24px; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #eef2ff; }
+        .price-label { font-size: 15px; color: #64748b; font-weight: 500; }
+        .price-label span { font-size: 12px; color: #94a3b8; display: block; margin-top: 2px; }
+        .price-value { font-size: 20px; font-weight: 700; color: #001B7A; }
+        .detail-close-btn { background: linear-gradient(135deg, #020B4E, #001B7A); color: white; border: none; padding: 14px; border-radius: 40px; font-weight: 600; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; }
+        
+        .delete-product-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 350; align-items: center; justify-content: center; }
+        .delete-product-container { background: white; margin: 20px; padding: 24px; border-radius: 32px; max-width: 340px; width: 90%; text-align: center; }
+        .delete-icon { font-size: 48px; margin-bottom: 16px; }
+        .delete-title { font-size: 20px; font-weight: 700; color: #1e293b; margin-bottom: 12px; }
+        .delete-message { font-size: 13px; color: #64748b; margin-bottom: 20px; }
+        .delete-product-card { background: #f8fafc; border-radius: 20px; padding: 16px; margin-bottom: 24px; text-align: left; }
+        .delete-product-name { font-weight: 700; font-size: 18px; color: #1e293b; margin-bottom: 8px; }
+        .delete-product-details { font-size: 13px; color: #64748b; margin-bottom: 4px; }
+        .delete-product-stock { font-size: 13px; color: #001B7A; font-weight: 600; margin-top: 8px; }
+        .delete-buttons { display: flex; gap: 12px; }
+        .delete-buttons button { flex: 1; padding: 12px; border-radius: 40px; border: none; font-weight: 600; font-size: 15px; cursor: pointer; }
+        .btn-cancel { background: #f1f5f9; color: #475569; }
+        .btn-delete { background: #ef4444; color: white; }
+        
+        .add-product-simple { text-align: center; padding: 40px 20px; }
+        .add-product-simple .selection-title { font-size: 24px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+        .add-product-simple .selection-subtitle { font-size: 14px; color: #6b7280; margin-bottom: 40px; }
+        .big-add-btn { background: linear-gradient(135deg, #020B4E, #001B7A); color: white; border: none; padding: 18px; border-radius: 50px; font-weight: bold; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; margin-bottom: 20px; }
+        .big-add-btn.green { background: linear-gradient(135deg, #0f3b2c, #1e6b4c); }
+        .add-product-form { display: none; }
+        .add-product-form.active { display: block; }
+        .back-btn { background: none; border: none; font-size: 16px; color: #001B7A; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; font-weight: 500; }
+        .selected-category-badge { background: #eef2ff; padding: 8px 16px; border-radius: 30px; font-size: 14px; color: #001B7A; margin-bottom: 20px; display: inline-block; }
         .premium-form { display: flex; flex-direction: column; gap: 14px; }
         .input-group { position: relative; }
-        .input-group i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-            font-size: 14px;
-        }
-        .premium-input {
-            width: 100%;
-            padding: 12px 14px 12px 40px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 25px;
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
-        }
-        .premium-input:focus {
-            outline: none;
-            border-color: #001B7A;
-        }
-        .image-upload-area {
-            border: 2px dashed #cbd5e1;
-            border-radius: 25px;
-            padding: 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .image-upload-area:hover {
-            border-color: #001B7A;
-            background: #f8fafc;
-        }
+        .input-group i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 14px; }
+        .premium-input { width: 100%; padding: 12px 14px 12px 40px; border: 1.5px solid #e2e8f0; border-radius: 25px; font-size: 14px; }
+        .image-upload-area { border: 2px dashed #cbd5e1; border-radius: 25px; padding: 16px; text-align: center; cursor: pointer; }
         .image-preview-sm { width: 60px; height: 60px; border-radius: 14px; object-fit: cover; margin-top: 8px; }
-        .btn-primary {
-            background: linear-gradient(135deg, #020B4E, #001B7A);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 35px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-        }
+        .btn-primary { background: linear-gradient(135deg, #020B4E, #001B7A); color: white; border: none; padding: 14px; border-radius: 35px; font-weight: bold; font-size: 16px; cursor: pointer; }
         
-        .search-bar {
-            background: #f1f5f9;
-            border-radius: 30px;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 12px 0;
-        }
-        .search-bar input {
-            background: none;
-            border: none;
-            flex: 1;
-            font-size: 14px;
-            outline: none;
-        }
+        .stock-item { background: #f8fafc; border-radius: 18px; padding: 12px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
+        .stock-actions button { background: none; border: none; margin: 0 4px; font-size: 16px; cursor: pointer; }
         
-        .category-row {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 6px 0 12px;
-        }
-        .chip {
-            background: #f1f5f9;
-            padding: 6px 16px;
-            border-radius: 35px;
-            font-size: 12px;
-            font-weight: 500;
-            white-space: nowrap;
-            cursor: pointer;
-        }
-        .chip.active { background: #001B7A; color: white; }
+        .profile-stats { background: linear-gradient(135deg, #020B4E20, #001B7A20); border-radius: 25px; padding: 20px; text-align: center; }
+        .profile-image-container { position: relative; width: 100px; height: 100px; margin: 0 auto; cursor: pointer; }
+        .profile-image-preview { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; display: block; border: 3px solid #FFC107; }
+        .profile-image-overlay { position: absolute; bottom: 0; right: 0; background: #FFC107; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; color: #001B7A; font-size: 12px; border: 2px solid white; }
+        .shop-name-input { margin: 12px 0; text-align: center; }
+        .shop-name-input input { text-align: center; font-size: 16px; font-weight: bold; border: 1px solid #e2e8f0; border-radius: 35px; padding: 6px 14px; width: 80%; }
+        .save-photo-btn { background: #001B7A; color: white; border: none; padding: 6px 16px; border-radius: 30px; font-size: 12px; margin-top: 8px; cursor: pointer; }
         
-        .products-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 6px;
-        }
-        .product-card {
-            background: white;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            border: 1px solid #f0f2f5;
-        }
-        .product-card:active { transform: scale(0.98); }
-        .product-img {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            background: #f8fafc;
-        }
-        .product-info { padding: 8px 10px 10px; }
-        .product-name { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
-        .price-row { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
-        .sell-price { font-weight: 800; color: #001B7A; font-size: 14px; }
-        .mrp { font-size: 11px; color: #94a3b8; text-decoration: line-through; }
-        .purchase-price { font-size: 10px; background: #fef3c7; padding: 2px 5px; border-radius: 18px; display: inline-block; margin-top: 4px; }
+        .success-modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 300; align-items: center; justify-content: center; }
+        .success-modal-container { background: white; margin: 20px; padding: 32px 24px; border-radius: 32px; max-width: 340px; width: 90%; text-align: center; }
+        .success-icon { width: 70px; height: 70px; background: #4CAF50; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; }
+        .success-icon i { font-size: 36px; color: white; }
+        .success-title { font-size: 24px; font-weight: 700; color: #1e293b; margin-bottom: 12px; }
+        .success-message { font-size: 15px; color: #64748b; margin-bottom: 8px; line-height: 1.4; }
+        .success-submessage { font-size: 14px; color: #001B7A; font-weight: 500; margin-top: 8px; margin-bottom: 24px; }
+        .success-ok-btn { background: linear-gradient(135deg, #020B4E, #001B7A); color: white; border: none; padding: 14px 20px; border-radius: 40px; font-weight: 600; font-size: 16px; cursor: pointer; width: 100%; }
         
-        .stock-item {
-            background: #f8fafc;
-            border-radius: 18px;
-            padding: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .stock-actions button {
-            background: none;
-            border: none;
-            margin: 0 3px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: center; justify-content: center; }
+        .modal-container { background: white; margin: 20px; padding: 28px 24px; border-radius: 32px; max-width: 360px; width: 90%; text-align: center; }
+        .modal-icon { font-size: 56px; margin-bottom: 16px; }
+        .modal-title { font-size: 22px; font-weight: 700; color: #1e293b; margin-bottom: 12px; }
+        .modal-message { font-size: 14px; color: #64748b; margin-bottom: 8px; line-height: 1.5; }
+        .modal-warning { font-size: 12px; color: #ef4444; margin-top: 8px; }
+        .modal-buttons { display: flex; gap: 12px; margin-top: 24px; }
+        .modal-buttons button { flex: 1; padding: 12px; border-radius: 40px; border: none; font-weight: 600; font-size: 14px; cursor: pointer; }
+        .modal-cancel { background: #f1f5f9; color: #475569; }
+        .modal-confirm { background: #ef4444; color: white; }
         
-        .profile-stats {
-            background: linear-gradient(135deg, #020B4E20, #001B7A20);
-            border-radius: 25px;
-            padding: 20px;
-            text-align: center;
-        }
-        .profile-image-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            margin: 0 auto;
-            cursor: pointer;
-        }
-        .profile-image-preview { 
-            width: 100px; 
-            height: 100px; 
-            border-radius: 50%; 
-            object-fit: cover; 
-            display: block; 
-            border: 3px solid #FFC107; 
-        }
-        .profile-image-overlay {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: #FFC107;
-            border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #001B7A;
-            font-size: 12px;
-            border: 2px solid white;
-        }
-        .shop-name-input {
-            margin: 12px 0;
-            text-align: center;
-        }
-        .shop-name-input input {
-            text-align: center;
-            font-size: 16px;
-            font-weight: bold;
-            border: 1px solid #e2e8f0;
-            border-radius: 35px;
-            padding: 6px 14px;
-            width: 80%;
-        }
-        .save-photo-btn {
-            background: #001B7A;
-            color: white;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-size: 12px;
-            margin-top: 8px;
-            cursor: pointer;
-        }
+        .toast-msg { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 8px 18px; border-radius: 35px; font-size: 13px; z-index: 200; display: none; }
+        .empty-state { text-align: center; padding: 40px; color: #94a3b8; font-size: 14px; grid-column: span 2; }
+        .firebase-status { position: fixed; bottom: 70px; right: 10px; background: #10b981; color: white; padding: 4px 10px; border-radius: 20px; font-size: 10px; z-index: 150; display: flex; align-items: center; gap: 5px; }
+        #profileImageInput, #prodImageFile { display: none; }
         
-        .toast-msg {
-            position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1e293b;
-            color: white;
-            padding: 8px 18px;
-            border-radius: 35px;
-            font-size: 13px;
-            z-index: 200;
-            display: none;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #94a3b8;
-            font-size: 14px;
-        }
-        
-        .loading-state {
-            text-align: center;
-            padding: 40px;
-            color: #001B7A;
-            font-size: 14px;
-        }
-        
-        .firebase-status {
-            position: fixed;
-            bottom: 70px;
-            right: 10px;
-            background: #f59e0b;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 10px;
-            z-index: 150;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        #profileImageInput, #prodImageFile {
-            display: none;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
-            background: white;
-            margin: 20px;
-            padding: 24px;
-            border-radius: 28px;
-            max-width: 400px;
-            width: 90%;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-        .modal-content h4 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: #001B7A;
-            text-align: center;
-        }
-        .modal-content input, .modal-content select {
-            width: 100%;
-            padding: 12px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 25px;
-            margin-bottom: 12px;
-            font-size: 14px;
-        }
-        .modal-image-area {
-            border: 2px dashed #cbd5e1;
-            border-radius: 25px;
-            padding: 16px;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 12px;
-        }
-        .modal-image-preview {
-            width: 80px;
-            height: 80px;
-            border-radius: 16px;
-            object-fit: cover;
-            margin-top: 8px;
-        }
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .modal-buttons button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 30px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .save-modal-btn {
-            background: linear-gradient(135deg, #020B4E, #001B7A);
-            color: white;
-        }
-        .cancel-modal-btn {
-            background: #e2e8f0;
-            color: #334155;
-        }
-        #categorySelectionView{
-    display:none !important;
-}
+        .icon-picker { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 15px 0; max-height: 300px; overflow-y: auto; padding: 5px; }
+        .icon-option { width: 55px; height: 55px; background: #f1f5f9; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; border: 2px solid transparent; }
+        .icon-option.selected { border-color: #001B7A; background: #eef2ff; }
+        .floating-add-btn { position: fixed; bottom: 85px; right: 20px; background: linear-gradient(135deg, #020B4E, #001B7A); color: white; width: 56px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; z-index: 90; border: none; font-size: 24px; }
+        @media (max-width: 500px) { .floating-add-btn { right: 16px; bottom: 80px; } }
     </style>
 </head>
 <body>
@@ -501,121 +139,27 @@
     </div>
 
     <div id="homeScreen" class="screen">
-        <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Search products...">
-        </div>
-        <div class="category-row" id="categoryChips"></div>
+        <div class="search-bar"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search products..."></div>
+        <div class="category-chips" id="categoryChips"></div>
         <div id="homeProductsGrid" class="products-grid"></div>
     </div>
 
-    <div id="addProductScreen" class="screen active-screen">
-        <div id="categorySelectionView" class="category-selection">
-            <div class="selection-title">Choose Product Category</div>
-            <div class="selection-subtitle">Select a category to continue</div>
-            
-            <div class="categories-grid">
-                <div class="category-card" onclick="selectCategory('Chips & Snacks')">
-                    <div class="category-icon">🍟</div>
-                    <div class="category-info">
-                        <div class="category-name">Chips & Snacks</div>
-                        <div class="category-desc">Potato chips, namkeen, kurkure</div>
-                    </div>
-                    <div class="category-arrow"><i class="fas fa-chevron-right"></i></div>
-                </div>
-                
-                
-             <div class="category-card" onclick="selectCategory('Cold Drinks & Beverages')">
-                    <div class="category-icon">🥤</div>
-                    <div class="category-info">
-                        <div class="category-name">Cold Drinks & Beverages</div>
-                        <div class="category-desc">Soft drinks, juices, energy drinks</div>
-                    </div>
-                    <div class="category-arrow"><i class="fas fa-chevron-right"></i></div>
-                </div>
-                
-                <div class="category-card" onclick="selectCategory('Namkeen')">
-                    <div class="category-icon">🥨</div>
-                    <div class="category-info">
-                        <div class="category-name">Namkeen</div>
-                        <div class="category-desc">Traditional Indian snacks</div>
-                    </div>
-                    <div class="category-arrow"><i class="fas fa-chevron-right"></i></div>
-                </div>
-                
-                <div class="category-card" onclick="selectCategory('Toffees & Candies')">
-                    <div class="category-icon">🍬</div>
-                    <div class="category-info">
-                        <div class="category-name">Toffees & Candies</div>
-                        <div class="category-desc">Chocolates, candies, mints</div>
-                    </div>
-                    <div class="category-arrow"><i class="fas fa-chevron-right"></i></div>
-                </div>
-                
-               <div class="category-card" onclick="selectCategory('Chocolate')">
-    <div class="category-icon">🍫</div>
-    <div class="category-info">
-        <div class="category-name">Chocolate</div>
-        <div class="category-desc">Chocolates, bars & treats</div>
-    </div>
-    <div class="category-arrow">
-        <i class="fas fa-chevron-right"></i>
-    </div>
-</div>
-                
-                <div class="category-card" onclick="selectCategory('Biscuits')">
-    <div class="category-icon">🍪</div>
-    <div class="category-info">
-        <div class="category-name">Biscuits</div>
-        <div class="category-desc">Cookies, biscuits & bakery products</div>
-    </div>
-    <div class="category-arrow">
-        <i class="fas fa-chevron-right"></i>
-    </div>
-</div>
-           <div class="category-card" onclick="selectCategory('Jelly')">
-    <div class="category-icon">🍮</div>
-    <div class="category-info">
-        <div class="category-name">Jelly</div>
-        <div class="category-desc">Jelly, cups & fruity desserts</div>
-    </div>
-    <div class="category-arrow">
-        <i class="fas fa-chevron-right"></i>
-    </div>
-</div> 
-            <button class="add-new-btn" onclick="openDirectAddModal()">
-                <i class="fas fa-plus-circle"></i> Add New Product
-            </button>
+    <div id="addProductScreen" class="screen">
+        <div id="categorySelectionView" class="add-product-simple">
+            <div class="selection-title">📦 Add New Product</div>
+            <div class="selection-subtitle">First add a category, then add products</div>
+            <button class="big-add-btn green" onclick="openAddCategoryModal()"><i class="fas fa-folder-plus"></i> ➕ Add New Category</button>
+            <button class="big-add-btn" onclick="openDirectAddModal()"><i class="fas fa-plus-circle"></i> Add Product</button>
         </div>
-        
         <div id="addProductFormView" class="add-product-form">
-            <button class="back-btn" onclick="backToCategorySelection()">
-                <i class="fas fa-arrow-left"></i> Back to Categories
-            </button>
-            <div class="selected-category-badge" id="selectedCategoryBadge">Chips & Snacks</div>
-            
+            <button class="back-btn" onclick="backToCategorySelection()"><i class="fas fa-arrow-left"></i> Back</button>
+            <div class="selected-category-badge" id="selectedCategoryBadge">Select Category</div>
             <form class="premium-form">
-                <div class="input-group">
-                    <i class="fas fa-tag"></i>
-                    <input type="text" id="prodName" class="premium-input" placeholder="Product Name" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-rupee-sign"></i>
-                    <input type="number" id="prodPurchasePrice" class="premium-input" placeholder="Purchase Price" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-tag"></i>
-                    <input type="number" id="prodSalmanPrice" class="premium-input" placeholder="Selling Price" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-store"></i>
-                    <input type="number" id="prodDukandarPrice" class="premium-input" placeholder="MRP / Dukandar Price" required>
-                </div>
-                <div class="image-upload-area" onclick="document.getElementById('prodImageFile').click()">
-                    <i class="fas fa-cloud-upload-alt"></i> Upload Product Image
-                    <input type="file" id="prodImageFile" accept="image/*">
-                    <img id="imgPreview" class="image-preview-sm" style="display:none">
-                </div>
+                <div class="input-group"><i class="fas fa-tag"></i><input type="text" id="prodName" class="premium-input" placeholder="Product Name" required></div>
+                <div class="input-group"><i class="fas fa-rupee-sign"></i><input type="number" id="prodPurchasePrice" class="premium-input" placeholder="Purchase Price (₹)" required></div>
+                <div class="input-group"><i class="fas fa-tag"></i><input type="number" id="prodSalmanPrice" class="premium-input" placeholder="Selling Price (₹)" required></div>
+                <div class="input-group"><i class="fas fa-store"></i><input type="number" id="prodDukandarPrice" class="premium-input" placeholder="MRP (₹)" required></div>
+                <div class="image-upload-area" onclick="document.getElementById('prodImageFile').click()"><i class="fas fa-cloud-upload-alt"></i> Upload Image<input type="file" id="prodImageFile" accept="image/*"><img id="imgPreview" class="image-preview-sm" style="display:none"></div>
                 <button type="button" class="btn-primary" id="saveProductBtn">➕ Add Product</button>
             </form>
         </div>
@@ -623,80 +167,132 @@
 
     <div id="stockScreen" class="screen">
         <h3><i class="fas fa-boxes"></i> Product Management</h3>
-        <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" id="stockSearchInput" placeholder="Search product by name...">
-        </div>
-        <div id="stockListContainer" class="loading-state">Loading products from Firebase...</div>
+        <div class="search-bar"><i class="fas fa-search"></i><input type="text" id="stockSearchInput" placeholder="Search product..."></div>
+        <div id="stockListContainer"></div>
     </div>
 
     <div id="profileScreen" class="screen">
         <div class="profile-stats">
             <div class="profile-image-container" onclick="document.getElementById('profileImageInput').click()">
                 <img id="profileImagePreview" class="profile-image-preview" src="https://ui-avatars.com/api/?background=001B7A&color=fff&name=Aamir">
-                <div class="profile-image-overlay">
-                    <i class="fas fa-camera"></i>
-                </div>
+                <div class="profile-image-overlay"><i class="fas fa-camera"></i></div>
             </div>
             <input type="file" id="profileImageInput" accept="image/*">
-            <div class="shop-name-input">
-                <input type="text" id="shopNameInput" placeholder="Shop Name" value="Aamir Trading">
-            </div>
+            <div class="shop-name-input"><input type="text" id="shopNameInput" placeholder="Shop Name" value="Aamir Trading"></div>
             <button class="save-photo-btn" id="saveProfileBtn">💾 Save Profile</button>
             <hr style="margin: 15px 0 10px 0;">
-            <div style="font-size: 14px;">📦 Total Products: <strong id="profileTotalProducts">0</strong></div>
+            <div>📦 Total Products: <strong id="profileTotalProducts">0</strong></div>
+            <div style="margin-top: 8px;">🏷️ Total Categories: <strong id="profileTotalCategories">0</strong></div>
             <button class="btn-primary" style="margin-top: 16px; background:#ef4444;" id="resetDataBtn">🔄 Reset All Data</button>
         </div>
     </div>
 
     <div class="bottom-nav">
         <div class="nav-item" data-screen="home"><i class="fas fa-home"></i><span>Home</span></div>
-        <div class="nav-item active" data-screen="addProduct"><i class="fas fa-plus-circle"></i><span>Add</span></div>
+        <div class="nav-item" data-screen="addProduct"><i class="fas fa-plus-circle"></i><span>Add</span></div>
         <div class="nav-item" data-screen="stock"><i class="fas fa-boxes"></i><span>Products</span></div>
         <div class="nav-item" data-screen="profile"><i class="fas fa-user"></i><span>Profile</span></div>
     </div>
 </div>
 
-<div class="firebase-status" id="firebaseStatus">
-    <i class="fas fa-circle-notch fa-spin"></i> Connecting to Firebase...
+<div class="floating-add-btn" onclick="openDirectAddModal()"><i class="fas fa-plus"></i></div>
+<div class="firebase-status" id="firebaseStatus"><i class="fas fa-check-circle"></i> Ready</div>
+
+<!-- Product Details Modal -->
+<div id="productDetailModal" class="product-detail-modal">
+    <div class="product-detail-container">
+        <div class="detail-image-container"><img id="detailImage" class="detail-image" src=""></div>
+        <div class="detail-content">
+            <div class="detail-title" id="detailTitle">Product</div>
+            <div class="detail-subtitle">Product Details</div>
+            <div class="price-row"><div class="price-label">Cost Price <span>Your Purchase Price</span></div><div class="price-value" id="detailPurchasePrice">₹0</div></div>
+            <div class="price-row"><div class="price-label">Salman Rate <span>Price for Salman</span></div><div class="price-value" id="detailSalmanPrice">₹0</div></div>
+            <div class="price-row"><div class="price-label">Shop Rate <span>Price for Shop/Customer</span></div><div class="price-value" id="detailMrpPrice">₹0</div></div>
+            <button class="detail-close-btn" onclick="closeProductDetail()">Close</button>
+        </div>
+    </div>
 </div>
 
-<div id="customModal" class="modal">
-    <div class="modal-content">
-        <h4><i class="fas fa-plus-circle"></i> Add New Product</h4>
-        <input type="text" id="customItemName" placeholder="📦 Product Name">
-        <select id="customCategory" class="category-select">
-            <option value="Chips">🍟 Chips & Snacks</option>
-            <option value="Colddrink">🥤 Cold Drinks & Beverages</option>
-            <option value="Namkeen">🥨 Namkeen</option>
-            <option value="Tofi">🍬 Toffees & Candies</option>
-           <option value="Chocolate">🍫 Chocolate</option>
-            <option value="Biscuits">🍪 Biscuits</option>
-            <option value="Jelly">🍮 Jelly</option>
-        </select>
-        <input type="number" id="customPurchasePrice" placeholder="💰 Purchase Price (₹)">
-        <input type="number" id="customSellingPrice" placeholder="💸 Selling Price (₹)">
-        <input type="number" id="customMrp" placeholder="🏪 MRP / Dukandar Price (₹)">
-        <div class="modal-image-area" onclick="document.getElementById('modalImageFile').click()">
-            <i class="fas fa-cloud-upload-alt"></i> Upload Product Image
+<!-- Delete Product Confirmation Modal -->
+<div id="deleteProductModal" class="delete-product-modal">
+    <div class="delete-product-container">
+        <div class="delete-icon">⚠️</div>
+        <div class="delete-title">Delete this product?</div>
+        <div class="delete-message">This action cannot be undone.</div>
+        <div class="delete-product-card">
+            <div class="delete-product-name" id="deleteProductName">Product</div>
+            <div class="delete-product-details" id="deleteProductPurchase">Purchase: ₹0</div>
+            <div class="delete-product-details" id="deleteProductSell">Sell: ₹0</div>
+            <div class="delete-product-stock" id="deleteProductStock">Stock: 0</div>
+        </div>
+        <div class="delete-buttons">
+            <button class="btn-cancel" onclick="closeDeleteProductModal()">Cancel</button>
+            <button class="btn-delete" onclick="confirmDeleteProduct()">Yes, Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" class="success-modal-overlay">
+    <div class="success-modal-container">
+        <div class="success-icon"><i class="fas fa-check"></i></div>
+        <div class="success-title">Product Added Successfully!</div>
+        <div class="success-message">Your product has been added successfully.</div>
+        <div class="success-submessage">Product has been saved and added to your inventory.</div>
+        <button class="success-ok-btn" onclick="closeSuccessModal()">OK, Got It!</button>
+    </div>
+</div>
+
+<!-- Delete Category Modal -->
+<div id="deleteCategoryModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-icon">⚠️</div>
+        <div class="modal-title">Delete Category</div>
+        <div class="modal-message">Are you sure you want to delete the category <strong id="deleteCategoryName"></strong>?</div>
+        <div class="modal-warning">⚠️ This action cannot be undone.</div>
+        <div class="modal-buttons"><button class="modal-cancel" onclick="closeDeleteModal()">Cancel</button><button class="modal-confirm" onclick="confirmDeleteCategory()">Delete</button></div>
+    </div>
+</div>
+
+<!-- Add Category Modal -->
+<div id="categoryModal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 400px;">
+        <div class="modal-title">Add New Category</div>
+        <input type="text" id="newCategoryName" placeholder="Category Name" style="width:100%; padding:12px; border:1.5px solid #e2e8f0; border-radius:25px; margin-bottom:15px;">
+        <div class="icon-picker" id="iconPicker">
+            <div class="icon-option" data-icon="🍫">🍫</div><div class="icon-option" data-icon="🍬">🍬</div><div class="icon-option" data-icon="🍭">🍭</div><div class="icon-option" data-icon="🍪">🍪</div>
+            <div class="icon-option" data-icon="🥛">🥛</div><div class="icon-option" data-icon="🥤">🥤</div><div class="icon-option" data-icon="🍟">🍟</div><div class="icon-option" data-icon="🥜">🥜</div>
+            <div class="icon-option" data-icon="🍞">🍞</div><div class="icon-option" data-icon="🧀">🧀</div><div class="icon-option" data-icon="🍎">🍎</div><div class="icon-option" data-icon="🥕">🥕</div>
+            <div class="icon-option" data-icon="📦">📦</div><div class="icon-option" data-icon="⭐">⭐</div><div class="icon-option" data-icon="🍕">🍕</div><div class="icon-option" data-icon="🍔">🍔</div>
+        </div>
+        <div class="modal-buttons"><button class="modal-cancel" onclick="closeCategoryModal()">Cancel</button><button class="modal-confirm" style="background:linear-gradient(135deg,#020B4E,#001B7A)" onclick="saveNewCategory()">Add Category</button></div>
+    </div>
+</div>
+
+<!-- Add Product Modal -->
+<div id="customModal" class="modal-overlay">
+    <div class="modal-container" style="max-width: 400px;">
+        <div class="modal-title">Add Product</div>
+        <input type="text" id="customItemName" placeholder="Product Name" style="width:100%; padding:12px; border:1.5px solid #e2e8f0; border-radius:25px; margin-bottom:12px;">
+        <select id="customCategory" style="width:100%; padding:12px; border:1.5px solid #e2e8f0; border-radius:25px; margin-bottom:12px;"></select>
+        <input type="number" id="customPurchasePrice" placeholder="Purchase Price (₹)" style="width:100%; padding:12px; border:1.5px solid #e2e8f0; border-radius:25px; margin-bottom:12px;">
+        <input type="number" id="customSellingPrice" placeholder="Selling Price (₹)" style="width:100%; padding:12px; border:1.5px solid #e2e8f0; border-radius:25px; margin-bottom:12px;">
+        <input type="number" id="customMrp" placeholder="MRP (₹)" style="width:100%; padding:12px; border:1.5px solid #e2e8f0; border-radius:25px; margin-bottom:12px;">
+        <div class="modal-image-area" onclick="document.getElementById('modalImageFile').click()" style="border:2px dashed #cbd5e1; border-radius:25px; padding:16px; text-align:center; cursor:pointer; margin-bottom:12px;">
+            <i class="fas fa-cloud-upload-alt"></i> Upload Image
             <input type="file" id="modalImageFile" accept="image/*" style="display:none">
-            <img id="modalImagePreview" class="modal-image-preview" style="display:none">
+            <img id="modalImagePreview" style="width:80px; height:80px; border-radius:16px; object-fit:cover; margin-top:8px; display:none;">
         </div>
-        <div class="modal-buttons">
-            <button class="save-modal-btn" onclick="saveCustomItemToFirebase()">Add Product</button>
-            <button class="cancel-modal-btn" onclick="closeModal()">Cancel</button>
-        </div>
+        <div class="modal-buttons"><button class="modal-cancel" onclick="closeModal()">Cancel</button><button class="modal-confirm" style="background:linear-gradient(135deg,#020B4E,#001B7A)" onclick="saveCustomItem()">Add Product</button></div>
     </div>
 </div>
 
 <div id="toastMsg" class="toast-msg"></div>
 
 <script type="module">
-    // Firebase Imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
-    // Firebase Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyDXbkHv3PTIBb4deIHsSjx0TC6ZTedhl3s",
         authDomain: "csc-shoaib.firebaseapp.com",
@@ -705,292 +301,432 @@
         messagingSenderId: "912590761562",
         appId: "1:912590761562:web:5b6b539486bfb89f783263"
     };
-
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     
-    console.log("✅ Firebase Initialized!");
-    
-    // Update status
-    const statusDiv = document.getElementById("firebaseStatus");
-    statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Firebase Connected!';
-    statusDiv.style.background = "#10b981";
-    
-    // Global variables
     let products = [];
+    let categories = [];
     let shopProfile = { name: "Aamir Trading", imageBase64: null };
-    let tempImageBase64 = null;
-    let stockSearchQuery = "";
     let currentSelectedCategory = "";
-    let modalImageBase64 = null;
     let editingId = null;
-    let currentCategory = "All";
+    let currentFilter = "All";
     let searchQuery = "";
+    let stockSearch = "";
+    let selectedIcon = "📦";
+    let modalImage = null;
+    let pendingDeleteId = null;
+    let pendingDeleteName = null;
+    let pendingProductDeleteId = null;
+    let dataLoaded = false;
 
-    function showToast(msg) {
-        const toast = document.getElementById("toastMsg");
-        toast.innerText = msg;
-        toast.style.display = "block";
-        setTimeout(() => { toast.style.display = "none"; }, 2000);
-    }
-
-    // ========== FIREBASE OPERATIONS ==========
+    function showToast(msg) { const t = document.getElementById("toastMsg"); t.innerText = msg; t.style.display = "block"; setTimeout(() => t.style.display = "none", 3000); }
+    function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
     
-    // Load products from Firebase
-    async function loadProductsFromFirebase() {
+    window.showProductDetail = (product) => {
+        document.getElementById("detailTitle").innerText = product.name;
+        document.getElementById("detailPurchasePrice").innerHTML = `₹${product.purchasePrice}`;
+        document.getElementById("detailSalmanPrice").innerHTML = `₹${product.salmanPrice}`;
+        document.getElementById("detailMrpPrice").innerHTML = `₹${product.dukandarPrice}`;
+        document.getElementById("detailImage").src = product.imageBase64 || "https://via.placeholder.com/140?text=No+Image";
+        document.getElementById("productDetailModal").style.display = "flex";
+    };
+    window.closeProductDetail = () => { document.getElementById("productDetailModal").style.display = "none"; };
+    
+    window.showDeleteProductModal = (id) => {
+        const product = products.find(p => p.id === id);
+        if(product) {
+            pendingProductDeleteId = id;
+            document.getElementById("deleteProductName").innerText = product.name;
+            document.getElementById("deleteProductPurchase").innerHTML = `Purchase: ₹${product.purchasePrice}`;
+            document.getElementById("deleteProductSell").innerHTML = `Sell: ₹${product.salmanPrice}`;
+            document.getElementById("deleteProductStock").innerHTML = `Stock: ${product.stock}`;
+            document.getElementById("deleteProductModal").style.display = "flex";
+        }
+    };
+    window.closeDeleteProductModal = () => { document.getElementById("deleteProductModal").style.display = "none"; pendingProductDeleteId = null; };
+    
+    window.confirmDeleteProduct = () => {
+        if(pendingProductDeleteId) {
+            const product = products.find(p => p.id === pendingProductDeleteId);
+            if(product) {
+                console.log("Attempting to delete product:", product.name, "ID:", pendingProductDeleteId);
+                
+                // Delete from Firebase first
+                if(pendingProductDeleteId && !pendingProductDeleteId.startsWith('temp_')) {
+                    deleteDoc(doc(db, "products", pendingProductDeleteId))
+                        .then(() => {
+                            console.log("✅ Product deleted from Firebase successfully");
+                            // Remove from UI after successful Firebase delete
+                            products = products.filter(p => p.id !== pendingProductDeleteId);
+                            renderAll();
+                            showToast(`✅ "${product.name}" deleted permanently!`);
+                        })
+                        .catch(error => {
+                            console.error("❌ Firebase Delete Error:", error);
+                            showToast(`❌ Delete failed: ${error.message}`);
+                        });
+                } else {
+                    // For temp IDs, just remove from UI
+                    products = products.filter(p => p.id !== pendingProductDeleteId);
+                    renderAll();
+                    showToast(`✅ "${product.name}" removed from list`);
+                }
+            }
+            closeDeleteProductModal();
+        }
+    };
+    
+    window.showSuccessModal = () => { document.getElementById("successModal").style.display = "flex"; };
+    window.closeSuccessModal = () => { document.getElementById("successModal").style.display = "none"; switchScreen('stock'); };
+    
+    async function loadData() {
+        if(dataLoaded) return;
         try {
-            const q = query(collection(db, "products"), orderBy("name"));
-            const querySnapshot = await getDocs(q);
-            products = [];
-            querySnapshot.forEach((doc) => {
-                products.push({ id: doc.id, ...doc.data() });
+            const [catSnap, prodSnap, profileSnap] = await Promise.all([
+                getDocs(collection(db, "categories")),
+                getDocs(collection(db, "products")),
+                getDocs(collection(db, "profile"))
+            ]);
+            
+            // Load categories - FIX 1: Use id consistently
+            categories = [];
+            catSnap.forEach(doc => {
+                const data = doc.data();
+                categories.push({
+                    id: doc.id,  // Firebase document ID as id
+                    name: data.name,
+                    icon: data.icon,
+                    isDefault: data.isDefault || false,
+                    createdAt: data.createdAt
+                });
             });
-            console.log("✅ Products loaded from Firebase:", products.length);
-            renderAll();
-            return true;
-        } catch (error) {
-            console.error("Error loading products:", error);
-            showToast("⚠️ Error loading from Firebase");
-            return false;
-        }
-    }
-    
-    // Add product to Firebase
-    async function addProductToFirebase(product) {
-        try {
-            const docRef = await addDoc(collection(db, "products"), product);
-            console.log("✅ Product added to Firebase with ID:", docRef.id);
-            return docRef.id;
-        } catch (error) {
-            console.error("Error adding product:", error);
-            showToast("⚠️ Error saving to Firebase");
-            return null;
-        }
-    }
-    
-    // Update product in Firebase
-    async function updateProductInFirebase(id, product) {
-        try {
-            const productRef = doc(db, "products", id);
-            await updateDoc(productRef, product);
-            console.log("✅ Product updated in Firebase:", id);
-            return true;
-        } catch (error) {
-            console.error("Error updating product:", error);
-            return false;
-        }
-    }
-    
-    // Delete product from Firebase
-    async function deleteProductFromFirebase(id) {
-        try {
-            const productRef = doc(db, "products", id);
-            await deleteDoc(productRef);
-            console.log("✅ Product deleted from Firebase:", id);
-            return true;
-        } catch (error) {
-            console.error("Error deleting product:", error);
-            return false;
-        }
-    }
-    
-    // Load profile from Firebase
-    async function loadProfileFromFirebase() {
-        try {
-            const q = query(collection(db, "profile"));
-            const querySnapshot = await getDocs(q);
-            if (!querySnapshot.empty) {
-                querySnapshot.forEach((doc) => {
-                    shopProfile = { id: doc.id, name: doc.data().name, imageBase64: doc.data().imageBase64 };
+            
+            // Load products - FIX 2: Use id consistently
+            products = [];
+            prodSnap.forEach(doc => {
+                const data = doc.data();
+                products.push({
+                    id: doc.id,  // Firebase document ID as id
+                    name: data.name,
+                    category: data.category,
+                    purchasePrice: data.purchasePrice,
+                    salmanPrice: data.salmanPrice,
+                    dukandarPrice: data.dukandarPrice,
+                    stock: data.stock,
+                    imageBase64: data.imageBase64,
+                    createdAt: data.createdAt
                 });
-            }
+            });
+            
+            console.log("Loaded products:", products.length);
+            products.forEach(p => console.log(" -", p.name, "ID:", p.id));
+            
+            if(!profileSnap.empty) profileSnap.forEach(d => { shopProfile = { id: d.id, name: d.data().name, imageBase64: d.data().imageBase64 }; });
+            
+            updateCategorySelect();
             loadProfileUI();
-            console.log("✅ Profile loaded from Firebase");
-        } catch (error) {
-            console.error("Error loading profile:", error);
-        }
+            renderAll();
+            dataLoaded = true;
+        } catch(e) { console.error(e); showToast("Error loading data"); }
     }
     
-    // Save profile to Firebase
-    async function saveProfileToFirebase() {
-        try {
-            const q = query(collection(db, "profile"));
-            const querySnapshot = await getDocs(q);
-            if (!querySnapshot.empty) {
-                querySnapshot.forEach(async (doc) => {
-                    const profileRef = doc(db, "profile", doc.id);
-                    await updateDoc(profileRef, {
-                        name: shopProfile.name,
-                        imageBase64: shopProfile.imageBase64 || null
-                    });
-                });
-            } else {
-                await addDoc(collection(db, "profile"), {
-                    name: shopProfile.name,
-                    imageBase64: shopProfile.imageBase64 || null
-                });
+    function renderAll() { renderCategoryChips(); renderHomeProducts(); renderStockList(); renderProfileStats(); }
+    
+    function renderCategoryChips() {
+        const container = document.getElementById("categoryChips");
+        if(!container) return;
+        
+        // Remove duplicates using Map
+        const uniqueCats = new Map();
+        categories.forEach(cat => {
+            if(!uniqueCats.has(cat.id)) {
+                uniqueCats.set(cat.id, cat);
             }
-            console.log("✅ Profile saved to Firebase");
-        } catch (error) {
-            console.error("Error saving profile:", error);
+        });
+        const uniqueCategories = Array.from(uniqueCats.values());
+        
+        let chips = `<div class="chip ${currentFilter === 'All' ? 'active' : ''}" data-cat="All">All</div>`;
+        chips += uniqueCategories.map(c => `<div class="chip ${currentFilter === c.id ? 'active' : ''}" data-cat="${c.id}">${c.icon} ${c.name}<button class="delete-chip" onclick="event.stopPropagation(); showDeleteModal('${c.id}', '${c.name.replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i></button></div>`).join('');
+        container.innerHTML = chips;
+        document.querySelectorAll(".chip").forEach(chip => {
+            chip.addEventListener("click", (e) => {
+                if(e.target.classList.contains('delete-chip') || e.target.closest('.delete-chip')) return;
+                currentFilter = chip.getAttribute("data-cat");
+                renderCategoryChips();
+                renderHomeProducts();
+            });
+        });
+    }
+    
+    function renderHomeProducts() {
+        let filtered = products.filter(p => (currentFilter === "All" || p.category === currentFilter) && p.name.toLowerCase().includes(searchQuery.toLowerCase()));
+        const container = document.getElementById("homeProductsGrid");
+        if(filtered.length === 0) { container.innerHTML = '<div class="empty-state">No products found</div>'; return; }
+        container.innerHTML = filtered.map(p => `
+            <div class="product-card" onclick='showProductDetail(${JSON.stringify(p).replace(/'/g, "&#39;")})'>
+                <div class="product-image-container">
+                    ${p.imageBase64 ? `<img class="product-image" src="${p.imageBase64}" alt="${escapeHtml(p.name)}">` : `<i class="fas fa-image" style="font-size:48px;color:#94a3b8;"></i>`}
+                </div>
+                <div class="product-info">
+                    <div class="product-name">${escapeHtml(p.name)}</div>
+                    <div class="sell-price">₹${p.salmanPrice}</div>
+                    <div class="mrp">₹${p.dukandarPrice}</div>
+                    <div class="purchase-badge"><span>Purchase: ₹${p.purchasePrice}</span></div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function renderStockList() {
+        let filtered = products.filter(p => p.name.toLowerCase().includes(stockSearch.toLowerCase()));
+        const container = document.getElementById("stockListContainer");
+        if(filtered.length === 0) { container.innerHTML = '<div class="empty-state">No products found</div>'; return; }
+        container.innerHTML = filtered.map(p => `<div class="stock-item"><div style="width:45px;height:45px;background:#e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;">${p.imageBase64 ? `<img src="${p.imageBase64}" style="width:100%;height:100%;object-fit:cover;">` : '<i class="fas fa-box"></i>'}</div><div style="flex:1"><strong>${escapeHtml(p.name)}</strong><br><span style="font-size:11px;">Purchase:₹${p.purchasePrice} | Sell:₹${p.salmanPrice}</span><br><span style="font-size:10px;">Stock: ${p.stock}</span></div><div class="stock-actions"><button onclick="sellProduct('${p.id}')"><i class="fas fa-shopping-cart" style="color:#10b981;"></i></button><button onclick="editStock('${p.id}')"><i class="fas fa-edit" style="color:#001B7A;"></i></button><button onclick="showDeleteProductModal('${p.id}')"><i class="fas fa-trash" style="color:#ef4444;"></i></button></div></div>`).join('');
+    }
+    
+    function renderProfileStats() {
+        document.getElementById("profileTotalProducts").innerText = products.length;
+        document.getElementById("profileTotalCategories").innerText = categories.length;
+    }
+    
+    function loadProfileUI() {
+        document.getElementById("shopNameInput").value = shopProfile.name;
+        if(shopProfile.imageBase64) document.getElementById("profileImagePreview").src = shopProfile.imageBase64;
+        else document.getElementById("profileImagePreview").src = `https://ui-avatars.com/api/?background=001B7A&color=fff&name=${encodeURIComponent(shopProfile.name)}`;
+    }
+    
+    function updateCategorySelect() {
+        const select = document.getElementById("customCategory");
+        if(select) {
+            const uniqueCats = new Map();
+            categories.forEach(cat => {
+                if(!uniqueCats.has(cat.id)) {
+                    uniqueCats.set(cat.id, cat);
+                }
+            });
+            const uniqueCategories = Array.from(uniqueCats.values());
+            select.innerHTML = uniqueCategories.map(c => `<option value="${c.id}">${c.icon} ${c.name}</option>`).join('');
         }
     }
-
-    // ========== UI FUNCTIONS ==========
     
-    window.saveCustomItemToFirebase = async () => {
+    window.sellProduct = async (id) => {
+        const p = products.find(p => p.id === id);
+        if(!p) return;
+        const qty = parseInt(prompt(`Sell ${p.name}\nPrice: ₹${p.salmanPrice}\nQuantity:`));
+        if(qty && qty > 0 && p.stock >= qty) {
+            p.stock -= qty;
+            renderAll();
+            showToast(`✅ Sold! Total: ₹${qty * p.salmanPrice}`);
+            if(id && !id.startsWith('temp_')) updateDoc(doc(db, "products", id), { stock: p.stock }).catch(e => console.error(e));
+        } else if(qty && qty > p.stock) alert(`Only ${p.stock} in stock!`);
+    };
+    
+    window.editStock = (id) => {
+        const p = products.find(p => p.id === id);
+        if(p) {
+            document.getElementById("prodName").value = p.name;
+            document.getElementById("prodPurchasePrice").value = p.purchasePrice;
+            document.getElementById("prodSalmanPrice").value = p.salmanPrice;
+            document.getElementById("prodDukandarPrice").value = p.dukandarPrice;
+            if(p.imageBase64) { document.getElementById("imgPreview").src = p.imageBase64; document.getElementById("imgPreview").style.display = "block"; }
+            editingId = id;
+            currentSelectedCategory = p.category;
+            const cat = categories.find(c => c.id === p.category);
+            document.getElementById("selectedCategoryBadge").innerText = cat ? cat.name : p.category;
+            document.getElementById("categorySelectionView").style.display = "none";
+            document.getElementById("addProductFormView").classList.add("active");
+            switchScreen('addProduct');
+        }
+    };
+    
+    window.showDeleteModal = (catId, catName) => {
+        pendingDeleteId = catId;
+        pendingDeleteName = catName;
+        document.getElementById("deleteCategoryName").innerHTML = escapeHtml(catName);
+        document.getElementById("deleteCategoryModal").style.display = "flex";
+    };
+    window.closeDeleteModal = () => { document.getElementById("deleteCategoryModal").style.display = "none"; pendingDeleteId = null; };
+    
+    window.confirmDeleteCategory = () => {
+        if(pendingDeleteId) {
+            const catName = pendingDeleteName;
+            const catToDelete = categories.find(c => c.id === pendingDeleteId);
+            
+            // Remove from UI
+            categories = categories.filter(c => c.id !== pendingDeleteId);
+            products = products.filter(p => p.category !== pendingDeleteId);
+            if(currentFilter === pendingDeleteId) currentFilter = "All";
+            updateCategorySelect();
+            renderAll();
+            showToast(`✅ Category "${catName}" deleted!`);
+            
+            // Delete from Firebase
+            if(catToDelete && catToDelete.id && !catToDelete.id.startsWith('cat_')) {
+                deleteDoc(doc(db, "categories", catToDelete.id))
+                    .then(() => console.log("Category deleted from Firebase"))
+                    .catch(e => console.error("Category delete error:", e));
+            }
+            closeDeleteModal();
+        }
+    };
+    
+    window.saveNewCategory = async () => {
+        const name = document.getElementById("newCategoryName").value.trim();
+        if(!name) { alert("Enter category name!"); return; }
+        if(categories.some(c => c.name.toLowerCase() === name.toLowerCase())) { showToast("Category exists!"); return; }
+        
+        const newCat = { 
+            name: name, 
+            icon: selectedIcon, 
+            isDefault: false, 
+            createdAt: new Date().toISOString() 
+        };
+        
+        try {
+            const docRef = await addDoc(collection(db, "categories"), newCat);
+            categories.push({
+                id: docRef.id,
+                ...newCat
+            });
+            updateCategorySelect();
+            renderAll();
+            showToast(`✅ Category "${name}" added!`);
+            closeCategoryModal();
+        } catch(e) { console.error(e); showToast("Error saving category"); }
+    };
+    
+    window.saveCustomItem = async () => {
         const name = document.getElementById("customItemName").value.trim();
         const category = document.getElementById("customCategory").value;
         const purchase = parseFloat(document.getElementById("customPurchasePrice").value);
         const sell = parseFloat(document.getElementById("customSellingPrice").value);
         const mrp = parseFloat(document.getElementById("customMrp").value);
         
-        if(!name || isNaN(purchase) || isNaN(sell) || isNaN(mrp)) {
-            alert("Please fill all fields correctly!");
-            return;
-        }
+        if(!category || categories.length === 0) { showToast("Add a category first!"); return; }
+        if(!name || isNaN(purchase) || isNaN(sell) || isNaN(mrp)) { showToast("Fill all fields!"); return; }
         
-        const exists = products.some(p => p.name.toLowerCase() === name.toLowerCase());
-        if(exists) {
-            showToast(`⚠️ ${name} already exists!`);
-            closeModal();
-            return;
-        }
-        
-        const newProduct = {
-            name: name,
-            category: category,
-            purchasePrice: purchase,
-            salmanPrice: sell,
-            dukandarPrice: mrp,
-            stock: 100,
-            imageBase64: modalImageBase64 || null,
-            createdAt: new Date().toISOString()
+        const newProduct = { 
+            name, 
+            category, 
+            purchasePrice: purchase, 
+            salmanPrice: sell, 
+            dukandarPrice: mrp, 
+            stock: 100, 
+            imageBase64: modalImage || null, 
+            createdAt: new Date().toISOString() 
         };
         
-        const docId = await addProductToFirebase(newProduct);
-        if(docId) {
-            products.push({ id: docId, ...newProduct });
+        try {
+            showToast(`Saving ${name}...`);
+            const docRef = await addDoc(collection(db, "products"), newProduct);
+            products.push({
+                id: docRef.id,
+                ...newProduct
+            });
             renderAll();
-            showToast(`✅ ${name} added successfully!`);
             closeModal();
-            switchScreen('stock');
-        }
-    };
-
-    // Modal image preview
-    document.getElementById("modalImageFile")?.addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        if(file) {
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                modalImageBase64 = ev.target.result;
-                document.getElementById("modalImagePreview").src = modalImageBase64;
-                document.getElementById("modalImagePreview").style.display = "block";
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    window.selectCategory = (category) => {
-        currentSelectedCategory = category;
-        let internalCat = "";
-        if(category === "Chips & Snacks") internalCat = "Chips";
-        else if(category === "Cold Drinks & Beverages") internalCat = "Colddrink";
-        else if(category === "Namkeen") internalCat = "Namkeen";
-        else if(category === "Toffees & Candies") internalCat = "Tofi";
-       else if(category === "Chocolate") internalCat = "Chocolate";
-        else if(category === "Biscuits") internalCat = "Biscuits";
-        else if(category === "Jelly") internalCat = "Jelly";
-        
-        document.getElementById("selectedCategoryBadge").innerText = category;
-        document.getElementById("categorySelectionView").style.display = "none";
-        document.getElementById("addProductFormView").classList.add("active");
+            showSuccessModal();
+        } catch(e) { console.error(e); showToast("Error saving product"); }
     };
     
-   window.backToCategorySelection = () => {
-    document.getElementById("categorySelectionView").style.display = "none";
-    document.getElementById("addProductFormView").style.display = "block";
-    document.getElementById("addProductFormView").classList.add("active");
-};
-
-    window.openDirectAddModal = () => {
-        document.getElementById("customItemName").value = "";
-        document.getElementById("customCategory").value = "Chips";
-        document.getElementById("customPurchasePrice").value = "";
-        document.getElementById("customSellingPrice").value = "";
-        document.getElementById("customMrp").value = "";
-        document.getElementById("modalImageFile").value = "";
-        document.getElementById("modalImagePreview").style.display = "none";
-        modalImageBase64 = null;
-        document.getElementById("customModal").style.display = "flex";
-    };
-    
-    window.closeModal = () => {
-        document.getElementById("customModal").style.display = "none";
-    };
-
     document.getElementById("saveProductBtn")?.addEventListener("click", async () => {
         const name = document.getElementById("prodName").value.trim();
-        let category = currentSelectedCategory;
-        let internalCategory = "";
-        if(category === "Chips & Snacks") internalCategory = "Chips";
-        else if(category === "Cold Drinks & Beverages") internalCategory = "Colddrink";
-        else if(category === "Namkeen") internalCategory = "Namkeen";
-        else if(category === "Toffees & Candies") internalCategory = "Tofi";
-      else if(category === "Chocolate") internalCategory = "Chocolate";
-        else if(category === "Biscuits") internalCategory = "Biscuits";
-        else if(category === "Jelly") internalCategory = "Jelly";
+        const purchase = parseFloat(document.getElementById("prodPurchasePrice").value);
+        const sell = parseFloat(document.getElementById("prodSalmanPrice").value);
+        const mrp = parseFloat(document.getElementById("prodDukandarPrice").value);
         
-        const purchasePrice = parseFloat(document.getElementById("prodPurchasePrice").value);
-        const salmanPrice = parseFloat(document.getElementById("prodSalmanPrice").value);
-        const dukandarPrice = parseFloat(document.getElementById("prodDukandarPrice").value);
-        const imageFile = document.getElementById("prodImageFile").files[0];
+        if(!currentSelectedCategory) { showToast("Select category!"); return; }
+        if(!name || isNaN(purchase) || isNaN(sell) || isNaN(mrp)) { showToast("Fill all fields!"); return; }
         
-        if(!name || isNaN(purchasePrice) || isNaN(salmanPrice) || isNaN(dukandarPrice)) return alert("Fill all fields correctly");
-
-        const saveProduct = async (base64) => {
-            const newProduct = {
-                name: name,
-                category: internalCategory,
-                purchasePrice: purchasePrice,
-                salmanPrice: salmanPrice,
-                dukandarPrice: dukandarPrice,
-                stock: 100,
-                imageBase64: base64 || null,
-                createdAt: new Date().toISOString()
+        const file = document.getElementById("prodImageFile").files[0];
+        
+        const saveToUI = async (img) => {
+            const newProduct = { 
+                name, 
+                category: currentSelectedCategory, 
+                purchasePrice: purchase, 
+                salmanPrice: sell, 
+                dukandarPrice: mrp, 
+                stock: 100, 
+                imageBase64: img || null, 
+                createdAt: new Date().toISOString() 
             };
             
-            if(editingId !== null) {
-                await updateProductInFirebase(editingId, newProduct);
-                let idx = products.findIndex(p => p.id === editingId);
+            if(editingId) {
+                // Update existing product
+                const idx = products.findIndex(p => p.id === editingId);
                 if(idx !== -1) {
                     products[idx] = { ...newProduct, id: editingId };
+                    showToast("Product updated!");
+                    if(editingId && !editingId.startsWith('temp_')) {
+                        updateDoc(doc(db, "products", editingId), newProduct).catch(e=>console.error(e));
+                    }
                 }
                 editingId = null;
-                showToast("Product updated!");
+                renderAll();
+                clearForm();
+                backToCategorySelection();
+                switchScreen('stock');
             } else {
-                const docId = await addProductToFirebase(newProduct);
-                if(docId) {
-                    products.push({ id: docId, ...newProduct });
-                    showToast("Product added!");
-                }
+                // Add new product
+                try {
+                    showToast(`Saving ${name}...`);
+                    const docRef = await addDoc(collection(db, "products"), newProduct);
+                    products.push({
+                        id: docRef.id,
+                        ...newProduct
+                    });
+                    renderAll();
+                    clearForm();
+                    backToCategorySelection();
+                    showSuccessModal();
+                } catch(e) { console.error(e); showToast("Error saving product"); }
             }
-            clearAddForm();
-            renderAll();
-            backToCategorySelection();
-            switchScreen('stock');
         };
         
-        if(imageFile) {
-            let reader = new FileReader();
-            reader.onload = e => saveProduct(e.target.result);
-            reader.readAsDataURL(imageFile);
-        } else saveProduct(null);
+        if(file) { const r = new FileReader(); r.onload = e => saveToUI(e.target.result); r.readAsDataURL(file); } 
+        else { saveToUI(null); }
     });
-
-    function clearAddForm() {
+    
+    document.getElementById("saveProfileBtn")?.addEventListener("click", async () => {
+        const newName = document.getElementById("shopNameInput").value;
+        shopProfile.name = newName;
+        if(window.tempImage) shopProfile.imageBase64 = window.tempImage;
+        const q = await getDocs(collection(db, "profile"));
+        if(!q.empty) { q.forEach(async d => { await updateDoc(doc(db, "profile", d.id), { name: shopProfile.name, imageBase64: shopProfile.imageBase64 || null }); }); }
+        else await addDoc(collection(db, "profile"), { name: shopProfile.name, imageBase64: shopProfile.imageBase64 || null });
+        showToast("Profile saved!");
+        loadProfileUI();
+    });
+    
+    document.getElementById("resetDataBtn")?.addEventListener("click", async () => {
+        if(confirm("Delete ALL data?")) {
+            for(const p of products) { if(p.id && !p.id.startsWith('temp_')) deleteDoc(doc(db, "products", p.id)).catch(e=>console.error(e)); }
+            for(const c of categories) { if(c.id && !c.id.startsWith('cat_')) deleteDoc(doc(db, "categories", c.id)).catch(e=>console.error(e)); }
+            products = [];
+            categories = [];
+            renderAll();
+            updateCategorySelect();
+            showToast("All data reset!");
+        }
+    });
+    
+    document.getElementById("profileImageInput")?.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if(file) { const r = new FileReader(); r.onload = ev => { window.tempImage = ev.target.result; document.getElementById("profileImagePreview").src = window.tempImage; showToast("Photo selected! Click Save."); }; r.readAsDataURL(file); }
+    });
+    
+    document.getElementById("prodImageFile")?.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if(file) { const r = new FileReader(); r.onload = ev => { document.getElementById("imgPreview").src = ev.target.result; document.getElementById("imgPreview").style.display = "block"; }; r.readAsDataURL(file); }
+    });
+    
+    document.getElementById("modalImageFile")?.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if(file) { const r = new FileReader(); r.onload = ev => { modalImage = ev.target.result; document.getElementById("modalImagePreview").src = modalImage; document.getElementById("modalImagePreview").style.display = "block"; }; r.readAsDataURL(file); }
+    });
+    
+    function clearForm() {
         document.getElementById("prodName").value = "";
         document.getElementById("prodPurchasePrice").value = "";
         document.getElementById("prodSalmanPrice").value = "";
@@ -999,239 +735,74 @@
         document.getElementById("imgPreview").style.display = "none";
         editingId = null;
     }
-
-    document.getElementById("prodImageFile")?.addEventListener("change", e => {
-        let file = e.target.files[0];
-        if(file) {
-            let reader = new FileReader();
-            reader.onload = ev => { document.getElementById("imgPreview").src = ev.target.result; document.getElementById("imgPreview").style.display = "block"; };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    window.sellProduct = async (id) => {
-        let product = products.find(p => p.id === id);
-        if(!product) return;
-        let qty = parseInt(prompt(`Sell ${product.name}\nSelling Price: ₹${product.salmanPrice}\nEnter quantity:`));
-        if(qty && qty > 0) {
-            if(product.stock < qty) {
-                alert(`Only ${product.stock} items available in stock!`);
-                return;
-            }
-            let totalAmount = qty * product.salmanPrice;
-            let profit = qty * (product.salmanPrice - product.purchasePrice);
-            product.stock -= qty;
-            
-            await updateProductInFirebase(id, {
-                name: product.name,
-                category: product.category,
-                purchasePrice: product.purchasePrice,
-                salmanPrice: product.salmanPrice,
-                dukandarPrice: product.dukandarPrice,
-                stock: product.stock,
-                imageBase64: product.imageBase64
-            });
-            
-            renderAll();
-            showToast(`✅ Sold! Total: ₹${totalAmount} | Profit: ₹${profit}`);
-        } else alert("Invalid quantity");
+    
+    window.selectCategory = (display, code) => {
+        currentSelectedCategory = code;
+        document.getElementById("selectedCategoryBadge").innerText = display;
+        document.getElementById("categorySelectionView").style.display = "none";
+        document.getElementById("addProductFormView").classList.add("active");
+        clearForm();
     };
-
-    window.editStock = (id) => {
-        let p = products.find(p => p.id === id);
-        if(p) {
-            document.getElementById("prodName").value = p.name;
-            document.getElementById("prodPurchasePrice").value = p.purchasePrice;
-            document.getElementById("prodSalmanPrice").value = p.salmanPrice;
-            document.getElementById("prodDukandarPrice").value = p.dukandarPrice;
-            if(p.imageBase64) { document.getElementById("imgPreview").src = p.imageBase64; document.getElementById("imgPreview").style.display = "block"; }
-            editingId = id;
-            if(p.category === "Chips") currentSelectedCategory = "Chips & Snacks";
-            else if(p.category === "Colddrink") currentSelectedCategory = "Cold Drinks & Beverages";
-            else if(p.category === "Namkeen") currentSelectedCategory = "Namkeen";
-            else if(p.category === "Tofi") currentSelectedCategory = "Toffees & Candies";
-           else if(p.category === "Chocolate") currentSelectedCategory = "Chocolate";
-           else if(p.category === "Biscuits") currentSelectedCategory = "Biscuits";
-            else if(p.category === "Jelly") currentSelectedCategory = "Jelly";
-            document.getElementById("selectedCategoryBadge").innerText = currentSelectedCategory;
-            document.getElementById("categorySelectionView").style.display = "none";
-            document.getElementById("addProductFormView").classList.add("active");
-           
-        }
+    
+    window.backToCategorySelection = () => {
+        document.getElementById("categorySelectionView").style.display = "block";
+        document.getElementById("addProductFormView").classList.remove("active");
+        clearForm();
     };
-
-    window.deleteStock = async (id) => {
-        if(confirm("Delete permanently?")) {
-            await deleteProductFromFirebase(id);
-            products = products.filter(p => p.id !== id);
-            renderAll();
-            showToast("Product deleted!");
-        }
+    
+    window.openAddCategoryModal = () => {
+        document.getElementById("newCategoryName").value = "";
+        selectedIcon = "📦";
+        document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
+        const def = document.querySelector('.icon-option[data-icon="📦"]');
+        if(def) def.classList.add('selected');
+        document.getElementById("categoryModal").style.display = "flex";
     };
-
-    function loadProfileUI() {
-        document.getElementById("shopNameInput").value = shopProfile.name;
-        if(shopProfile.imageBase64 && shopProfile.imageBase64 !== "null" && shopProfile.imageBase64 !== "") {
-            document.getElementById("profileImagePreview").src = shopProfile.imageBase64;
-        } else {
-            document.getElementById("profileImagePreview").src = `https://ui-avatars.com/api/?background=001B7A&color=fff&name=${encodeURIComponent(shopProfile.name)}`;
-        }
-    }
-
-    document.getElementById("profileImageInput")?.addEventListener("change", (e) => {
-        const file = e.target.files[0];
-        if(file) {
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                tempImageBase64 = ev.target.result;
-                document.getElementById("profileImagePreview").src = tempImageBase64;
-                showToast("Photo selected! Click 'Save Profile' to save.");
-            };
-            reader.readAsDataURL(file);
-        }
+    window.closeCategoryModal = () => { document.getElementById("categoryModal").style.display = "none"; };
+    
+    window.openDirectAddModal = () => {
+        if(categories.length === 0) { showToast("Add a category first!"); return; }
+        document.getElementById("customItemName").value = "";
+        updateCategorySelect();
+        document.getElementById("customPurchasePrice").value = "";
+        document.getElementById("customSellingPrice").value = "";
+        document.getElementById("customMrp").value = "";
+        document.getElementById("modalImageFile").value = "";
+        document.getElementById("modalImagePreview").style.display = "none";
+        modalImage = null;
+        document.getElementById("customModal").style.display = "flex";
+    };
+    window.closeModal = () => { document.getElementById("customModal").style.display = "none"; };
+    
+    document.querySelectorAll('.icon-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+            document.querySelectorAll('.icon-option').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+            selectedIcon = opt.getAttribute('data-icon');
+        });
     });
     
-    document.getElementById("saveProfileBtn")?.addEventListener("click", async () => {
-        const newName = document.getElementById("shopNameInput").value;
-        shopProfile.name = newName;
-        if(tempImageBase64) {
-            shopProfile.imageBase64 = tempImageBase64;
-            tempImageBase64 = null;
-        }
-        await saveProfileToFirebase();
-        showToast("Profile saved successfully! ✅");
-    });
-
-    document.getElementById("resetDataBtn")?.addEventListener("click", async () => {
-        if(confirm("⚠️ This will delete ALL data from Firebase! Are you sure?")) {
-            for(let p of products) {
-                await deleteProductFromFirebase(p.id);
-            }
-            products = [];
-            renderAll();
-            showToast("All data reset successfully!");
-        }
-    });
-
-    function renderAll() {
-        renderHome();
-        renderStockList();
-        renderProfileStats();
-        renderCategoryChips();
-    }
-
-    function renderHome() {
-        let filtered = products.filter(p => {
-            const matchCat = currentCategory === "All" || p.category === currentCategory;
-            const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
-            return matchCat && matchSearch;
-        });
-        const container = document.getElementById("homeProductsGrid");
-        if(filtered.length === 0) { container.innerHTML = `<div class="empty-state">No products found</div>`; return; }
-        container.innerHTML = filtered.map(p => `
-            <div class="product-card">
-                ${p.imageBase64 ? `<img class="product-img" src="${p.imageBase64}" />` : `<div class="product-img" style="display:flex;align-items:center;justify-content:center;"><i class="fas fa-image" style="font-size:28px;color:#94a3b8;"></i></div>`}
-                <div class="product-info">
-                    <div class="product-name">${escapeHtml(p.name)}</div>
-                    <div class="price-row">
-                        <span class="sell-price">₹${p.salmanPrice}</span>
-                        <span class="mrp">₹${p.dukandarPrice}</span>
-                    </div>
-                    <div class="purchase-price">Purchase: ₹${p.purchasePrice}</div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function renderCategoryChips() {
-      let cats = ["All", "Chips", "Colddrink", "Namkeen", "Tofi", "Chocolate", "Biscuits", "Jelly"];
-        const container = document.getElementById("categoryChips");
-        container.innerHTML = cats.map(cat => `<div class="chip ${currentCategory === cat ? 'active' : ''}" data-cat="${cat}">${cat}</div>`).join('');
-        document.querySelectorAll(".chip").forEach(chip => {
-            chip.addEventListener("click", (e) => {
-                currentCategory = chip.getAttribute("data-cat");
-                renderCategoryChips();
-                renderHome();
-            });
-        });
-    }
-
-    function renderStockList() {
-        let filtered = products.filter(p => {
-            return p.name.toLowerCase().includes(stockSearchQuery.toLowerCase());
-        });
-        const container = document.getElementById("stockListContainer");
-        if(filtered.length === 0) { 
-            container.innerHTML = `<div class="empty-state">No products found</div>`; 
-            return; 
-        }
-        container.innerHTML = filtered.map(p => `
-            <div class="stock-item">
-                <div style="width:45px;height:45px;background:#e2e8f0;border-radius:12px;overflow:hidden;">${p.imageBase64 ? `<img src="${p.imageBase64}" style="width:100%;height:100%;object-fit:cover;">` : '<i class="fas fa-box"></i>'}</div>
-                <div style="flex:1"><strong style="font-size:13px;">${escapeHtml(p.name)}</strong><br><span style="font-size:11px;">Purchase:₹${p.purchasePrice} | Sell:₹${p.salmanPrice}</span></div>
-                <div class="stock-actions">
-                    <button onclick="sellProduct('${p.id}')" title="Sell"><i class="fas fa-shopping-cart" style="color:#10b981;"></i></button>
-                    <button onclick="editStock('${p.id}')" title="Edit"><i class="fas fa-edit" style="color:#001B7A;"></i></button>
-                    <button onclick="deleteStock('${p.id}')" title="Delete"><i class="fas fa-trash" style="color:#ef4444;"></i></button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function renderProfileStats() {
-        document.getElementById("profileTotalProducts").innerText = products.length;
-    }
-
     function switchScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
         document.getElementById(screenId + "Screen").classList.add('active-screen');
-        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-        let activeNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.getAttribute('data-screen') === screenId);
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        const activeNav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.getAttribute('data-screen') === screenId);
         if(activeNav) activeNav.classList.add('active');
-        if(screenId === 'home') renderHome();
+        if(screenId === 'home') { renderCategoryChips(); renderHomeProducts(); }
         if(screenId === 'stock') renderStockList();
         if(screenId === 'profile') { renderProfileStats(); loadProfileUI(); }
-        if(screenId === 'addProduct' && editingId === null) {
-    document.getElementById("categorySelectionView").style.display = "none";
-    document.getElementById("addProductFormView").style.display = "block";
-    document.getElementById("addProductFormView").classList.add("active");
-
-    currentSelectedCategory = "Chocolate";
-    document.getElementById("selectedCategoryBadge").innerText = "Chocolate";
-}
+        if(screenId === 'addProduct') {
+            if(editingId === null) { document.getElementById("categorySelectionView").style.display = "block"; document.getElementById("addProductFormView").classList.remove("active"); }
+            else { document.getElementById("categorySelectionView").style.display = "none"; document.getElementById("addProductFormView").classList.add("active"); }
+        }
     }
-
-    document.querySelectorAll('.nav-item').forEach(nav => {
-        nav.addEventListener('click', () => switchScreen(nav.getAttribute('data-screen')));
-    });
-
-    document.getElementById("searchInput")?.addEventListener("input", (e) => { searchQuery = e.target.value; renderHome(); });
-    document.getElementById("stockSearchInput")?.addEventListener("input", (e) => { 
-        stockSearchQuery = e.target.value; 
-        renderStockList();
-    });
-
-    function escapeHtml(str) { 
-        return str.replace(/[&<>]/g, function(m){ 
-            if(m==='&') return '&amp;'; 
-            if(m==='<') return '&lt;'; 
-            if(m==='>') return '&gt;'; 
-            return m;
-        }); 
-    }
-
-   // Initialize - Load data from Firebase
-await loadProductsFromFirebase();
-await loadProfileFromFirebase();
-renderAll();
-
+    
+    document.querySelectorAll('.nav-item').forEach(nav => nav.addEventListener('click', () => switchScreen(nav.getAttribute('data-screen'))));
+    document.getElementById("searchInput")?.addEventListener("input", (e) => { searchQuery = e.target.value; renderHomeProducts(); });
+    document.getElementById("stockSearchInput")?.addEventListener("input", (e) => { stockSearch = e.target.value; renderStockList(); });
+    
+    await loadData();
+    switchScreen('home');
 </script>
-
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js');
-}
-</script>
-
 </body>
 </html>
