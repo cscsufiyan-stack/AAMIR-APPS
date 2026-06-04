@@ -488,6 +488,9 @@
             background: #e2e8f0;
             color: #334155;
         }
+        #categorySelectionView{
+    display:none !important;
+}
     </style>
 </head>
 <body>
@@ -906,11 +909,11 @@
         document.getElementById("addProductFormView").classList.add("active");
     };
     
-    window.backToCategorySelection = () => {
-        document.getElementById("categorySelectionView").style.display = "block";
-        document.getElementById("addProductFormView").classList.remove("active");
-        clearAddForm();
-    };
+   window.backToCategorySelection = () => {
+    document.getElementById("categorySelectionView").style.display = "none";
+    document.getElementById("addProductFormView").style.display = "block";
+    document.getElementById("addProductFormView").classList.add("active");
+};
 
     window.openDirectAddModal = () => {
         document.getElementById("customItemName").value = "";
@@ -1053,7 +1056,7 @@
             document.getElementById("selectedCategoryBadge").innerText = currentSelectedCategory;
             document.getElementById("categorySelectionView").style.display = "none";
             document.getElementById("addProductFormView").classList.add("active");
-            switchScreen('addProduct');
+           
         }
     };
 
@@ -1188,9 +1191,14 @@
         if(screenId === 'home') renderHome();
         if(screenId === 'stock') renderStockList();
         if(screenId === 'profile') { renderProfileStats(); loadProfileUI(); }
-        if(screenId === 'addProduct') {
-            backToCategorySelection();
-        }
+        if(screenId === 'addProduct' && editingId === null) {
+    document.getElementById("categorySelectionView").style.display = "none";
+    document.getElementById("addProductFormView").style.display = "block";
+    document.getElementById("addProductFormView").classList.add("active");
+
+    currentSelectedCategory = "Chocolate";
+    document.getElementById("selectedCategoryBadge").innerText = "Chocolate";
+}
     }
 
     document.querySelectorAll('.nav-item').forEach(nav => {
