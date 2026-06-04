@@ -548,14 +548,16 @@
                     <div class="category-arrow"><i class="fas fa-chevron-right"></i></div>
                 </div>
                 
-                <div class="category-card" onclick="selectCategory('Sweets')">
-                    <div class="category-icon">🍰</div>
-                    <div class="category-info">
-                        <div class="category-name">Sweets</div>
-                        <div class="category-desc">Indian mithai, desserts</div>
-                    </div>
-                    <div class="category-arrow"><i class="fas fa-chevron-right"></i></div>
-                </div>
+               <div class="category-card" onclick="selectCategory('Chocolate')">
+    <div class="category-icon">🍫</div>
+    <div class="category-info">
+        <div class="category-name">Chocolate</div>
+        <div class="category-desc">Chocolates, bars & treats</div>
+    </div>
+    <div class="category-arrow">
+        <i class="fas fa-chevron-right"></i>
+    </div>
+</div>
                 
                 <div class="category-card" onclick="selectCategory('Biscuits')">
     <div class="category-icon">🍪</div>
@@ -655,7 +657,7 @@
             <option value="Colddrink">🥤 Cold Drinks & Beverages</option>
             <option value="Namkeen">🥨 Namkeen</option>
             <option value="Tofi">🍬 Toffees & Candies</option>
-            <option value="Sweet">🍰 Sweets</option>
+           <option value="Chocolate">🍫 Chocolate</option>
             <option value="Biscuits">🍪 Biscuits</option>
         </select>
         <input type="number" id="customPurchasePrice" placeholder="💰 Purchase Price (₹)">
@@ -884,7 +886,7 @@
         else if(category === "Cold Drinks & Beverages") internalCat = "Colddrink";
         else if(category === "Namkeen") internalCat = "Namkeen";
         else if(category === "Toffees & Candies") internalCat = "Tofi";
-        else if(category === "Sweets") internalCat = "Sweet";
+       else if(category === "Chocolate") internalCat = "Chocolate";
         else if(category === "Biscuits") internalCat = "Biscuits";
         
         document.getElementById("selectedCategoryBadge").innerText = category;
@@ -922,7 +924,7 @@
         else if(category === "Cold Drinks & Beverages") internalCategory = "Colddrink";
         else if(category === "Namkeen") internalCategory = "Namkeen";
         else if(category === "Toffees & Candies") internalCategory = "Tofi";
-        else if(category === "Sweets") internalCategory = "Sweet";
+      else if(category === "Chocolate") internalCategory = "Chocolate";
         else if(category === "Biscuits") internalCategory = "Biscuits";
         
         const purchasePrice = parseFloat(document.getElementById("prodPurchasePrice").value);
@@ -1032,7 +1034,7 @@
             else if(p.category === "Colddrink") currentSelectedCategory = "Cold Drinks & Beverages";
             else if(p.category === "Namkeen") currentSelectedCategory = "Namkeen";
             else if(p.category === "Tofi") currentSelectedCategory = "Toffees & Candies";
-            else if(p.category === "Sweet") currentSelectedCategory = "Sweets";
+           else if(p.category === "Chocolate") currentSelectedCategory = "Chocolate";
            else if(p.category === "Biscuits") currentSelectedCategory = "Biscuits";
             document.getElementById("selectedCategoryBadge").innerText = currentSelectedCategory;
             document.getElementById("categorySelectionView").style.display = "none";
@@ -1125,7 +1127,7 @@
     }
 
     function renderCategoryChips() {
-       let cats = ["All", "Chips", "Colddrink", "Namkeen", "Tofi", "Sweet", "Biscuits"];
+       let cats = ["All", "Chips", "Colddrink", "Namkeen", "Tofi", "Chocolate", "Biscuits"];
         const container = document.getElementById("categoryChips");
         container.innerHTML = cats.map(cat => `<div class="chip ${currentCategory === cat ? 'active' : ''}" data-cat="${cat}">${cat}</div>`).join('');
         document.querySelectorAll(".chip").forEach(chip => {
