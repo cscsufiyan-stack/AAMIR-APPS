@@ -521,7 +521,8 @@
                     <div class="category-arrow"><i class="fas fa-chevron-right"></i></div>
                 </div>
                 
-                <div class="category-card" onclick="selectCategory('Cold Drinks & Beverages')">
+                
+             <div class="category-card" onclick="selectCategory('Cold Drinks & Beverages')">
                     <div class="category-icon">🥤</div>
                     <div class="category-info">
                         <div class="category-name">Cold Drinks & Beverages</div>
@@ -569,7 +570,16 @@
         <i class="fas fa-chevron-right"></i>
     </div>
 </div>
-            
+           <div class="category-card" onclick="selectCategory('Jelly')">
+    <div class="category-icon">🍮</div>
+    <div class="category-info">
+        <div class="category-name">Jelly</div>
+        <div class="category-desc">Jelly, cups & fruity desserts</div>
+    </div>
+    <div class="category-arrow">
+        <i class="fas fa-chevron-right"></i>
+    </div>
+</div> 
             <button class="add-new-btn" onclick="openDirectAddModal()">
                 <i class="fas fa-plus-circle"></i> Add New Product
             </button>
@@ -659,6 +669,7 @@
             <option value="Tofi">🍬 Toffees & Candies</option>
            <option value="Chocolate">🍫 Chocolate</option>
             <option value="Biscuits">🍪 Biscuits</option>
+            <option value="Jelly">🍮 Jelly</option>
         </select>
         <input type="number" id="customPurchasePrice" placeholder="💰 Purchase Price (₹)">
         <input type="number" id="customSellingPrice" placeholder="💸 Selling Price (₹)">
@@ -888,6 +899,7 @@
         else if(category === "Toffees & Candies") internalCat = "Tofi";
        else if(category === "Chocolate") internalCat = "Chocolate";
         else if(category === "Biscuits") internalCat = "Biscuits";
+        else if(category === "Jelly") internalCat = "Jelly";
         
         document.getElementById("selectedCategoryBadge").innerText = category;
         document.getElementById("categorySelectionView").style.display = "none";
@@ -926,6 +938,7 @@
         else if(category === "Toffees & Candies") internalCategory = "Tofi";
       else if(category === "Chocolate") internalCategory = "Chocolate";
         else if(category === "Biscuits") internalCategory = "Biscuits";
+        else if(category === "Jelly") internalCategory = "Jelly";
         
         const purchasePrice = parseFloat(document.getElementById("prodPurchasePrice").value);
         const salmanPrice = parseFloat(document.getElementById("prodSalmanPrice").value);
@@ -1036,6 +1049,7 @@
             else if(p.category === "Tofi") currentSelectedCategory = "Toffees & Candies";
            else if(p.category === "Chocolate") currentSelectedCategory = "Chocolate";
            else if(p.category === "Biscuits") currentSelectedCategory = "Biscuits";
+            else if(p.category === "Jelly") currentSelectedCategory = "Jelly";
             document.getElementById("selectedCategoryBadge").innerText = currentSelectedCategory;
             document.getElementById("categorySelectionView").style.display = "none";
             document.getElementById("addProductFormView").classList.add("active");
@@ -1127,7 +1141,7 @@
     }
 
     function renderCategoryChips() {
-       let cats = ["All", "Chips", "Colddrink", "Namkeen", "Tofi", "Chocolate", "Biscuits"];
+      let cats = ["All", "Chips", "Colddrink", "Namkeen", "Tofi", "Chocolate", "Biscuits", "Jelly"];
         const container = document.getElementById("categoryChips");
         container.innerHTML = cats.map(cat => `<div class="chip ${currentCategory === cat ? 'active' : ''}" data-cat="${cat}">${cat}</div>`).join('');
         document.querySelectorAll(".chip").forEach(chip => {
