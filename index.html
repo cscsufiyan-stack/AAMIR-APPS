@@ -401,7 +401,7 @@
 
     <!-- Main Screens -->
     <div id="homeScreen" class="screen"><div class="search-bar"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search products..."></div><div class="category-chips" id="categoryChips"></div><div id="homeProductsGrid" class="products-grid"></div></div>
-    <div id="addProductScreen" class="screen"><div id="categorySelectionView"><div style="font-size:22px; font-weight:700;">📦 Add New Product</div><div style="color:#6b7280; margin:8px 0 24px;">First add a category, then add products</div><button class="btn-primary" id="openCategoryBtn" style="width:100%; margin-bottom:12px;"><i class="fas fa-folder-plus"></i> ➕ Add New Category</button><button class="btn-primary" id="openProductBtn" style="background:#1e6b4c;"><i class="fas fa-plus-circle"></i> Add Product</button></div><div id="addProductFormView" style="display:none;"><button class="back-btn" onclick="backToCategorySelection()"><i class="fas fa-arrow-left"></i> Back</button><div class="selected-badge" id="selectedCategoryBadge">Select Category</div><div><input type="text" id="prodName" class="modal-input" placeholder="Product Name"><div class="input-group"><label>Purchase Price (₹) - कितने का हमें मिलेगा?</label><input type="number" id="prodPurchasePrice" class="modal-input" placeholder="e.g., 5"></div><div class="input-group"><label>Selling Price (₹) - कितना का सेलमान को देना है?</label><input type="number" id="prodSalmanPrice" class="modal-input" placeholder="e.g., 10"></div><div class="input-group"><label>MRP (₹) - कितने का दुकानदार को देना है?</label><input type="number" id="prodDukandarPrice" class="modal-input" placeholder="e.g., 15"></div><div class="image-upload-area" onclick="document.getElementById('prodImageFile').click()"><i class="fas fa-cloud-upload-alt"></i> Upload Image<input type="file" id="prodImageFile" accept="image/*" style="display:none"><div id="imgPreviewContainer" style="margin-top:8px;"></div></div><button class="btn-primary" id="saveProductBtn" style="margin-top:15px;">➕ Save Product</button></div></div></div>
+    <div id="addProductScreen" class="screen"><div id="categorySelectionView"><div style="font-size:22px; font-weight:700;">📦 Add New Product</div><div style="color:#6b7280; margin:8px 0 24px;">First add a category, then add products</div><button class="btn-primary" id="openCategoryBtn" style="width:100%; margin-bottom:12px;"><i class="fas fa-folder-plus"></i> ➕ Add New Category</button><button class="btn-primary" id="openProductBtn" style="background:#1e6b4c;"><i class="fas fa-plus-circle"></i> Add Product</button></div><div id="addProductFormView" style="display:none;"><button class="back-btn" id="backToCategoryBtn"><i class="fas fa-arrow-left"></i> Back</button><div class="selected-badge" id="selectedCategoryBadge">Select Category</div><div><input type="text" id="prodName" class="modal-input" placeholder="Product Name"><div class="input-group"><label>Purchase Price (₹) - कितने का हमें मिलेगा?</label><input type="number" id="prodPurchasePrice" class="modal-input" placeholder="e.g., 5"></div><div class="input-group"><label>Selling Price (₹) - कितना का सेलमान को देना है?</label><input type="number" id="prodSalmanPrice" class="modal-input" placeholder="e.g., 10"></div><div class="input-group"><label>MRP (₹) - कितने का दुकानदार को देना है?</label><input type="number" id="prodDukandarPrice" class="modal-input" placeholder="e.g., 15"></div><div class="image-upload-area" onclick="document.getElementById('prodImageFile').click()"><i class="fas fa-cloud-upload-alt"></i> Upload Image<input type="file" id="prodImageFile" accept="image/*" style="display:none"><div id="imgPreviewContainer" style="margin-top:8px;"></div></div><button class="btn-primary" id="saveProductBtn" style="margin-top:15px;">➕ Save Product</button></div></div></div>
     <div id="stockScreen" class="screen"><h3><i class="fas fa-boxes"></i> Product Management</h3><div class="search-bar"><i class="fas fa-search"></i><input type="text" id="stockSearchInput" placeholder="Search product..."></div><div id="stockListContainer"></div></div>
     
     <!-- Profile Screen with hidden Reset button (5 taps on stats to show) -->
@@ -445,16 +445,13 @@
     
     function showToast(msg) { const t = document.getElementById("toastMsg"); t.innerText = msg; t.style.display = "block"; setTimeout(() => t.style.display = "none", 2000); }
     
-    // Load data from localStorage
     function loadData() {
         const storedProducts = localStorage.getItem("aamir_products");
         const storedCategories = localStorage.getItem("aamir_categories");
         if (storedProducts) products = JSON.parse(storedProducts);
         if (storedCategories) categories = JSON.parse(storedCategories);
         categories.forEach(c => {
-            if(c.icon && !iconList.includes(c.icon) && c.icon !== "➕") {
-                iconList.push(c.icon);
-            }
+            if(c.icon && !iconList.includes(c.icon) && c.icon !== "➕") iconList.push(c.icon);
         });
         renderAll();
     }
@@ -462,7 +459,6 @@
     function saveProducts() { localStorage.setItem("aamir_products", JSON.stringify(products)); }
     function saveCategories() { localStorage.setItem("aamir_categories", JSON.stringify(categories)); }
     
-    // TPIN & Fingerprint
     function loadTpin() { userTpin = localStorage.getItem("aamir_tpin") || null; }
     function saveTpin(tpin) {
         if (tpin === null) localStorage.removeItem("aamir_tpin");
@@ -490,16 +486,9 @@
         if (unlockResolve) unlockResolve();
     }
     
-    // WebAuthn with proper error handling
     async function registerFingerprint() {
-        if (!window.isSecureContext) {
-            showToast("❌ Fingerprint requires HTTPS or localhost. Not available in this preview.");
-            return false;
-        }
-        if (!window.PublicKeyCredential) {
-            showToast("❌ Browser does not support WebAuthn.");
-            return false;
-        }
+        if (!window.isSecureContext) { showToast("❌ Fingerprint requires HTTPS or localhost."); return false; }
+        if (!window.PublicKeyCredential) { showToast("❌ Browser does not support WebAuthn."); return false; }
         try {
             const challenge = new Uint8Array(32);
             window.crypto.getRandomValues(challenge);
@@ -518,132 +507,39 @@
             saveWebAuthnId(idB64);
             showToast("✅ Fingerprint registered successfully!");
             return true;
-        } catch(e) {
-            showToast("❌ Registration failed: " + (e.message || "User cancelled or not supported"));
-            return false;
-        }
+        } catch(e) { showToast("❌ Registration failed: " + (e.message || "Not supported")); return false; }
     }
     async function authenticateWithFingerprint() {
-        if (!window.isSecureContext) {
-            showToast("❌ Fingerprint requires HTTPS or localhost.");
-            return false;
-        }
-        if (!userWebAuthnId) {
-            showToast("❌ No fingerprint registered. Please enable it first.");
-            return false;
-        }
+        if (!window.isSecureContext || !userWebAuthnId) return false;
         try {
             const credId = Uint8Array.from(atob(userWebAuthnId), c => c.charCodeAt(0));
             const challenge = new Uint8Array(32);
             window.crypto.getRandomValues(challenge);
             const assertion = await navigator.credentials.get({
-                publicKey: {
-                    challenge,
-                    allowCredentials: [{ id: credId, type: "public-key" }],
-                    timeout: 60000,
-                    userVerification: "required"
-                }
+                publicKey: { challenge, allowCredentials: [{ id: credId, type: "public-key" }], timeout: 60000, userVerification: "required" }
             });
-            if (assertion) {
-                showToast("✅ Fingerprint verified!");
-                return true;
-            }
-            return false;
-        } catch(e) {
-            showToast("❌ Authentication failed: " + (e.message || "Try again"));
-            return false;
-        }
+            return !!assertion;
+        } catch(e) { return false; }
     }
     
-    // CRUD
-    function addCategory(name, icon) {
-        const newId = Date.now().toString() + Math.random().toString(36).substr(2, 5);
-        categories.push({ id: newId, name, icon });
-        saveCategories();
-        renderAll();
-        showToast(`✅ Category "${name}" added`);
-    }
-    function deleteCategory(id) {
-        categories = categories.filter(c => c.id !== id);
-        products = products.filter(p => p.category !== id);
-        if (currentFilter === id) currentFilter = "All";
-        saveCategories(); saveProducts();
-        renderAll();
-    }
-    function addProduct(productData, imageBase64) {
-        const newId = Date.now().toString() + Math.random().toString(36).substr(2, 5);
-        products.unshift({ ...productData, id: newId, imageBase64: imageBase64 || null, stock: productData.stock || 100 });
-        saveProducts();
-        renderAll();
-        showToast("✅ Product added!");
-    }
-    function updateProduct(id, updates, imageBase64) {
-        const idx = products.findIndex(p => p.id === id);
-        if (idx === -1) return;
-        products[idx] = { ...products[idx], ...updates, imageBase64: imageBase64 !== undefined ? imageBase64 : products[idx].imageBase64 };
-        saveProducts();
-        renderAll();
-        showToast("✅ Product updated!");
-    }
-    function deleteProduct(id) {
-        products = products.filter(p => p.id !== id);
-        saveProducts();
-        renderAll();
-    }
-    function deleteAllData() {
-        if (confirm("⚠️ Delete ALL products and categories? This cannot be undone.")) {
-            products = []; categories = [];
-            saveProducts(); saveCategories();
-            renderAll();
-            showToast("All data reset");
-        }
-    }
+    function addCategory(name, icon) { const newId = Date.now().toString() + Math.random().toString(36).substr(2, 5); categories.push({ id: newId, name, icon }); saveCategories(); renderAll(); showToast(`✅ Category "${name}" added`); }
+    function deleteCategory(id) { categories = categories.filter(c => c.id !== id); products = products.filter(p => p.category !== id); if (currentFilter === id) currentFilter = "All"; saveCategories(); saveProducts(); renderAll(); }
+    function addProduct(productData, imageBase64) { const newId = Date.now().toString() + Math.random().toString(36).substr(2, 5); products.unshift({ ...productData, id: newId, imageBase64: imageBase64 || null, stock: productData.stock || 100 }); saveProducts(); renderAll(); showToast("✅ Product added!"); }
+    function updateProduct(id, updates, imageBase64) { const idx = products.findIndex(p => p.id === id); if (idx === -1) return; products[idx] = { ...products[idx], ...updates, imageBase64: imageBase64 !== undefined ? imageBase64 : products[idx].imageBase64 }; saveProducts(); renderAll(); showToast("✅ Product updated!"); }
+    function deleteProduct(id) { products = products.filter(p => p.id !== id); saveProducts(); renderAll(); showToast("✅ Product deleted"); }
+    function deleteAllData() { if (confirm("⚠️ Delete ALL products and categories?")) { products = []; categories = []; saveProducts(); saveCategories(); renderAll(); showToast("All data reset"); } }
     
     function renderAll() { renderCategoryChips(); renderHomeProducts(); renderStockList(); document.getElementById("profileTotalProducts").innerText = products.length; document.getElementById("profileTotalCategories").innerText = categories.length; updateCategorySelect(); }
     function renderCategoryChips() {
         let html = `<div class="chip ${currentFilter === 'All' ? 'active' : ''}" data-cat="All">All</div>`;
         html += categories.map(c => `<div class="chip ${currentFilter === c.id ? 'active' : ''}" data-cat="${c.id}">${c.icon || '📦'} ${c.name}<button class="delete-chip" onclick="event.stopPropagation(); showDeleteModal('${c.id}','${escapeHtml(c.name)}')"><i class="fas fa-trash-alt"></i></button></div>`).join('');
         document.getElementById("categoryChips").innerHTML = html;
-        document.querySelectorAll(".chip").forEach(chip => {
-            chip.addEventListener("click", (e) => { if (e.target.closest('.delete-chip')) return; currentFilter = chip.getAttribute("data-cat"); renderAll(); });
-        });
+        document.querySelectorAll(".chip").forEach(chip => { chip.addEventListener("click", (e) => { if (e.target.closest('.delete-chip')) return; currentFilter = chip.getAttribute("data-cat"); renderAll(); }); });
     }
-    function renderHomeProducts() {
-        let filtered = products.filter(p => (currentFilter === "All" || p.category === currentFilter) && p.name.toLowerCase().includes(searchQuery.toLowerCase()));
-        const container = document.getElementById("homeProductsGrid");
-        if (!filtered.length) { container.innerHTML = '<div class="empty-state">No products found</div>'; return; }
-        container.innerHTML = filtered.map(p => `<div class="product-card" onclick='showProductDetail(${JSON.stringify(p).replace(/'/g,"&#39;")})'><div class="product-image-container">${p.imageBase64 ? `<img class="product-image" src="${p.imageBase64}">` : '<i class="fas fa-image no-image-icon"></i>'}</div><div class="product-info"><div class="product-name">${escapeHtml(p.name)}</div><div class="sell-price">₹${p.salmanPrice}</div><div class="mrp">₹${p.dukandarPrice}</div><div class="purchase-badge">Purchase: ₹${p.purchasePrice}</div></div></div>`).join('');
-    }
-    function renderStockList() {
-        let filtered = products.filter(p => p.name.toLowerCase().includes(stockSearch.toLowerCase()));
-        const container = document.getElementById("stockListContainer");
-        if (!filtered.length) { container.innerHTML = '<div class="empty-state">No products</div>'; return; }
-        container.innerHTML = filtered.map(p => `<div class="stock-item"><div style="width:50px;height:50px;background:#e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center;">${p.imageBase64 ? `<img src="${p.imageBase64}" style="width:100%;height:100%;object-fit:cover;">` : '<i class="fas fa-box"></i>'}</div><div style="flex:1"><strong>${escapeHtml(p.name)}</strong><br><span>Purchase: ₹${p.purchasePrice} | Sell: ₹${p.salmanPrice}</span><br><span>Stock: ${p.stock}</span></div><div class="stock-actions"><button onclick="sellProduct('${p.id}')"><i class="fas fa-shopping-cart" style="color:#10b981;"></i></button><button onclick="editStock('${p.id}')"><i class="fas fa-edit" style="color:#001959;"></i></button><button onclick="showDeleteProductModal('${p.id}')"><i class="fas fa-trash" style="color:#ef4444;"></i></button></div></div>`).join('');
-    }
-    window.sellProduct = (id) => {
-        const p = products.find(p => p.id === id);
-        if (!p) return;
-        let qty = prompt(`Sell ${p.name}\nPrice: ₹${p.salmanPrice}\nQuantity:`);
-        qty = parseInt(qty);
-        if (qty > 0 && p.stock >= qty) { p.stock -= qty; saveProducts(); renderAll(); showToast(`Sold! ₹${qty * p.salmanPrice}`); }
-        else if (qty > p.stock) alert("Insufficient stock");
-    };
-    window.editStock = (id) => {
-        const p = products.find(p => p.id === id);
-        if (p) {
-            document.getElementById("prodName").value = p.name;
-            document.getElementById("prodPurchasePrice").value = p.purchasePrice;
-            document.getElementById("prodSalmanPrice").value = p.salmanPrice;
-            document.getElementById("prodDukandarPrice").value = p.dukandarPrice;
-            editingId = id; editingImageData = p.imageBase64;
-            currentSelectedCategory = p.category;
-            const cat = categories.find(c => c.id === p.category);
-            document.getElementById("selectedCategoryBadge").innerText = cat ? cat.name : p.category;
-            document.getElementById("categorySelectionView").style.display = "none";
-            document.getElementById("addProductFormView").style.display = "block";
-            switchScreen('addProduct');
-        }
-    };
+    function renderHomeProducts() { let filtered = products.filter(p => (currentFilter === "All" || p.category === currentFilter) && p.name.toLowerCase().includes(searchQuery.toLowerCase())); const container = document.getElementById("homeProductsGrid"); if (!filtered.length) { container.innerHTML = '<div class="empty-state">No products found</div>'; return; } container.innerHTML = filtered.map(p => `<div class="product-card" onclick='showProductDetail(${JSON.stringify(p).replace(/'/g,"&#39;")})'><div class="product-image-container">${p.imageBase64 ? `<img class="product-image" src="${p.imageBase64}">` : '<i class="fas fa-image no-image-icon"></i>'}</div><div class="product-info"><div class="product-name">${escapeHtml(p.name)}</div><div class="sell-price">₹${p.salmanPrice}</div><div class="mrp">₹${p.dukandarPrice}</div><div class="purchase-badge">Purchase: ₹${p.purchasePrice}</div></div></div>`).join(''); }
+    function renderStockList() { let filtered = products.filter(p => p.name.toLowerCase().includes(stockSearch.toLowerCase())); const container = document.getElementById("stockListContainer"); if (!filtered.length) { container.innerHTML = '<div class="empty-state">No products</div>'; return; } container.innerHTML = filtered.map(p => `<div class="stock-item"><div style="width:50px;height:50px;background:#e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center;">${p.imageBase64 ? `<img src="${p.imageBase64}" style="width:100%;height:100%;object-fit:cover;">` : '<i class="fas fa-box"></i>'}</div><div style="flex:1"><strong>${escapeHtml(p.name)}</strong><br><span>Purchase: ₹${p.purchasePrice} | Sell: ₹${p.salmanPrice}</span><br><span>Stock: ${p.stock}</span></div><div class="stock-actions"><button onclick="sellProduct('${p.id}')"><i class="fas fa-shopping-cart" style="color:#10b981;"></i></button><button onclick="editStock('${p.id}')"><i class="fas fa-edit" style="color:#001959;"></i></button><button onclick="showDeleteProductModal('${p.id}')"><i class="fas fa-trash" style="color:#ef4444;"></i></button></div></div>`).join(''); }
+    window.sellProduct = (id) => { const p = products.find(p => p.id === id); if (!p) return; let qty = prompt(`Sell ${p.name}\nPrice: ₹${p.salmanPrice}\nQuantity:`); qty = parseInt(qty); if (qty > 0 && p.stock >= qty) { p.stock -= qty; saveProducts(); renderAll(); showToast(`Sold! ₹${qty * p.salmanPrice}`); } else if (qty > p.stock) alert("Insufficient stock"); };
+    window.editStock = (id) => { const p = products.find(p => p.id === id); if (p) { document.getElementById("prodName").value = p.name; document.getElementById("prodPurchasePrice").value = p.purchasePrice; document.getElementById("prodSalmanPrice").value = p.salmanPrice; document.getElementById("prodDukandarPrice").value = p.dukandarPrice; editingId = id; editingImageData = p.imageBase64; currentSelectedCategory = p.category; const cat = categories.find(c => c.id === p.category); document.getElementById("selectedCategoryBadge").innerText = cat ? cat.name : p.category; document.getElementById("categorySelectionView").style.display = "none"; document.getElementById("addProductFormView").style.display = "block"; switchScreen('addProduct'); } };
     window.showDeleteProductModal = (id) => { window.pendingProductDeleteId = id; const p = products.find(p => p.id === id); if (p) document.getElementById("deleteProductName").innerText = p.name; document.getElementById("deleteProductModal").style.display = "flex"; };
     window.closeDeleteProductModal = () => document.getElementById("deleteProductModal").style.display = "none";
     window.confirmDeleteProduct = () => { if (window.pendingProductDeleteId) { deleteProduct(window.pendingProductDeleteId); window.pendingProductDeleteId = null; closeDeleteProductModal(); } };
@@ -651,8 +547,8 @@
     window.closeDeleteModal = () => document.getElementById("deleteCategoryModal").style.display = "none";
     window.confirmDeleteCategory = () => { if (window.pendingDeleteId) { deleteCategory(window.pendingDeleteId); window.pendingDeleteId = null; closeDeleteModal(); } };
     function updateCategorySelect() { const sel = document.getElementById("customCategory"); if (sel) sel.innerHTML = categories.map(c => `<option value="${c.id}">${c.icon || '📦'} ${c.name}</option>`).join(''); }
-    window.backToCategorySelection = () => { document.getElementById("categorySelectionView").style.display = "block"; document.getElementById("addProductFormView").style.display = "none"; editingId = null; };
     
+    document.getElementById("backToCategoryBtn").onclick = () => { document.getElementById("categorySelectionView").style.display = "block"; document.getElementById("addProductFormView").style.display = "none"; editingId = null; editingImageData = null; };
     document.getElementById("saveProductBtn").onclick = () => {
         const name = document.getElementById("prodName").value.trim();
         const purchase = parseFloat(document.getElementById("prodPurchasePrice").value);
@@ -664,88 +560,24 @@
         const perform = (imageData) => {
             if (editingId) updateProduct(editingId, { name, category: currentSelectedCategory, purchasePrice: purchase, salmanPrice: sell, dukandarPrice: mrp, stock: 100 }, imageData);
             else addProduct({ name, category: currentSelectedCategory, purchasePrice: purchase, salmanPrice: sell, dukandarPrice: mrp, stock: 100 }, imageData);
-            clearAddForm(); backToCategorySelection(); switchScreen('stock');
+            clearAddForm(); document.getElementById("categorySelectionView").style.display = "block"; document.getElementById("addProductFormView").style.display = "none"; editingId = null; switchScreen('stock');
         };
-        if (file) { const reader = new FileReader(); reader.onload = e => perform(e.target.result); reader.readAsDataURL(file); }
-        else perform(imgBase64);
+        if (file) { const reader = new FileReader(); reader.onload = e => perform(e.target.result); reader.readAsDataURL(file); } else perform(imgBase64);
     };
-    function clearAddForm() { document.getElementById("prodName").value = ""; document.getElementById("prodPurchasePrice").value = ""; document.getElementById("prodSalmanPrice").value = ""; document.getElementById("prodDukandarPrice").value = ""; document.getElementById("imgPreviewContainer").innerHTML = ""; editingId = null; editingImageData = null; }
+    function clearAddForm() { document.getElementById("prodName").value = ""; document.getElementById("prodPurchasePrice").value = ""; document.getElementById("prodSalmanPrice").value = ""; document.getElementById("prodDukandarPrice").value = ""; document.getElementById("imgPreviewContainer").innerHTML = ""; document.getElementById("prodImageFile").value = ""; editingId = null; editingImageData = null; }
     document.getElementById("prodImageFile").onchange = e => { const f = e.target.files[0]; if (f) { const reader = new FileReader(); reader.onload = ev => document.getElementById("imgPreviewContainer").innerHTML = `<img src="${ev.target.result}" class="image-preview-sm">`; reader.readAsDataURL(f); } };
     
-    function buildIconGrid() {
-        const grid = document.getElementById("iconGrid");
-        if (!grid) return;
-        grid.innerHTML = "";
-        iconList.forEach(icon => {
-            const div = document.createElement("div");
-            div.className = "icon-option";
-            if (icon === "➕") div.classList.add("green-plus");
-            if (icon === selectedIcon) div.classList.add("selected");
-            div.textContent = icon;
-            div.addEventListener("click", () => {
-                document.querySelectorAll("#iconGrid .icon-option").forEach(opt => opt.classList.remove("selected"));
-                div.classList.add("selected");
-                selectedIcon = icon;
-            });
-            grid.appendChild(div);
-        });
-    }
-    
-    window.openAddCategoryModal = () => {
-        document.getElementById("newCategoryName").value = ""; document.getElementById("customIconInput").value = "";
-        selectedIcon = "📦"; buildIconGrid();
-        document.getElementById("categoryModal").style.display = "flex";
-    };
+    function buildIconGrid() { const grid = document.getElementById("iconGrid"); if (!grid) return; grid.innerHTML = ""; iconList.forEach(icon => { const div = document.createElement("div"); div.className = "icon-option"; if (icon === "➕") div.classList.add("green-plus"); if (icon === selectedIcon) div.classList.add("selected"); div.textContent = icon; div.addEventListener("click", () => { document.querySelectorAll("#iconGrid .icon-option").forEach(opt => opt.classList.remove("selected")); div.classList.add("selected"); selectedIcon = icon; }); grid.appendChild(div); }); }
+    window.openAddCategoryModal = () => { document.getElementById("newCategoryName").value = ""; document.getElementById("customIconInput").value = ""; selectedIcon = "📦"; buildIconGrid(); document.getElementById("categoryModal").style.display = "flex"; };
     window.closeCategoryModal = () => document.getElementById("categoryModal").style.display = "none";
-    document.getElementById("saveCategoryBtn").onclick = () => {
-        const name = document.getElementById("newCategoryName").value.trim();
-        const customIcon = document.getElementById("customIconInput").value.trim();
-        if (!name) return showToast("Enter name");
-        let iconToSave = customIcon || selectedIcon;
-        if (customIcon && !iconList.includes(customIcon)) iconList.push(customIcon);
-        addCategory(name, iconToSave);
-        document.getElementById("customIconInput").value = "";
-        buildIconGrid(); closeCategoryModal();
-    };
+    document.getElementById("saveCategoryBtn").onclick = () => { const name = document.getElementById("newCategoryName").value.trim(); const customIcon = document.getElementById("customIconInput").value.trim(); if (!name) return showToast("Enter name"); let iconToSave = customIcon || selectedIcon; if (customIcon && !iconList.includes(customIcon)) iconList.push(customIcon); addCategory(name, iconToSave); document.getElementById("customIconInput").value = ""; buildIconGrid(); closeCategoryModal(); };
     
-    window.openDirectAddModal = () => {
-        if (categories.length === 0) { showToast("Add a category first"); return; }
-        updateCategorySelect();
-        document.getElementById("customItemName").value = "";
-        document.getElementById("customPurchasePrice").value = "";
-        document.getElementById("customSellingPrice").value = "";
-        document.getElementById("customMrp").value = "";
-        document.getElementById("modalImagePreviewContainer").innerHTML = "";
-        window.modalImageData = null;
-        document.getElementById("customModal").style.display = "flex";
-    };
+    window.openDirectAddModal = () => { if (categories.length === 0) { showToast("Add a category first"); return; } updateCategorySelect(); document.getElementById("customItemName").value = ""; document.getElementById("customPurchasePrice").value = ""; document.getElementById("customSellingPrice").value = ""; document.getElementById("customMrp").value = ""; document.getElementById("modalImagePreviewContainer").innerHTML = ""; window.modalImageData = null; document.getElementById("customModal").style.display = "flex"; };
     window.closeModal = () => document.getElementById("customModal").style.display = "none";
-    document.getElementById("saveCustomItemBtn").onclick = () => {
-        const name = document.getElementById("customItemName").value.trim();
-        const catId = document.getElementById("customCategory").value;
-        const purchase = parseFloat(document.getElementById("customPurchasePrice").value);
-        const sell = parseFloat(document.getElementById("customSellingPrice").value);
-        const mrp = parseFloat(document.getElementById("customMrp").value);
-        if (!name || !catId || isNaN(purchase) || isNaN(sell) || isNaN(mrp)) { showToast("Fill all fields"); return; }
-        let img = window.modalImageData;
-        const file = document.getElementById("modalImageFile").files[0];
-        const perform = (imageData) => {
-            addProduct({ name, category: catId, purchasePrice: purchase, salmanPrice: sell, dukandarPrice: mrp, stock: 100 }, imageData);
-            closeModal(); document.getElementById("successModal").style.display = "flex";
-        };
-        if (file) { const reader = new FileReader(); reader.onload = e => perform(e.target.result); reader.readAsDataURL(file); }
-        else perform(img);
-    };
+    document.getElementById("saveCustomItemBtn").onclick = () => { const name = document.getElementById("customItemName").value.trim(); const catId = document.getElementById("customCategory").value; const purchase = parseFloat(document.getElementById("customPurchasePrice").value); const sell = parseFloat(document.getElementById("customSellingPrice").value); const mrp = parseFloat(document.getElementById("customMrp").value); if (!name || !catId || isNaN(purchase) || isNaN(sell) || isNaN(mrp)) { showToast("Fill all fields"); return; } let img = window.modalImageData; const file = document.getElementById("modalImageFile").files[0]; const perform = (imageData) => { addProduct({ name, category: catId, purchasePrice: purchase, salmanPrice: sell, dukandarPrice: mrp, stock: 100 }, imageData); closeModal(); document.getElementById("successModal").style.display = "flex"; }; if (file) { const reader = new FileReader(); reader.onload = e => perform(e.target.result); reader.readAsDataURL(file); } else perform(img); };
     document.getElementById("modalImageFile").onchange = e => { const f = e.target.files[0]; if (f) { const reader = new FileReader(); reader.onload = ev => { window.modalImageData = ev.target.result; document.getElementById("modalImagePreviewContainer").innerHTML = `<img src="${ev.target.result}" class="image-preview-sm">`; }; reader.readAsDataURL(f); } };
     window.closeSuccessModal = () => { document.getElementById("successModal").style.display = "none"; switchScreen('stock'); };
-    window.showProductDetail = (p) => {
-        document.getElementById("detailTitle").innerText = p.name;
-        document.getElementById("detailPurchasePrice").innerText = p.purchasePrice;
-        document.getElementById("detailSalmanPrice").innerText = p.salmanPrice;
-        document.getElementById("detailMrpPrice").innerText = p.dukandarPrice;
-        document.getElementById("detailImage").src = p.imageBase64 || "https://via.placeholder.com/140?text=No+Image";
-        document.getElementById("productDetailModal").style.display = "flex";
-    };
+    window.showProductDetail = (p) => { document.getElementById("detailTitle").innerText = p.name; document.getElementById("detailPurchasePrice").innerText = p.purchasePrice; document.getElementById("detailSalmanPrice").innerText = p.salmanPrice; document.getElementById("detailMrpPrice").innerText = p.dukandarPrice; document.getElementById("detailImage").src = p.imageBase64 || "https://via.placeholder.com/140?text=No+Image"; document.getElementById("productDetailModal").style.display = "flex"; };
     window.closeProductDetail = () => document.getElementById("productDetailModal").style.display = "none";
     
     function switchScreen(id) {
@@ -756,10 +588,7 @@
         if (act) act.classList.add('active');
         if (id === 'home') renderHomeProducts();
         if (id === 'stock') renderStockList();
-        if (id === 'addProduct') {
-            if (!editingId) document.getElementById("categorySelectionView").style.display = "block";
-            else document.getElementById("addProductFormView").style.display = "block";
-        }
+        if (id === 'addProduct') { if (!editingId) document.getElementById("categorySelectionView").style.display = "block"; else document.getElementById("addProductFormView").style.display = "block"; }
     }
     document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', () => switchScreen(n.getAttribute('data-screen'))));
     document.getElementById("searchInput").addEventListener('input', e => { searchQuery = e.target.value; renderHomeProducts(); });
@@ -768,82 +597,28 @@
     document.getElementById("openProductBtn").onclick = openDirectAddModal;
     document.getElementById("fabBtn").onclick = openDirectAddModal;
     
-    // Hidden Reset Button: 5 taps on stats area
     const statsArea = document.getElementById("secretTapArea");
     const resetBtn = document.getElementById("resetDataBtn");
-    statsArea.addEventListener("click", () => {
-        if (tapTimeout) clearTimeout(tapTimeout);
-        tapCount++;
-        if (tapCount === 5) {
-            resetBtn.style.display = "block";
-            showToast("🔓 Reset All Data button revealed!");
-            tapCount = 0;
-        } else {
-            tapTimeout = setTimeout(() => { tapCount = 0; }, 800);
-        }
-    });
+    statsArea.addEventListener("click", () => { if (tapTimeout) clearTimeout(tapTimeout); tapCount++; if (tapCount === 5) { resetBtn.style.display = "block"; showToast("🔓 Reset All Data button revealed!"); tapCount = 0; } else { tapTimeout = setTimeout(() => { tapCount = 0; }, 800); } });
     resetBtn.onclick = () => deleteAllData();
     
-    // TPIN Custom Modals
-    function openSetTpinFlow() {
-        if (userTpin) {
-            document.getElementById("currentTpinInput").value = "";
-            document.getElementById("enterCurrentTpinModal").style.display = "flex";
-        } else {
-            document.getElementById("newTpinInput").value = "";
-            document.getElementById("setNewTpinModal").style.display = "flex";
-        }
-    }
+    function openSetTpinFlow() { if (userTpin) document.getElementById("enterCurrentTpinModal").style.display = "flex"; else { document.getElementById("newTpinInput").value = ""; document.getElementById("setNewTpinModal").style.display = "flex"; } }
     document.getElementById("setTpinBtn").onclick = openSetTpinFlow;
     document.getElementById("cancelCurrentTpinBtn").onclick = () => document.getElementById("enterCurrentTpinModal").style.display = "none";
     document.getElementById("cancelSetTpinBtn").onclick = () => document.getElementById("setNewTpinModal").style.display = "none";
-    document.getElementById("verifyCurrentTpinBtn").onclick = () => {
-        const entered = document.getElementById("currentTpinInput").value;
-        if (entered === userTpin) {
-            document.getElementById("enterCurrentTpinModal").style.display = "none";
-            document.getElementById("newTpinInput").value = "";
-            document.getElementById("setNewTpinModal").style.display = "flex";
-        } else {
-            showToast("Incorrect current TPIN");
-        }
-    };
-    document.getElementById("confirmSetTpinBtn").onclick = () => {
-        const newPin = document.getElementById("newTpinInput").value.trim();
-        if (newPin === "") {
-            saveTpin(null);
-            showToast("TPIN disabled");
-            document.getElementById("setNewTpinModal").style.display = "none";
-        } else if (/^\d{4,6}$/.test(newPin)) {
-            saveTpin(newPin);
-            showToast("TPIN set successfully");
-            document.getElementById("setNewTpinModal").style.display = "none";
-        } else {
-            showToast("TPIN must be 4-6 digits");
-        }
-    };
-    
+    document.getElementById("verifyCurrentTpinBtn").onclick = () => { const entered = document.getElementById("currentTpinInput").value; if (entered === userTpin) { document.getElementById("enterCurrentTpinModal").style.display = "none"; document.getElementById("newTpinInput").value = ""; document.getElementById("setNewTpinModal").style.display = "flex"; } else showToast("Incorrect current TPIN"); };
+    document.getElementById("confirmSetTpinBtn").onclick = () => { const newPin = document.getElementById("newTpinInput").value.trim(); if (newPin === "") { saveTpin(null); showToast("TPIN disabled"); document.getElementById("setNewTpinModal").style.display = "none"; } else if (/^\d{4,6}$/.test(newPin)) { saveTpin(newPin); showToast("TPIN set successfully"); document.getElementById("setNewTpinModal").style.display = "none"; } else showToast("TPIN must be 4-6 digits"); };
     document.getElementById("enableFingerprintBtn").onclick = registerFingerprint;
-    document.getElementById("unlockPinBtn").onclick = () => {
-        const entered = document.getElementById("unlockPinInput").value;
-        if (entered === userTpin) hideUnlockScreen();
-        else document.getElementById("unlockError").innerText = "Invalid TPIN";
-    };
-    document.getElementById("unlockFingerprintBtn").onclick = async () => {
-        const ok = await authenticateWithFingerprint();
-        if (ok) hideUnlockScreen();
-        else document.getElementById("unlockError").innerText = "Fingerprint not recognized";
-    };
-    
+    document.getElementById("unlockPinBtn").onclick = () => { const entered = document.getElementById("unlockPinInput").value; if (entered === userTpin) hideUnlockScreen(); else document.getElementById("unlockError").innerText = "Invalid TPIN"; };
+    document.getElementById("unlockFingerprintBtn").onclick = async () => { const ok = await authenticateWithFingerprint(); if (ok) hideUnlockScreen(); else document.getElementById("unlockError").innerText = "Fingerprint not recognized"; };
     function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m]); }
     
-    // Initialize
     loadData();
     buildIconGrid();
-    showUnlockIfNeeded().then(() => {
-        document.getElementById("bottomNav").style.display = "flex";
-        document.getElementById("fabBtn").style.display = "flex";
-        switchScreen('home');
-    });
+    showUnlockIfNeeded().then(() => { document.getElementById("bottomNav").style.display = "flex"; document.getElementById("fabBtn").style.display = "flex"; switchScreen('home'); });
+    
+    document.getElementById("confirmDeleteProdBtn").onclick = () => { if (window.pendingProductDeleteId) { deleteProduct(window.pendingProductDeleteId); window.pendingProductDeleteId = null; closeDeleteProductModal(); } };
+    document.getElementById("confirmDeleteCatBtn").onclick = () => { if (window.pendingDeleteId) { deleteCategory(window.pendingDeleteId); window.pendingDeleteId = null; closeDeleteModal(); } };
 </script>
 </body>
 </html>
