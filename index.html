@@ -2,9 +2,16 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Aamir Trading - Private Inventory</title>
+    <!-- ✅ NO manifest.json - This prevents download/install prompts -->
+    <!-- ✅ Disable theme-color that might trigger install -->
     <meta name="theme-color" content="#001959">
+    <!-- ✅ Prevent iOS from showing "Add to Home Screen" popup -->
+    <meta name="apple-mobile-web-app-capable" content="no">
+    <meta name="mobile-web-app-capable" content="no">
+    <!-- ✅ Disable automatic app detection -->
+    <meta name="format-detection" content="telephone=no">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -13,7 +20,6 @@
         body { font-family: 'Inter', sans-serif; background: #f5f7fb; padding-bottom: 75px; }
         .app-main { max-width: 500px; margin: 0 auto; background: #ffffff; min-height: 100vh; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
         
-        /* Premium Banner Header */
         .premium-banner {
             position: relative;
             width: 100%;
@@ -108,7 +114,6 @@
             .gold-divider { width: 130px; height: 1.2px; }
             .tagline { font-size: 0.65rem; gap: 5px; }
             .curve-wrapper svg { height: 25px; }
-            .premium-banner::before, .premium-banner::after { width: 40px; background-size: 10px 10px; }
         }
         
         .bottom-nav { position: fixed; bottom: 0; max-width: 500px; width: 100%; background: rgba(255,255,255,0.96); backdrop-filter: blur(20px); display: flex; justify-content: space-around; padding: 8px 16px 20px; border-top: 1px solid #eef2ff; z-index: 100; }
@@ -119,7 +124,6 @@
         .screen.active-screen { display: block; }
         @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
         
-        /* Unlock Screen - Only security */
         .unlock-screen {
             position: fixed;
             top: 0;
@@ -255,7 +259,6 @@
         .stock-item { background: #f8fafc; border-radius: 18px; padding: 12px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
         .stock-actions button { background: none; border: none; margin: 0 4px; font-size: 18px; cursor: pointer; }
         
-        /* Profile Screen */
         .profile-stats { background: transparent; padding: 20px; text-align: center; }
         .setting-row { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 12px 16px; border-radius: 20px; margin: 10px 0; cursor: pointer; }
         .setting-row span { font-weight: 500; color: #1e293b; }
@@ -270,7 +273,6 @@
         .floating-add-btn { position: fixed; bottom: 85px; right: 20px; background: linear-gradient(135deg, #001959, #002d8a); color: white; width: 56px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; z-index: 90; font-size: 24px; border: none; }
         .toast-msg { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 8px 18px; border-radius: 35px; font-size: 13px; z-index: 200; display: none; }
         
-        /* Modal Styles - Common */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -330,7 +332,6 @@
         .btn-primary { background: linear-gradient(135deg, #001959, #002d8a); color: white; }
         .btn-delete { background: #ef4444; color: white; }
         
-        /* Category Modal Grid */
         .icon-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -372,11 +373,13 @@
         .selected-badge { background: #eef2ff; padding: 6px 12px; border-radius: 30px; font-size: 14px; display: inline-block; margin-bottom: 15px; }
         .input-group { margin-bottom: 10px; text-align: left; }
         .input-group label { font-size: 12px; color: #64748b; margin-left: 10px; display: block; margin-bottom: 4px; }
+        
+        /* ✅ Hide any browser install prompts */
+        :-webkit-full-screen, :fullscreen { display: none !important; }
     </style>
 </head>
 <body>
 <div class="app-main">
-    <!-- Premium Banner Header -->
     <div class="premium-banner">
         <h1 class="main-title">Aamir Trading</h1>
         <div class="gold-divider"></div>
@@ -396,36 +399,43 @@
         </div>
     </div>
 
-    <!-- Unlock Screen (TPIN / Fingerprint) -->
     <div id="unlockScreen" class="unlock-screen"><div class="unlock-card"><div class="unlock-title">Enter TPIN</div><div class="unlock-sub">Enter your TPIN to continue</div><input type="password" id="unlockPinInput" class="unlock-input" maxlength="6" inputmode="numeric" placeholder="••••••"><div class="security-note"><i class="fas fa-shield-alt"></i> Your security is our priority</div><div class="unlock-buttons"><button class="unlock-btn primary" id="unlockPinBtn">Unlock</button></div><button class="fingerprint-btn" id="unlockFingerprintBtn"><i class="fas fa-fingerprint"></i></button><div id="unlockError" class="unlock-error"></div></div></div>
 
-    <!-- Main Screens -->
     <div id="homeScreen" class="screen"><div class="search-bar"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search products..."></div><div class="category-chips" id="categoryChips"></div><div id="homeProductsGrid" class="products-grid"></div></div>
-    <div id="addProductScreen" class="screen"><div id="categorySelectionView"><div style="font-size:22px; font-weight:700;">📦 Add New Product</div><div style="color:#6b7280; margin:8px 0 24px;">First add a category, then add products</div><button class="btn-primary" id="openCategoryBtn" style="width:100%; margin-bottom:12px;"><i class="fas fa-folder-plus"></i> ➕ Add New Category</button><button class="btn-primary" id="openProductBtn" style="background:#1e6b4c;"><i class="fas fa-plus-circle"></i> Add Product</button></div><div id="addProductFormView" style="display:none;"><button class="back-btn" id="backToCategoryBtn"><i class="fas fa-arrow-left"></i> Back</button><div class="selected-badge" id="selectedCategoryBadge">Select Category</div><div><input type="text" id="prodName" class="modal-input" placeholder="Product Name"><div class="input-group"><label>Purchase Price (₹) - कितने का हमें मिलेगा?</label><input type="number" id="prodPurchasePrice" class="modal-input" placeholder="e.g., 5"></div><div class="input-group"><label>Selling Price (₹) - कितना का सेलमान को देना है?</label><input type="number" id="prodSalmanPrice" class="modal-input" placeholder="e.g., 10"></div><div class="input-group"><label>MRP (₹) - कितने का दुकानदार को देना है?</label><input type="number" id="prodDukandarPrice" class="modal-input" placeholder="e.g., 15"></div><div class="image-upload-area" onclick="document.getElementById('prodImageFile').click()"><i class="fas fa-cloud-upload-alt"></i> Upload Image<input type="file" id="prodImageFile" accept="image/*" style="display:none"><div id="imgPreviewContainer" style="margin-top:8px;"></div></div><button class="btn-primary" id="saveProductBtn" style="margin-top:15px;">➕ Save Product</button></div></div></div>
+    <div id="addProductScreen" class="screen"><div id="categorySelectionView"><div style="font-size:22px; font-weight:700;">📦 Add New Product</div><div style="color:#6b7280; margin:8px 0 24px;">First add a category, then add products</div><button class="btn-primary" id="openCategoryBtn" style="width:100%; margin-bottom:12px;"><i class="fas fa-folder-plus"></i> ➕ Add New Category</button><button class="btn-primary" id="openProductBtn" style="background:#1e6b4c;"><i class="fas fa-plus-circle"></i> Add Product</button></div><div id="addProductFormView" style="display:none;"><button class="back-btn" id="backToCategoryBtn"><i class="fas fa-arrow-left"></i> Back</button><div class="selected-badge" id="selectedCategoryBadge">Select Category</div><div><input type="text" id="prodName" class="modal-input" placeholder="Product Name"><div class="input-group"><label>Purchase Price (₹)</label><input type="number" id="prodPurchasePrice" class="modal-input" placeholder="e.g., 5"></div><div class="input-group"><label>Selling Price (₹)</label><input type="number" id="prodSalmanPrice" class="modal-input" placeholder="e.g., 10"></div><div class="input-group"><label>MRP (₹)</label><input type="number" id="prodDukandarPrice" class="modal-input" placeholder="e.g., 15"></div><div class="image-upload-area" onclick="document.getElementById('prodImageFile').click()"><i class="fas fa-cloud-upload-alt"></i> Upload Image<input type="file" id="prodImageFile" accept="image/*" style="display:none"><div id="imgPreviewContainer" style="margin-top:8px;"></div></div><button class="btn-primary" id="saveProductBtn" style="margin-top:15px;">➕ Save Product</button></div></div></div>
     <div id="stockScreen" class="screen"><h3><i class="fas fa-boxes"></i> Product Management</h3><div class="search-bar"><i class="fas fa-search"></i><input type="text" id="stockSearchInput" placeholder="Search product..."></div><div id="stockListContainer"></div></div>
-    
-    <!-- Profile Screen with hidden Reset button (5 taps on stats to show) -->
     <div id="profileScreen" class="screen"><div class="profile-stats"><div class="setting-row" id="setTpinBtn"><span><i class="fas fa-lock"></i> Set/Change TPIN</span><i class="fas fa-chevron-down arrow"></i></div><div class="setting-row" id="enableFingerprintBtn"><span><i class="fas fa-fingerprint"></i> Enable Fingerprint Unlock</span><i class="fas fa-chevron-down arrow"></i></div><div class="stats-row" id="secretTapArea"><div class="stats-item"><div class="stats-number" id="profileTotalProducts">0</div><div class="stats-label">Total Products</div></div><div class="stats-item"><div class="stats-number" id="profileTotalCategories">0</div><div class="stats-label">Total Categories</div></div></div><button class="danger-btn" id="resetDataBtn">🔄 Reset All Data</button></div></div>
 
     <div class="bottom-nav" id="bottomNav"><div class="nav-item" data-screen="home"><i class="fas fa-home"></i><span>Home</span></div><div class="nav-item" data-screen="addProduct"><i class="fas fa-plus-circle"></i><span>Add</span></div><div class="nav-item" data-screen="stock"><i class="fas fa-boxes"></i><span>Products</span></div><div class="nav-item" data-screen="profile"><i class="fas fa-user"></i><span>Profile</span></div></div>
     <div class="floating-add-btn" id="fabBtn"><i class="fas fa-plus"></i></div>
     <div id="toastMsg" class="toast-msg"></div>
 
-    <!-- TPIN Stylish Modals -->
-    <div id="enterCurrentTpinModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Enter Current TPIN</div><div class="modal-desc">For your security, please enter your current TPIN.</div><input type="password" id="currentTpinInput" class="modal-input" placeholder="Enter current TPIN (leave empty if none)" maxlength="6"><div class="modal-buttons"><button class="btn-cancel" id="cancelCurrentTpinBtn">Cancel</button><button class="btn-primary" id="verifyCurrentTpinBtn">OK</button></div></div></div>
+    <div id="enterCurrentTpinModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Enter Current TPIN</div><div class="modal-desc">For your security, please enter your current TPIN.</div><input type="password" id="currentTpinInput" class="modal-input" placeholder="Enter current TPIN" maxlength="6"><div class="modal-buttons"><button class="btn-cancel" id="cancelCurrentTpinBtn">Cancel</button><button class="btn-primary" id="verifyCurrentTpinBtn">OK</button></div></div></div>
     <div id="setNewTpinModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Set / Change TPIN</div><div class="modal-desc">TPIN adds an extra layer of security to your account.</div><input type="password" id="newTpinInput" class="modal-input" placeholder="Enter new TPIN (4-6 digits) or leave empty to disable" maxlength="6"><div class="modal-buttons"><button class="btn-cancel" id="cancelSetTpinBtn">Cancel</button><button class="btn-primary" id="confirmSetTpinBtn">OK</button></div></div></div>
-
-    <!-- Category Modal -->
-    <div id="categoryModal" class="modal-overlay"><div class="modal-card"><div class="modal-title"><i class="fas fa-folder"></i> New Category</div><input type="text" id="newCategoryName" class="modal-input" placeholder="Category name"><div class="icon-grid" id="iconGrid"></div><input type="text" id="customIconInput" class="modal-input custom-icon-input" placeholder="या यहाँ अपना नया आइकॉन (Emoji) डालें" maxlength="2"><div class="modal-buttons"><button class="btn-cancel" onclick="closeCategoryModal()">Cancel</button><button class="btn-primary" id="saveCategoryBtn">Save</button></div></div></div>
+    <div id="categoryModal" class="modal-overlay"><div class="modal-card"><div class="modal-title"><i class="fas fa-folder"></i> New Category</div><input type="text" id="newCategoryName" class="modal-input" placeholder="Category name"><div class="icon-grid" id="iconGrid"></div><input type="text" id="customIconInput" class="modal-input custom-icon-input" placeholder="Ya yahan apna naya Icon (Emoji) daalein" maxlength="2"><div class="modal-buttons"><button class="btn-cancel" onclick="closeCategoryModal()">Cancel</button><button class="btn-primary" id="saveCategoryBtn">Save</button></div></div></div>
     <div id="deleteCategoryModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Delete Category?</div><p id="deleteCategoryName"></p><div class="modal-buttons"><button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button><button class="btn-delete" id="confirmDeleteCatBtn">Delete</button></div></div></div>
-    <div id="customModal" class="modal-overlay"><div class="modal-card"><div class="modal-title"><i class="fas fa-box-open"></i> Add Product</div><input type="text" id="customItemName" class="modal-input" placeholder="Product Name"><select id="customCategory" class="modal-input"></select><input type="number" id="customPurchasePrice" class="modal-input" placeholder="Purchase Price (₹) - हमें कितने का मिलेगा"><input type="number" id="customSellingPrice" class="modal-input" placeholder="Selling Price (₹) - सेलमान को कितना देना है"><input type="number" id="customMrp" class="modal-input" placeholder="MRP (₹) - दुकानदार को कितना देना है"><div class="image-upload-area" onclick="document.getElementById('modalImageFile').click()"><i class="fas fa-image"></i> Upload Image<input type="file" id="modalImageFile" accept="image/*" style="display:none"><div id="modalImagePreviewContainer"></div></div><div class="modal-buttons"><button class="btn-cancel" onclick="closeModal()">Cancel</button><button class="btn-primary" id="saveCustomItemBtn">Save Product</button></div></div></div>
+    <div id="customModal" class="modal-overlay"><div class="modal-card"><div class="modal-title"><i class="fas fa-box-open"></i> Add Product</div><input type="text" id="customItemName" class="modal-input" placeholder="Product Name"><select id="customCategory" class="modal-input"></select><input type="number" id="customPurchasePrice" class="modal-input" placeholder="Purchase Price (₹)"><input type="number" id="customSellingPrice" class="modal-input" placeholder="Selling Price (₹)"><input type="number" id="customMrp" class="modal-input" placeholder="MRP (₹)"><div class="image-upload-area" onclick="document.getElementById('modalImageFile').click()"><i class="fas fa-image"></i> Upload Image<input type="file" id="modalImageFile" accept="image/*" style="display:none"><div id="modalImagePreviewContainer"></div></div><div class="modal-buttons"><button class="btn-cancel" onclick="closeModal()">Cancel</button><button class="btn-primary" id="saveCustomItemBtn">Save Product</button></div></div></div>
     <div id="deleteProductModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Delete Product?</div><p id="deleteProductName"></p><div class="modal-buttons"><button class="btn-cancel" onclick="closeDeleteProductModal()">Cancel</button><button class="btn-delete" id="confirmDeleteProdBtn">Delete</button></div></div></div>
-    <div id="productDetailModal" class="modal-overlay"><div class="modal-card"><img id="detailImage" style="width:100%; border-radius:20px; margin-bottom:12px;"><h3 id="detailTitle"></h3><p>Purchase: ₹<span id="detailPurchasePrice"></span> (हमें मिला)</p><p>Selling: ₹<span id="detailSalmanPrice"></span> (सेलमान को देना है)</p><p>MRP: ₹<span id="detailMrpPrice"></span> (दुकानदार को देना है)</p><button class="btn-primary" onclick="closeProductDetail()">Close</button></div></div>
+    <div id="productDetailModal" class="modal-overlay"><div class="modal-card"><img id="detailImage" style="width:100%; border-radius:20px; margin-bottom:12px;"><h3 id="detailTitle"></h3><p>Purchase: ₹<span id="detailPurchasePrice"></span></p><p>Selling: ₹<span id="detailSalmanPrice"></span></p><p>MRP: ₹<span id="detailMrpPrice"></span></p><button class="btn-primary" onclick="closeProductDetail()">Close</button></div></div>
     <div id="successModal" class="modal-overlay"><div class="modal-card"><i class="fas fa-check-circle" style="font-size:48px; color:#10b981;"></i><div class="modal-title">Success!</div><p>Product added successfully.</p><button class="btn-primary" onclick="closeSuccessModal()">OK</button></div></div>
 </div>
 
 <script>
-    // ~~~~~~~~~~~~~~~~~~ LOCAL STORAGE DATA ~~~~~~~~~~~~~~~~~~
+    // ✅ Prevent any install prompt events
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        return false;
+    });
+    
+    // ✅ Prevent any PWA installation
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+                registration.unregister();
+            }
+        });
+    }
+    
     let products = [];
     let categories = [];
     let userTpin = null;
@@ -450,9 +460,7 @@
         const storedCategories = localStorage.getItem("aamir_categories");
         if (storedProducts) products = JSON.parse(storedProducts);
         if (storedCategories) categories = JSON.parse(storedCategories);
-        categories.forEach(c => {
-            if(c.icon && !iconList.includes(c.icon) && c.icon !== "➕") iconList.push(c.icon);
-        });
+        categories.forEach(c => { if(c.icon && !iconList.includes(c.icon) && c.icon !== "➕") iconList.push(c.icon); });
         renderAll();
     }
     
@@ -460,61 +468,38 @@
     function saveCategories() { localStorage.setItem("aamir_categories", JSON.stringify(categories)); }
     
     function loadTpin() { userTpin = localStorage.getItem("aamir_tpin") || null; }
-    function saveTpin(tpin) {
-        if (tpin === null) localStorage.removeItem("aamir_tpin");
-        else localStorage.setItem("aamir_tpin", tpin);
-        userTpin = tpin;
-    }
+    function saveTpin(tpin) { if (tpin === null) localStorage.removeItem("aamir_tpin"); else localStorage.setItem("aamir_tpin", tpin); userTpin = tpin; }
     function loadWebAuthnId() { userWebAuthnId = localStorage.getItem("aamir_webauthn_id") || null; }
-    function saveWebAuthnId(id) {
-        if (id === null) localStorage.removeItem("aamir_webauthn_id");
-        else localStorage.setItem("aamir_webauthn_id", id);
-        userWebAuthnId = id;
-    }
+    function saveWebAuthnId(id) { if (id === null) localStorage.removeItem("aamir_webauthn_id"); else localStorage.setItem("aamir_webauthn_id", id); userWebAuthnId = id; }
     
     async function showUnlockIfNeeded() {
-        loadTpin();
-        loadWebAuthnId();
-        if (userTpin) {
-            document.getElementById("unlockScreen").style.display = "flex";
-            return new Promise((resolve) => { unlockResolve = resolve; });
-        }
+        loadTpin(); loadWebAuthnId();
+        if (userTpin) { document.getElementById("unlockScreen").style.display = "flex"; return new Promise((resolve) => { unlockResolve = resolve; }); }
         return Promise.resolve();
     }
-    function hideUnlockScreen() {
-        document.getElementById("unlockScreen").style.display = "none";
-        if (unlockResolve) unlockResolve();
-    }
+    function hideUnlockScreen() { document.getElementById("unlockScreen").style.display = "none"; if (unlockResolve) unlockResolve(); }
     
     async function registerFingerprint() {
         if (!window.isSecureContext) { showToast("❌ Fingerprint requires HTTPS or localhost."); return false; }
         if (!window.PublicKeyCredential) { showToast("❌ Browser does not support WebAuthn."); return false; }
         try {
-            const challenge = new Uint8Array(32);
-            window.crypto.getRandomValues(challenge);
-            const userId = new Uint8Array(16);
-            window.crypto.getRandomValues(userId);
+            const challenge = new Uint8Array(32); window.crypto.getRandomValues(challenge);
+            const userId = new Uint8Array(16); window.crypto.getRandomValues(userId);
             const cred = await navigator.credentials.create({
-                publicKey: {
-                    challenge, rp: { name: "Aamir Trading", id: window.location.hostname },
-                    user: { id: userId, name: "user", displayName: "User" },
-                    pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
-                    authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" },
-                    timeout: 60000
-                }
+                publicKey: { challenge, rp: { name: "Aamir Trading", id: window.location.hostname },
+                user: { id: userId, name: "user", displayName: "User" },
+                pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
+                authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" }, timeout: 60000 }
             });
             const idB64 = btoa(String.fromCharCode(...new Uint8Array(cred.rawId)));
-            saveWebAuthnId(idB64);
-            showToast("✅ Fingerprint registered successfully!");
-            return true;
-        } catch(e) { showToast("❌ Registration failed: " + (e.message || "Not supported")); return false; }
+            saveWebAuthnId(idB64); showToast("✅ Fingerprint registered!"); return true;
+        } catch(e) { showToast("❌ Registration failed"); return false; }
     }
     async function authenticateWithFingerprint() {
         if (!window.isSecureContext || !userWebAuthnId) return false;
         try {
             const credId = Uint8Array.from(atob(userWebAuthnId), c => c.charCodeAt(0));
-            const challenge = new Uint8Array(32);
-            window.crypto.getRandomValues(challenge);
+            const challenge = new Uint8Array(32); window.crypto.getRandomValues(challenge);
             const assertion = await navigator.credentials.get({
                 publicKey: { challenge, allowCredentials: [{ id: credId, type: "public-key" }], timeout: 60000, userVerification: "required" }
             });
@@ -542,10 +527,6 @@
     window.editStock = (id) => { const p = products.find(p => p.id === id); if (p) { document.getElementById("prodName").value = p.name; document.getElementById("prodPurchasePrice").value = p.purchasePrice; document.getElementById("prodSalmanPrice").value = p.salmanPrice; document.getElementById("prodDukandarPrice").value = p.dukandarPrice; editingId = id; editingImageData = p.imageBase64; currentSelectedCategory = p.category; const cat = categories.find(c => c.id === p.category); document.getElementById("selectedCategoryBadge").innerText = cat ? cat.name : p.category; document.getElementById("categorySelectionView").style.display = "none"; document.getElementById("addProductFormView").style.display = "block"; switchScreen('addProduct'); } };
     window.showDeleteProductModal = (id) => { window.pendingProductDeleteId = id; const p = products.find(p => p.id === id); if (p) document.getElementById("deleteProductName").innerText = p.name; document.getElementById("deleteProductModal").style.display = "flex"; };
     window.closeDeleteProductModal = () => document.getElementById("deleteProductModal").style.display = "none";
-    window.confirmDeleteProduct = () => { if (window.pendingProductDeleteId) { deleteProduct(window.pendingProductDeleteId); window.pendingProductDeleteId = null; closeDeleteProductModal(); } };
-    window.showDeleteModal = (catId, catName) => { window.pendingDeleteId = catId; document.getElementById("deleteCategoryName").innerHTML = catName; document.getElementById("deleteCategoryModal").style.display = "flex"; };
-    window.closeDeleteModal = () => document.getElementById("deleteCategoryModal").style.display = "none";
-    window.confirmDeleteCategory = () => { if (window.pendingDeleteId) { deleteCategory(window.pendingDeleteId); window.pendingDeleteId = null; closeDeleteModal(); } };
     function updateCategorySelect() { const sel = document.getElementById("customCategory"); if (sel) sel.innerHTML = categories.map(c => `<option value="${c.id}">${c.icon || '📦'} ${c.name}</option>`).join(''); }
     
     document.getElementById("backToCategoryBtn").onclick = () => { document.getElementById("categorySelectionView").style.display = "block"; document.getElementById("addProductFormView").style.display = "none"; editingId = null; editingImageData = null; };
@@ -599,7 +580,7 @@
     
     const statsArea = document.getElementById("secretTapArea");
     const resetBtn = document.getElementById("resetDataBtn");
-    statsArea.addEventListener("click", () => { if (tapTimeout) clearTimeout(tapTimeout); tapCount++; if (tapCount === 5) { resetBtn.style.display = "block"; showToast("🔓 Reset All Data button revealed!"); tapCount = 0; } else { tapTimeout = setTimeout(() => { tapCount = 0; }, 800); } });
+    statsArea.addEventListener("click", () => { if (tapTimeout) clearTimeout(tapTimeout); tapCount++; if (tapCount === 5) { resetBtn.style.display = "block"; showToast("🔓 Reset button revealed!"); tapCount = 0; } else { tapTimeout = setTimeout(() => { tapCount = 0; }, 800); } });
     resetBtn.onclick = () => deleteAllData();
     
     function openSetTpinFlow() { if (userTpin) document.getElementById("enterCurrentTpinModal").style.display = "flex"; else { document.getElementById("newTpinInput").value = ""; document.getElementById("setNewTpinModal").style.display = "flex"; } }
@@ -619,6 +600,10 @@
     
     document.getElementById("confirmDeleteProdBtn").onclick = () => { if (window.pendingProductDeleteId) { deleteProduct(window.pendingProductDeleteId); window.pendingProductDeleteId = null; closeDeleteProductModal(); } };
     document.getElementById("confirmDeleteCatBtn").onclick = () => { if (window.pendingDeleteId) { deleteCategory(window.pendingDeleteId); window.pendingDeleteId = null; closeDeleteModal(); } };
+    window.closeDeleteModal = () => document.getElementById("deleteCategoryModal").style.display = "none";
+    window.confirmDeleteCategory = () => { if (window.pendingDeleteId) { deleteCategory(window.pendingDeleteId); window.pendingDeleteId = null; closeDeleteModal(); } };
+    window.confirmDeleteProduct = () => { if (window.pendingProductDeleteId) { deleteProduct(window.pendingProductDeleteId); window.pendingProductDeleteId = null; closeDeleteProductModal(); } };
+    window.showDeleteModal = (catId, catName) => { window.pendingDeleteId = catId; document.getElementById("deleteCategoryName").innerHTML = catName; document.getElementById("deleteCategoryModal").style.display = "flex"; };
 </script>
 </body>
 </html>
