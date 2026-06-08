@@ -3,23 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Aamir Trading - Private Inventory</title>
-    <!-- ✅ NO manifest.json - This prevents download/install prompts -->
-    <!-- ✅ Disable theme-color that might trigger install -->
-    <meta name="theme-color" content="#001959">
-    <!-- ✅ Prevent iOS from showing "Add to Home Screen" popup -->
-    <meta name="apple-mobile-web-app-capable" content="no">
-    <meta name="mobile-web-app-capable" content="no">
-    <!-- ✅ Disable automatic app detection -->
-    <meta name="format-detection" content="telephone=no">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Aamir Trading - Premium Inventory</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f5f7fb; padding-bottom: 75px; }
+        body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f5f7fb; padding-bottom: 85px; }
         .app-main { max-width: 500px; margin: 0 auto; background: #ffffff; min-height: 100vh; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
         
+        /* Premium Banner */
         .premium-banner {
             position: relative;
             width: 100%;
@@ -35,33 +25,12 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             border-radius: 0 0 30px 30px;
         }
-        .premium-banner::before, .premium-banner::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            width: 60px;
-            height: 100%;
-            pointer-events: none;
-            opacity: 0.15;
-        }
-        .premium-banner::before {
-            left: 0;
-            background-image: radial-gradient(#ffffff 1px, transparent 1px);
-            background-size: 12px 12px;
-        }
-        .premium-banner::after {
-            right: 0;
-            background-image: radial-gradient(#ffffff 1px, transparent 1px);
-            background-size: 12px 12px;
-        }
         .main-title {
-            font-family: 'Poppins', sans-serif;
             font-size: 1.6rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 1px;
             text-transform: uppercase;
             margin-bottom: 4px;
-            z-index: 2;
             text-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
         }
         .gold-divider {
@@ -69,10 +38,8 @@
             height: 1.5px;
             background: linear-gradient(90deg, transparent, #dfad47 20%, #ffd97d 50%, #dfad47 80%, transparent);
             margin-bottom: 8px;
-            z-index: 2;
         }
         .tagline {
-            font-family: 'Poppins', sans-serif;
             font-size: 0.7rem;
             font-weight: 500;
             text-transform: uppercase;
@@ -81,14 +48,8 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            z-index: 2;
-            text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
         }
-        .gold-dot {
-            color: #dfad47;
-            font-size: 0.8rem;
-            line-height: 1;
-        }
+        .gold-dot { color: #dfad47; }
         .curve-wrapper {
             position: absolute;
             bottom: -2px;
@@ -108,21 +69,279 @@
         .curve-gold-stroke { stroke: #dfad47; stroke-width: 1.5px; fill: none; }
         .curve-white-stroke { stroke: #ffffff; stroke-width: 1px; fill: none; }
         
-        @media (max-width: 500px) {
-            .premium-banner { height: 140px; }
-            .main-title { font-size: 1.3rem; }
-            .gold-divider { width: 130px; height: 1.2px; }
-            .tagline { font-size: 0.65rem; gap: 5px; }
-            .curve-wrapper svg { height: 25px; }
+        /* Bottom Navigation - compact */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            max-width: 500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 8px 16px 20px;
+            border-top: 1px solid rgba(223, 173, 71, 0.3);
+            z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
         }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 500;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            padding: 4px 10px;
+            border-radius: 40px;
+        }
+        .nav-item span:first-child { font-size: 22px; transition: transform 0.2s ease; display: inline-block; }
+        .nav-item span:last-child { font-size: 10px; letter-spacing: 0.3px; font-weight: 500; }
+        .nav-item.active { color: #001B7A; background: rgba(0, 25, 89, 0.08); transform: translateY(-2px); }
+        .nav-item.active span:first-child { transform: scale(1.05); }
         
-        .bottom-nav { position: fixed; bottom: 0; max-width: 500px; width: 100%; background: rgba(255,255,255,0.96); backdrop-filter: blur(20px); display: flex; justify-content: space-around; padding: 8px 16px 20px; border-top: 1px solid #eef2ff; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: #94a3b8; cursor: pointer; font-weight: 500; transition: 0.2s; }
-        .nav-item i { font-size: 20px; }
-        .nav-item.active { color: #001B7A; }
-        .screen { display: none; padding: 20px 12px 80px 12px; animation: fade 0.15s ease; }
+        .screen { display: none; padding: 20px 12px 80px; animation: fade 0.15s ease; }
         .screen.active-screen { display: block; }
         @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* Search & Chips */
+        .search-bar { background: #f1f5f9; border-radius: 30px; padding: 12px 18px; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .search-bar input { background: none; border: none; flex: 1; font-size: 15px; outline: none; }
+        .category-chips { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 16px; margin-bottom: 8px; white-space: nowrap; }
+        .chip { background: #f1f5f9; padding: 8px 20px; border-radius: 40px; font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.1s; }
+        .chip.active { background: #dbeafe; color: #1e3a8a; }
+        .chip .delete-chip { background: none; border: none; cursor: pointer; font-size: 11px; opacity: 0.6; margin-left: 4px; color: inherit; }
+        
+        /* Products Grid – Home Screen */
+        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+        .product-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.2s ease; }
+        .product-card:active { transform: scale(0.98); }
+        .product-image-container { width: 100%; height: 150px; background: #f8fafc; display: flex; align-items: center; justify-content: center; }
+        .product-image { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .no-image-icon { font-size: 48px; color: #cbd5e1; }
+        .product-info { padding: 12px; text-align: center; }
+        .product-name { font-weight: 700; font-size: 14px; color: #1e293b; margin-bottom: 6px; }
+        .sell-price { font-weight: 800; color: #001959; font-size: 20px; margin: 4px 0 2px; }
+        .mrp { font-size: 12px; color: #94a3b8; text-decoration: line-through; }
+        .purchase-badge { background: #FFF4CC; padding: 4px 10px; border-radius: 20px; display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 500; color: #b45309; }
+        
+        /* Product Management with image */
+        .stock-list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .stock-item {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eef2f6;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .stock-image-thumb {
+            flex-shrink: 0;
+            width: 70px;
+            height: 70px;
+            background: #f8fafc;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .stock-image-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .stock-image-thumb span {
+            font-size: 36px;
+            opacity: 0.5;
+        }
+        .stock-info-block {
+            flex: 1;
+        }
+        .stock-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+            letter-spacing: -0.2px;
+        }
+        .stock-purchase-sell-line {
+            font-size: 13px;
+            font-weight: 500;
+            color: #334155;
+            background: #f8fafc;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            margin-bottom: 8px;
+        }
+        .stock-stock-badge {
+            font-size: 12px;
+            font-weight: 600;
+            color: #001959;
+            background: #eef2ff;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            margin-bottom: 12px;
+        }
+        .stock-actions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .stock-actions-row button {
+            background: #f8fafc;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-sell-small { background: #dcfce7; color: #15803d; }
+        .btn-add-small { background: #dbeafe; color: #1e40af; }
+        .btn-edit-small { background: #fff3e3; color: #b45309; }
+        .btn-delete-small { background: #fee2e2; color: #b91c1c; }
+        .stock-actions-row button:active { transform: scale(0.96); }
+        
+        /* Profile screen */
+        .profile-stats {
+            padding: 8px 0;
+        }
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            background: #f8fafc;
+            padding: 12px 16px;
+            border-radius: 20px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            background: #eef2ff;
+            padding: 12px 20px;
+            border-radius: 20px;
+            margin: 15px 0;
+        }
+        .stats-item {
+            text-align: center;
+            flex: 1;
+        }
+        .stats-number {
+            font-size: 22px;
+            font-weight: 800;
+            color: #001959;
+        }
+        
+        /* Modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 400;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        .modal-card {
+            background: white;
+            margin: 20px;
+            padding: 24px;
+            border-radius: 32px;
+            max-width: 340px;
+            width: 90%;
+            text-align: center;
+        }
+        .modal-input {
+            width: 100%;
+            padding: 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 30px;
+            margin: 10px 0;
+            font-size: 16px;
+            text-align: center;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #001959, #002d8a);
+            color: white;
+            padding: 12px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 12px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+        }
+        .icon-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin: 16px 0; }
+        .icon-option { aspect-ratio: 1; background: #f8fafc; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; border: 2px solid transparent; }
+        .icon-option.selected { border-color: #001959; background: #eef2ff; }
+        .image-upload-area { border: 2px dashed #cbd5e1; border-radius: 25px; padding: 12px; text-align: center; cursor: pointer; margin-top: 8px; }
+        .image-preview-sm { width: 80px; height: 80px; border-radius: 14px; object-fit: cover; margin: 8px auto; }
+        .toast-msg {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 35px;
+            font-size: 13px;
+            z-index: 200;
+            display: none;
+        }
+        .floating-add-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: linear-gradient(135deg, #001959, #002d8a);
+            color: white;
+            width: 52px;
+            height: 52px;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 90;
+            font-size: 24px;
+        }
+        .empty-state { text-align: center; padding: 40px; color: #94a3b8; }
+        .back-btn { background: none; border: none; color: #001959; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        .selected-badge { background: #eef2ff; padding: 8px 16px; border-radius: 40px; display: inline-block; margin-bottom: 16px; font-weight: 500; }
+        .category-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; max-height: 400px; overflow-y: auto; }
+        .category-item { background: #f1f5f9; padding: 14px 18px; border-radius: 60px; display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; }
         
         .unlock-screen {
             position: fixed;
@@ -141,241 +360,40 @@
             background: rgba(255, 255, 255, 0.96);
             backdrop-filter: blur(10px);
             border-radius: 48px;
-            padding: 32px 24px;
+            padding: 24px 20px 28px;
             width: 100%;
             max-width: 340px;
             text-align: center;
-            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(223, 173, 71, 0.2);
-            border: 1px solid rgba(255, 215, 125, 0.3);
-        }
-        .unlock-title {
-            font-size: 28px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #001959, #004cb5);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 8px;
-        }
-        .unlock-sub {
-            font-size: 14px;
-            color: #5b6e8c;
-            margin-bottom: 28px;
-            font-weight: 500;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
         }
         .unlock-input {
             width: 100%;
             text-align: center;
             font-size: 32px;
             letter-spacing: 12px;
-            padding: 16px 12px;
+            padding: 14px 12px;
             border: 2px solid #e2e8f0;
             border-radius: 60px;
             margin-bottom: 20px;
             font-weight: 700;
-            background: #ffffff;
-        }
-        .unlock-input:focus {
-            outline: none;
-            border-color: #dfad47;
-            box-shadow: 0 0 0 3px rgba(223, 173, 71, 0.2);
-        }
-        .security-note {
-            font-size: 12px;
-            color: #7c8aa0;
-            margin: 16px 0 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: #f1f5f9;
-            padding: 6px 14px;
-            border-radius: 40px;
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .unlock-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 8px;
-        }
-        .unlock-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 50px;
-            border: none;
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .unlock-btn.primary {
-            background: linear-gradient(135deg, #001959, #002d8a);
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 25, 89, 0.3);
+            font-family: monospace;
         }
         .fingerprint-btn {
-            background: #f1f5f9;
+            background: #001959;
+            color: white;
             border: none;
             padding: 12px;
-            border-radius: 50px;
-            width: 55px;
-            cursor: pointer;
-            margin: 15px auto 0;
-            font-size: 24px;
-            color: #001959;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .unlock-error {
-            color: #ef4444;
-            font-size: 13px;
-            margin-top: 15px;
-            background: #fee2e2;
-            padding: 6px 12px;
-            border-radius: 40px;
-            display: inline-block;
-        }
-        
-        .search-bar { background: #f1f5f9; border-radius: 30px; padding: 12px 18px; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-        .search-bar input { background: none; border: none; flex: 1; font-size: 15px; outline: none; }
-        .category-chips { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 16px; margin-bottom: 8px; white-space: nowrap; scrollbar-width: thin; }
-        .chip { background: #f1f5f9; padding: 8px 20px; border-radius: 40px; font-size: 14px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
-        .chip.active { background: #001959; color: white; }
-        .chip .delete-chip { background: none; border: none; cursor: pointer; font-size: 11px; opacity: 0.6; margin-left: 4px; color: inherit; }
-        .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
-        .product-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; transition: 0.1s; }
-        .product-card:active { transform: scale(0.98); }
-        .product-image-container { width: 100%; height: 150px; background: #f8fafc; display: flex; align-items: center; justify-content: center; }
-        .product-image { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .no-image-icon { font-size: 48px; color: #cbd5e1; }
-        .product-info { padding: 12px; }
-        .product-name { font-weight: 700; font-size: 14px; color: #1e293b; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .sell-price { font-weight: 800; color: #001959; font-size: 20px; margin: 4px 0 2px; }
-        .mrp { font-size: 12px; color: #94a3b8; text-decoration: line-through; }
-        .purchase-badge { background: #FFF4CC; padding: 4px 10px; border-radius: 20px; display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 500; color: #b45309; }
-        .stock-item { background: #f8fafc; border-radius: 18px; padding: 12px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
-        .stock-actions button { background: none; border: none; margin: 0 4px; font-size: 18px; cursor: pointer; }
-        
-        .profile-stats { background: transparent; padding: 20px; text-align: center; }
-        .setting-row { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 12px 16px; border-radius: 20px; margin: 10px 0; cursor: pointer; }
-        .setting-row span { font-weight: 500; color: #1e293b; }
-        .setting-row i:first-child { color: #001959; width: 24px; }
-        .setting-row .arrow { color: #94a3b8; font-size: 14px; }
-        .stats-row { display: flex; justify-content: space-between; background: #eef2ff; padding: 12px 20px; border-radius: 20px; margin: 15px 0; cursor: pointer; }
-        .stats-item { text-align: center; flex: 1; }
-        .stats-number { font-size: 22px; font-weight: 800; color: #001959; }
-        .stats-label { font-size: 12px; color: #475569; }
-        .danger-btn { background: #ef4444; color: white; border: none; padding: 12px; border-radius: 40px; font-weight: 600; width: 100%; margin-top: 12px; cursor: pointer; display: none; }
-        
-        .floating-add-btn { position: fixed; bottom: 85px; right: 20px; background: linear-gradient(135deg, #001959, #002d8a); color: white; width: 56px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2); cursor: pointer; z-index: 90; font-size: 24px; border: none; }
-        .toast-msg { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 8px 18px; border-radius: 35px; font-size: 13px; z-index: 200; display: none; }
-        
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 400;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-card {
-            background: white;
-            margin: 20px;
-            padding: 24px;
-            border-radius: 32px;
-            max-width: 340px;
-            width: 90%;
-            text-align: center;
-        }
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
+            border-radius: 60px;
+            width: 100%;
+            font-size: 18px;
             margin-bottom: 12px;
-            color: #001959;
-        }
-        .modal-desc {
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 20px;
-        }
-        .modal-input {
-            width: 100%;
-            padding: 14px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 30px;
-            margin: 10px 0;
-            font-size: 16px;
-            text-align: center;
-        }
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-        .btn-cancel, .btn-primary, .btn-delete {
-            flex: 1;
-            padding: 12px;
-            border-radius: 40px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .btn-cancel { background: #f1f5f9; color: #475569; }
-        .btn-primary { background: linear-gradient(135deg, #001959, #002d8a); color: white; }
-        .btn-delete { background: #ef4444; color: white; }
-        
-        .icon-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin: 16px 0 20px;
-        }
-        .icon-option {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            background: #f8fafc;
-            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            gap: 10px;
             cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
         }
-        .icon-option.selected {
-            border-color: #001959 !important;
-            background: #eef2ff;
-        }
-        .icon-option.green-plus {
-            border: 2px solid #22c55e;
-            background: #f0fdf4;
-        }
-        .custom-icon-input {
-            width: 80%;
-            margin: 5px auto 15px auto;
-            display: block;
-            font-size: 20px;
-            text-align: center;
-        }
-        .image-upload-area { border: 2px dashed #cbd5e1; border-radius: 25px; padding: 12px; text-align: center; cursor: pointer; margin-top: 8px; }
-        .image-preview-sm { width: 80px; height: 80px; border-radius: 14px; object-fit: contain; background: #f1f5f9; margin: 8px auto; }
-        .empty-state { text-align: center; padding: 40px; color: #94a3b8; grid-column: span 2; }
-        .back-btn { background: none; border: none; color: #001959; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; cursor: pointer; }
-        .selected-badge { background: #eef2ff; padding: 6px 12px; border-radius: 30px; font-size: 14px; display: inline-block; margin-bottom: 15px; }
-        .input-group { margin-bottom: 10px; text-align: left; }
-        .input-group label { font-size: 12px; color: #64748b; margin-left: 10px; display: block; margin-bottom: 4px; }
-        
-        /* ✅ Hide any browser install prompts */
-        :-webkit-full-screen, :fullscreen { display: none !important; }
+        h3 { font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 12px; letter-spacing: -0.3px; }
     </style>
 </head>
 <body>
@@ -399,211 +417,336 @@
         </div>
     </div>
 
-    <div id="unlockScreen" class="unlock-screen"><div class="unlock-card"><div class="unlock-title">Enter TPIN</div><div class="unlock-sub">Enter your TPIN to continue</div><input type="password" id="unlockPinInput" class="unlock-input" maxlength="6" inputmode="numeric" placeholder="••••••"><div class="security-note"><i class="fas fa-shield-alt"></i> Your security is our priority</div><div class="unlock-buttons"><button class="unlock-btn primary" id="unlockPinBtn">Unlock</button></div><button class="fingerprint-btn" id="unlockFingerprintBtn"><i class="fas fa-fingerprint"></i></button><div id="unlockError" class="unlock-error"></div></div></div>
+    <div id="homeScreen" class="screen">
+        <div class="search-bar"><span>🔍</span><input type="text" id="searchInput" placeholder="Search products..."></div>
+        <div class="category-chips" id="categoryChips"></div>
+        <div id="homeProductsGrid" class="products-grid"></div>
+    </div>
 
-    <div id="homeScreen" class="screen"><div class="search-bar"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search products..."></div><div class="category-chips" id="categoryChips"></div><div id="homeProductsGrid" class="products-grid"></div></div>
-    <div id="addProductScreen" class="screen"><div id="categorySelectionView"><div style="font-size:22px; font-weight:700;">📦 Add New Product</div><div style="color:#6b7280; margin:8px 0 24px;">First add a category, then add products</div><button class="btn-primary" id="openCategoryBtn" style="width:100%; margin-bottom:12px;"><i class="fas fa-folder-plus"></i> ➕ Add New Category</button><button class="btn-primary" id="openProductBtn" style="background:#1e6b4c;"><i class="fas fa-plus-circle"></i> Add Product</button></div><div id="addProductFormView" style="display:none;"><button class="back-btn" id="backToCategoryBtn"><i class="fas fa-arrow-left"></i> Back</button><div class="selected-badge" id="selectedCategoryBadge">Select Category</div><div><input type="text" id="prodName" class="modal-input" placeholder="Product Name"><div class="input-group"><label>Purchase Price (₹)</label><input type="number" id="prodPurchasePrice" class="modal-input" placeholder="e.g., 5"></div><div class="input-group"><label>Selling Price (₹)</label><input type="number" id="prodSalmanPrice" class="modal-input" placeholder="e.g., 10"></div><div class="input-group"><label>MRP (₹)</label><input type="number" id="prodDukandarPrice" class="modal-input" placeholder="e.g., 15"></div><div class="image-upload-area" onclick="document.getElementById('prodImageFile').click()"><i class="fas fa-cloud-upload-alt"></i> Upload Image<input type="file" id="prodImageFile" accept="image/*" style="display:none"><div id="imgPreviewContainer" style="margin-top:8px;"></div></div><button class="btn-primary" id="saveProductBtn" style="margin-top:15px;">➕ Save Product</button></div></div></div>
-    <div id="stockScreen" class="screen"><h3><i class="fas fa-boxes"></i> Product Management</h3><div class="search-bar"><i class="fas fa-search"></i><input type="text" id="stockSearchInput" placeholder="Search product..."></div><div id="stockListContainer"></div></div>
-    <div id="profileScreen" class="screen"><div class="profile-stats"><div class="setting-row" id="setTpinBtn"><span><i class="fas fa-lock"></i> Set/Change TPIN</span><i class="fas fa-chevron-down arrow"></i></div><div class="setting-row" id="enableFingerprintBtn"><span><i class="fas fa-fingerprint"></i> Enable Fingerprint Unlock</span><i class="fas fa-chevron-down arrow"></i></div><div class="stats-row" id="secretTapArea"><div class="stats-item"><div class="stats-number" id="profileTotalProducts">0</div><div class="stats-label">Total Products</div></div><div class="stats-item"><div class="stats-number" id="profileTotalCategories">0</div><div class="stats-label">Total Categories</div></div></div><button class="danger-btn" id="resetDataBtn">🔄 Reset All Data</button></div></div>
+    <div id="addProductScreen" class="screen">
+        <div id="addProductInitialView">
+            <div style="font-size:22px; font-weight:700;">📦 Add New Product</div>
+            <div style="color:#6b7280; margin:8px 0 24px;">First add a category, then add products</div>
+            <button class="btn-primary" id="openCategoryBtn" style="width:100%; margin-bottom:12px;">➕ Add New Category</button>
+            <button class="btn-primary" id="openProductBtn" style="background:#1e6b4c;">📝 Add Product</button>
+        </div>
+        <div id="addProductCategoryView" style="display:none;">
+            <button class="back-btn" id="backToInitialViewBtn"><span>←</span> Back</button>
+            <div style="font-size:18px; font-weight:600; margin:10px 0;">Select a category:</div>
+            <div id="categorySelectorList" class="category-list"></div>
+        </div>
+        <div id="addProductFormView" style="display:none;">
+            <button class="back-btn" id="backToCategoryListViewBtn"><span>←</span> Back</button>
+            <div class="selected-badge" id="selectedCategoryDisplay"></div>
+            <input type="text" id="prodName" class="modal-input" placeholder="Product Name">
+            <input type="number" id="prodPurchasePrice" class="modal-input" placeholder="Purchase Price (₹)">
+            <input type="number" id="prodSellingPrice" class="modal-input" placeholder="Selling Price (₹)">
+            <input type="number" id="prodMrp" class="modal-input" placeholder="MRP (₹)">
+            <div class="image-upload-area" onclick="document.getElementById('prodImageFile').click()">
+                📤 Upload Image <input type="file" id="prodImageFile" accept="image/*" style="display:none">
+                <div id="imgPreviewContainer"></div>
+            </div>
+            <div style="display:flex; gap:12px; margin-top:15px;">
+                <button class="btn-cancel" id="cancelProductBtn" style="flex:1;">Cancel</button>
+                <button class="btn-primary" id="saveProductBtn" style="flex:1;">Save Product</button>
+            </div>
+        </div>
+    </div>
 
-    <div class="bottom-nav" id="bottomNav"><div class="nav-item" data-screen="home"><i class="fas fa-home"></i><span>Home</span></div><div class="nav-item" data-screen="addProduct"><i class="fas fa-plus-circle"></i><span>Add</span></div><div class="nav-item" data-screen="stock"><i class="fas fa-boxes"></i><span>Products</span></div><div class="nav-item" data-screen="profile"><i class="fas fa-user"></i><span>Profile</span></div></div>
-    <div class="floating-add-btn" id="fabBtn"><i class="fas fa-plus"></i></div>
+    <div id="stockScreen" class="screen">
+        <h3>📦 Product Management</h3>
+        <div class="search-bar"><span>🔍</span><input type="text" id="stockSearchInput" placeholder="Search product..."></div>
+        <div id="stockListContainer" class="stock-list-container"></div>
+    </div>
+
+    <div id="profileScreen" class="screen">
+        <div class="profile-stats">
+            <div class="setting-row" id="setTpinBtn"><span>🔒 Set/Change TPIN</span><span>▼</span></div>
+            <div class="setting-row" id="enableFingerprintBtn"><span>🖐️ Enable Fingerprint Unlock</span><span>▼</span></div>
+            <div class="stats-row">
+                <div class="stats-item"><div class="stats-number" id="profileTotalProducts">0</div><div>Total Products</div></div>
+                <div class="stats-item"><div class="stats-number" id="profileTotalCategories">0</div><div>Total Categories</div></div>
+            </div>
+            <button id="resetDataBtn" style="background:#ef4444; color:white; border:none; padding:12px; border-radius:40px; width:100%; margin-top:20px;">🔄 Reset All Data</button>
+        </div>
+    </div>
+
+    <div class="bottom-nav" id="bottomNav">
+        <div class="nav-item" data-screen="home"><span>🏠</span><span>Home</span></div>
+        <div class="nav-item" data-screen="addProduct"><span>➕</span><span>Add</span></div>
+        <div class="nav-item" data-screen="stock"><span>📦</span><span>Products</span></div>
+        <div class="nav-item" data-screen="profile"><span>👤</span><span>Profile</span></div>
+    </div>
+    <div class="floating-add-btn" id="fabBtn"><span>+</span></div>
     <div id="toastMsg" class="toast-msg"></div>
 
-    <div id="enterCurrentTpinModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Enter Current TPIN</div><div class="modal-desc">For your security, please enter your current TPIN.</div><input type="password" id="currentTpinInput" class="modal-input" placeholder="Enter current TPIN" maxlength="6"><div class="modal-buttons"><button class="btn-cancel" id="cancelCurrentTpinBtn">Cancel</button><button class="btn-primary" id="verifyCurrentTpinBtn">OK</button></div></div></div>
-    <div id="setNewTpinModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Set / Change TPIN</div><div class="modal-desc">TPIN adds an extra layer of security to your account.</div><input type="password" id="newTpinInput" class="modal-input" placeholder="Enter new TPIN (4-6 digits) or leave empty to disable" maxlength="6"><div class="modal-buttons"><button class="btn-cancel" id="cancelSetTpinBtn">Cancel</button><button class="btn-primary" id="confirmSetTpinBtn">OK</button></div></div></div>
-    <div id="categoryModal" class="modal-overlay"><div class="modal-card"><div class="modal-title"><i class="fas fa-folder"></i> New Category</div><input type="text" id="newCategoryName" class="modal-input" placeholder="Category name"><div class="icon-grid" id="iconGrid"></div><input type="text" id="customIconInput" class="modal-input custom-icon-input" placeholder="Ya yahan apna naya Icon (Emoji) daalein" maxlength="2"><div class="modal-buttons"><button class="btn-cancel" onclick="closeCategoryModal()">Cancel</button><button class="btn-primary" id="saveCategoryBtn">Save</button></div></div></div>
-    <div id="deleteCategoryModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Delete Category?</div><p id="deleteCategoryName"></p><div class="modal-buttons"><button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button><button class="btn-delete" id="confirmDeleteCatBtn">Delete</button></div></div></div>
-    <div id="customModal" class="modal-overlay"><div class="modal-card"><div class="modal-title"><i class="fas fa-box-open"></i> Add Product</div><input type="text" id="customItemName" class="modal-input" placeholder="Product Name"><select id="customCategory" class="modal-input"></select><input type="number" id="customPurchasePrice" class="modal-input" placeholder="Purchase Price (₹)"><input type="number" id="customSellingPrice" class="modal-input" placeholder="Selling Price (₹)"><input type="number" id="customMrp" class="modal-input" placeholder="MRP (₹)"><div class="image-upload-area" onclick="document.getElementById('modalImageFile').click()"><i class="fas fa-image"></i> Upload Image<input type="file" id="modalImageFile" accept="image/*" style="display:none"><div id="modalImagePreviewContainer"></div></div><div class="modal-buttons"><button class="btn-cancel" onclick="closeModal()">Cancel</button><button class="btn-primary" id="saveCustomItemBtn">Save Product</button></div></div></div>
-    <div id="deleteProductModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Delete Product?</div><p id="deleteProductName"></p><div class="modal-buttons"><button class="btn-cancel" onclick="closeDeleteProductModal()">Cancel</button><button class="btn-delete" id="confirmDeleteProdBtn">Delete</button></div></div></div>
-    <div id="productDetailModal" class="modal-overlay"><div class="modal-card"><img id="detailImage" style="width:100%; border-radius:20px; margin-bottom:12px;"><h3 id="detailTitle"></h3><p>Purchase: ₹<span id="detailPurchasePrice"></span></p><p>Selling: ₹<span id="detailSalmanPrice"></span></p><p>MRP: ₹<span id="detailMrpPrice"></span></p><button class="btn-primary" onclick="closeProductDetail()">Close</button></div></div>
-    <div id="successModal" class="modal-overlay"><div class="modal-card"><i class="fas fa-check-circle" style="font-size:48px; color:#10b981;"></i><div class="modal-title">Success!</div><p>Product added successfully.</p><button class="btn-primary" onclick="closeSuccessModal()">OK</button></div></div>
+    <div id="categoryModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">📁 New Category</div><input type="text" id="newCategoryName" class="modal-input" placeholder="Category name"><div class="icon-grid" id="iconGrid"></div><input type="text" id="customIconInput" class="modal-input" placeholder="Or enter your own emoji" maxlength="2"><div style="display:flex; gap:12px;"><button class="btn-cancel" onclick="closeCategoryModal()">Cancel</button><button class="btn-primary" id="saveCategoryBtn">Save</button></div></div></div>
+    <div id="deleteCategoryModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Delete Category?</div><div id="deleteCategoryName"></div><div style="display:flex; gap:12px;"><button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button><button class="btn-primary" id="confirmDeleteCatBtn">Delete</button></div></div></div>
+    <div id="deleteProductModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Delete Product?</div><div id="deleteProductName"></div><div style="display:flex; gap:12px;"><button class="btn-cancel" onclick="closeDeleteProductModal()">Cancel</button><button class="btn-primary" id="confirmDeleteProdBtn">Delete</button></div></div></div>
+    <div id="productDetailModal" class="modal-overlay"><div class="modal-card"><img id="detailImage" style="width:100%; border-radius:20px;"><h3 id="detailTitle"></h3><p>Purchase: ₹<span id="detailPurchasePrice"></span></p><p>Selling: ₹<span id="detailSellingPrice"></span></p><p>MRP: ₹<span id="detailMrp"></span></p><button class="btn-primary" onclick="closeProductDetail()">Close</button></div></div>
+
+    <div id="unlockScreen" class="unlock-screen">
+        <div class="unlock-card">
+            <div style="font-size:28px; font-weight:800;">Enter TPIN</div>
+            <input type="password" id="unlockPinInput" class="unlock-input" maxlength="6">
+            <button id="unlockSubmitBtn" style="background:#001959; color:white; padding:12px; border-radius:40px; width:100%;">UNLOCK</button>
+            <div id="unlockError" style="color:red; margin-top:12px;"></div>
+            <div id="fingerprintUnlockBtn" class="fingerprint-btn" style="display:none;">🖐️ Use Fingerprint</div>
+        </div>
+    </div>
 </div>
 
-<script>
-    // ✅ Prevent any install prompt events
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        return false;
-    });
-    
-    // ✅ Prevent any PWA installation
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-            for(let registration of registrations) {
-                registration.unregister();
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, onSnapshot, enableIndexedDbPersistence } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA-pL2c_krKunSMXfAx4pSy62yRW496daU",
+        authDomain: "csc-wabsite.firebaseapp.com",
+        databaseURL: "https://csc-wabsite-default-rtdb.firebaseio.com",
+        projectId: "csc-wabsite",
+        storageBucket: "csc-wabsite.firebasestorage.app",
+        messagingSenderId: "327142092603",
+        appId: "1:327142092603:web:a247e16eab423c1abbd11e"
+    };
+    const IMGBB_API_KEY = "1f42df4851adb618a955ae35bd93282a";
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    enableIndexedDbPersistence(db).catch(e => console.warn("Offline mode"));
+
+    async function compressAndUpload(file) {
+        const compress = (f) => new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(f);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    let w = img.width, h = img.height;
+                    const maxDim = 800;
+                    if (w > maxDim) { h = (h * maxDim) / w; w = maxDim; }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w; canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    canvas.toBlob(resolve, f.type, 0.7);
+                };
+            };
+        });
+        const blob = await compress(file);
+        const fd = new FormData();
+        fd.append("image", blob);
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: fd });
+        const data = await res.json();
+        if (data.success) return data.data.url;
+        throw new Error(data.error?.message);
+    }
+
+    let products = [], categories = [], userTpin = localStorage.getItem("aamir_tpin") || null;
+    let currentFilter = "All", searchQuery = "", stockSearch = "";
+    let selectedCategoryId = null, editingProductId = null;
+    let pendingUnlockResolve = null;
+
+    // WebAuthn helpers
+    let fingerprintCredentialId = localStorage.getItem("aamir_fingerprint_id");
+    let fingerprintEnabled = fingerprintCredentialId !== null;
+
+    async function registerFingerprint() {
+        if (!window.PublicKeyCredential) { showToast("Fingerprint not supported on this device"); return false; }
+        try {
+            const challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+            const credential = await navigator.credentials.create({
+                publicKey: {
+                    challenge: challenge,
+                    rp: { name: "Aamir Trading", id: location.hostname },
+                    user: {
+                        id: new Uint8Array(16),
+                        name: "aamir_user",
+                        displayName: "Aamir User"
+                    },
+                    pubKeyCredParams: [{ type: "public-key", alg: -7 }],
+                    authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" },
+                    timeout: 60000
+                }
+            });
+            const credId = btoa(String.fromCharCode(...new Uint8Array(credential.rawId)));
+            localStorage.setItem("aamir_fingerprint_id", credId);
+            fingerprintCredentialId = credId;
+            fingerprintEnabled = true;
+            showToast("✅ Fingerprint registered successfully!");
+            return true;
+        } catch (err) {
+            console.error(err);
+            showToast("Fingerprint registration failed: " + err.message);
+            return false;
+        }
+    }
+
+    async function authenticateWithFingerprint() {
+        if (!fingerprintCredentialId) return false;
+        try {
+            const challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+            const allowedCredential = {
+                id: Uint8Array.from(atob(fingerprintCredentialId), c => c.charCodeAt(0)),
+                type: "public-key"
+            };
+            const assertion = await navigator.credentials.get({
+                publicKey: {
+                    challenge: challenge,
+                    allowCredentials: [allowedCredential],
+                    userVerification: "required",
+                    timeout: 60000
+                }
+            });
+            if (assertion) {
+                return true;
             }
+            return false;
+        } catch (err) {
+            console.error(err);
+            showToast("Fingerprint authentication failed: " + err.message);
+            return false;
+        }
+    }
+
+    function showToast(msg) { const t = document.getElementById("toastMsg"); t.innerText = msg; t.style.display = "block"; setTimeout(() => t.style.display = "none", 2000); }
+    async function syncToFirestore() { await setDoc(doc(db, "inventory", "master"), { categories, products, updatedAt: new Date() }); localStorage.setItem("aamir_products_backup", JSON.stringify(products)); localStorage.setItem("aamir_categories_backup", JSON.stringify(categories)); }
+    function startFirestoreListener() {
+        onSnapshot(doc(db, "inventory", "master"), (snap) => {
+            if (snap.exists()) { const d = snap.data(); categories = d.categories || []; products = d.products || []; renderAll(); showToast("☁️ Synced"); }
+            else { const p = localStorage.getItem("aamir_products_backup"), c = localStorage.getItem("aamir_categories_backup"); if (p) products = JSON.parse(p); if (c) categories = JSON.parse(c); if (categories.length || products.length) syncToFirestore(); else setDoc(doc(db, "inventory", "master"), { categories: [], products: [] }); renderAll(); }
         });
     }
-    
-    let products = [];
-    let categories = [];
-    let userTpin = null;
-    let userWebAuthnId = null;
-    let unlockResolve = null;
-    let editingId = null;
-    let editingImageData = null;
-    let currentSelectedCategory = "";
-    let currentFilter = "All";
-    let searchQuery = "";
-    let stockSearch = "";
-    let tapCount = 0;
-    let tapTimeout = null;
-    
-    let selectedIcon = "📦";
-    let iconList = ["📦", "🛒", "📱", "👕", "➕", "📚", "🍕", "💻"];
-    
-    function showToast(msg) { const t = document.getElementById("toastMsg"); t.innerText = msg; t.style.display = "block"; setTimeout(() => t.style.display = "none", 2000); }
-    
-    function loadData() {
-        const storedProducts = localStorage.getItem("aamir_products");
-        const storedCategories = localStorage.getItem("aamir_categories");
-        if (storedProducts) products = JSON.parse(storedProducts);
-        if (storedCategories) categories = JSON.parse(storedCategories);
-        categories.forEach(c => { if(c.icon && !iconList.includes(c.icon) && c.icon !== "➕") iconList.push(c.icon); });
-        renderAll();
+    async function addCategory(n, i) { const id = Date.now()+Math.random().toString(36).substr(2,5); categories.push({ id, name:n, icon:i }); await syncToFirestore(); renderAll(); showToast(`✅ Category "${n}" added`); }
+    async function deleteCategory(id) { products = products.map(p => p.category === id ? {...p, category:null} : p); categories = categories.filter(c => c.id !== id); if (currentFilter === id) currentFilter = "All"; await syncToFirestore(); renderAll(); showToast("Category removed"); }
+    async function addProduct(pd, imgUrl) { const id = Date.now()+Math.random().toString(36).substr(2,5); products.unshift({ ...pd, id, stock:100, imageUrl: imgUrl || null }); await syncToFirestore(); renderAll(); showToast("✅ Product saved!"); }
+    async function updateProduct(id, up, imgUrl) { const idx = products.findIndex(p => p.id === id); if (idx !== -1) { products[idx] = { ...products[idx], ...up }; if (imgUrl !== undefined) products[idx].imageUrl = imgUrl; await syncToFirestore(); renderAll(); showToast("✅ Updated"); } }
+    async function deleteProduct(id) { products = products.filter(p => p.id !== id); await syncToFirestore(); renderAll(); }
+    async function deleteAllData() { if (confirm("Delete all?")) { products = []; categories = []; await syncToFirestore(); renderAll(); showToast("All reset"); } }
+    function updateProfileStats() {
+        document.getElementById("profileTotalProducts").innerText = products.length;
+        document.getElementById("profileTotalCategories").innerText = categories.length;
     }
-    
-    function saveProducts() { localStorage.setItem("aamir_products", JSON.stringify(products)); }
-    function saveCategories() { localStorage.setItem("aamir_categories", JSON.stringify(categories)); }
-    
-    function loadTpin() { userTpin = localStorage.getItem("aamir_tpin") || null; }
-    function saveTpin(tpin) { if (tpin === null) localStorage.removeItem("aamir_tpin"); else localStorage.setItem("aamir_tpin", tpin); userTpin = tpin; }
-    function loadWebAuthnId() { userWebAuthnId = localStorage.getItem("aamir_webauthn_id") || null; }
-    function saveWebAuthnId(id) { if (id === null) localStorage.removeItem("aamir_webauthn_id"); else localStorage.setItem("aamir_webauthn_id", id); userWebAuthnId = id; }
-    
-    async function showUnlockIfNeeded() {
-        loadTpin(); loadWebAuthnId();
-        if (userTpin) { document.getElementById("unlockScreen").style.display = "flex"; return new Promise((resolve) => { unlockResolve = resolve; }); }
-        return Promise.resolve();
-    }
-    function hideUnlockScreen() { document.getElementById("unlockScreen").style.display = "none"; if (unlockResolve) unlockResolve(); }
-    
-    async function registerFingerprint() {
-        if (!window.isSecureContext) { showToast("❌ Fingerprint requires HTTPS or localhost."); return false; }
-        if (!window.PublicKeyCredential) { showToast("❌ Browser does not support WebAuthn."); return false; }
-        try {
-            const challenge = new Uint8Array(32); window.crypto.getRandomValues(challenge);
-            const userId = new Uint8Array(16); window.crypto.getRandomValues(userId);
-            const cred = await navigator.credentials.create({
-                publicKey: { challenge, rp: { name: "Aamir Trading", id: window.location.hostname },
-                user: { id: userId, name: "user", displayName: "User" },
-                pubKeyCredParams: [{ type: "public-key", alg: -7 }, { type: "public-key", alg: -257 }],
-                authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" }, timeout: 60000 }
-            });
-            const idB64 = btoa(String.fromCharCode(...new Uint8Array(cred.rawId)));
-            saveWebAuthnId(idB64); showToast("✅ Fingerprint registered!"); return true;
-        } catch(e) { showToast("❌ Registration failed"); return false; }
-    }
-    async function authenticateWithFingerprint() {
-        if (!window.isSecureContext || !userWebAuthnId) return false;
-        try {
-            const credId = Uint8Array.from(atob(userWebAuthnId), c => c.charCodeAt(0));
-            const challenge = new Uint8Array(32); window.crypto.getRandomValues(challenge);
-            const assertion = await navigator.credentials.get({
-                publicKey: { challenge, allowCredentials: [{ id: credId, type: "public-key" }], timeout: 60000, userVerification: "required" }
-            });
-            return !!assertion;
-        } catch(e) { return false; }
-    }
-    
-    function addCategory(name, icon) { const newId = Date.now().toString() + Math.random().toString(36).substr(2, 5); categories.push({ id: newId, name, icon }); saveCategories(); renderAll(); showToast(`✅ Category "${name}" added`); }
-    function deleteCategory(id) { categories = categories.filter(c => c.id !== id); products = products.filter(p => p.category !== id); if (currentFilter === id) currentFilter = "All"; saveCategories(); saveProducts(); renderAll(); }
-    function addProduct(productData, imageBase64) { const newId = Date.now().toString() + Math.random().toString(36).substr(2, 5); products.unshift({ ...productData, id: newId, imageBase64: imageBase64 || null, stock: productData.stock || 100 }); saveProducts(); renderAll(); showToast("✅ Product added!"); }
-    function updateProduct(id, updates, imageBase64) { const idx = products.findIndex(p => p.id === id); if (idx === -1) return; products[idx] = { ...products[idx], ...updates, imageBase64: imageBase64 !== undefined ? imageBase64 : products[idx].imageBase64 }; saveProducts(); renderAll(); showToast("✅ Product updated!"); }
-    function deleteProduct(id) { products = products.filter(p => p.id !== id); saveProducts(); renderAll(); showToast("✅ Product deleted"); }
-    function deleteAllData() { if (confirm("⚠️ Delete ALL products and categories?")) { products = []; categories = []; saveProducts(); saveCategories(); renderAll(); showToast("All data reset"); } }
-    
-    function renderAll() { renderCategoryChips(); renderHomeProducts(); renderStockList(); document.getElementById("profileTotalProducts").innerText = products.length; document.getElementById("profileTotalCategories").innerText = categories.length; updateCategorySelect(); }
     function renderCategoryChips() {
-        let html = `<div class="chip ${currentFilter === 'All' ? 'active' : ''}" data-cat="All">All</div>`;
-        html += categories.map(c => `<div class="chip ${currentFilter === c.id ? 'active' : ''}" data-cat="${c.id}">${c.icon || '📦'} ${c.name}<button class="delete-chip" onclick="event.stopPropagation(); showDeleteModal('${c.id}','${escapeHtml(c.name)}')"><i class="fas fa-trash-alt"></i></button></div>`).join('');
+        let html = `<div class="chip ${currentFilter==='All'?'active':''}" data-cat="All">All</div><div class="chip ${currentFilter==='null'?'active':''}" data-cat="null">📂 Uncategorized</div>`;
+        html += categories.map(c => `<div class="chip ${currentFilter===c.id?'active':''}" data-cat="${c.id}">${c.icon||'📦'} ${c.name}<button class="delete-chip" onclick="event.stopPropagation(); window.showDeleteModal('${c.id}')">🗑️</button></div>`).join('');
         document.getElementById("categoryChips").innerHTML = html;
-        document.querySelectorAll(".chip").forEach(chip => { chip.addEventListener("click", (e) => { if (e.target.closest('.delete-chip')) return; currentFilter = chip.getAttribute("data-cat"); renderAll(); }); });
+        document.querySelectorAll(".chip").forEach(ch => ch.addEventListener("click", (e) => { if(e.target.closest('.delete-chip')) return; currentFilter = ch.getAttribute("data-cat"); renderHomeProducts(); }));
     }
-    function renderHomeProducts() { let filtered = products.filter(p => (currentFilter === "All" || p.category === currentFilter) && p.name.toLowerCase().includes(searchQuery.toLowerCase())); const container = document.getElementById("homeProductsGrid"); if (!filtered.length) { container.innerHTML = '<div class="empty-state">No products found</div>'; return; } container.innerHTML = filtered.map(p => `<div class="product-card" onclick='showProductDetail(${JSON.stringify(p).replace(/'/g,"&#39;")})'><div class="product-image-container">${p.imageBase64 ? `<img class="product-image" src="${p.imageBase64}">` : '<i class="fas fa-image no-image-icon"></i>'}</div><div class="product-info"><div class="product-name">${escapeHtml(p.name)}</div><div class="sell-price">₹${p.salmanPrice}</div><div class="mrp">₹${p.dukandarPrice}</div><div class="purchase-badge">Purchase: ₹${p.purchasePrice}</div></div></div>`).join(''); }
-    function renderStockList() { let filtered = products.filter(p => p.name.toLowerCase().includes(stockSearch.toLowerCase())); const container = document.getElementById("stockListContainer"); if (!filtered.length) { container.innerHTML = '<div class="empty-state">No products</div>'; return; } container.innerHTML = filtered.map(p => `<div class="stock-item"><div style="width:50px;height:50px;background:#e2e8f0;border-radius:12px;display:flex;align-items:center;justify-content:center;">${p.imageBase64 ? `<img src="${p.imageBase64}" style="width:100%;height:100%;object-fit:cover;">` : '<i class="fas fa-box"></i>'}</div><div style="flex:1"><strong>${escapeHtml(p.name)}</strong><br><span>Purchase: ₹${p.purchasePrice} | Sell: ₹${p.salmanPrice}</span><br><span>Stock: ${p.stock}</span></div><div class="stock-actions"><button onclick="sellProduct('${p.id}')"><i class="fas fa-shopping-cart" style="color:#10b981;"></i></button><button onclick="editStock('${p.id}')"><i class="fas fa-edit" style="color:#001959;"></i></button><button onclick="showDeleteProductModal('${p.id}')"><i class="fas fa-trash" style="color:#ef4444;"></i></button></div></div>`).join(''); }
-    window.sellProduct = (id) => { const p = products.find(p => p.id === id); if (!p) return; let qty = prompt(`Sell ${p.name}\nPrice: ₹${p.salmanPrice}\nQuantity:`); qty = parseInt(qty); if (qty > 0 && p.stock >= qty) { p.stock -= qty; saveProducts(); renderAll(); showToast(`Sold! ₹${qty * p.salmanPrice}`); } else if (qty > p.stock) alert("Insufficient stock"); };
-    window.editStock = (id) => { const p = products.find(p => p.id === id); if (p) { document.getElementById("prodName").value = p.name; document.getElementById("prodPurchasePrice").value = p.purchasePrice; document.getElementById("prodSalmanPrice").value = p.salmanPrice; document.getElementById("prodDukandarPrice").value = p.dukandarPrice; editingId = id; editingImageData = p.imageBase64; currentSelectedCategory = p.category; const cat = categories.find(c => c.id === p.category); document.getElementById("selectedCategoryBadge").innerText = cat ? cat.name : p.category; document.getElementById("categorySelectionView").style.display = "none"; document.getElementById("addProductFormView").style.display = "block"; switchScreen('addProduct'); } };
-    window.showDeleteProductModal = (id) => { window.pendingProductDeleteId = id; const p = products.find(p => p.id === id); if (p) document.getElementById("deleteProductName").innerText = p.name; document.getElementById("deleteProductModal").style.display = "flex"; };
+    function renderHomeProducts() {
+        let filtered = products.filter(p => (currentFilter==="All" || (currentFilter==="null" && !p.category) || p.category===currentFilter) && (p.name||"").toLowerCase().includes(searchQuery.toLowerCase()));
+        const cont = document.getElementById("homeProductsGrid");
+        if(!filtered.length) { cont.innerHTML = '<div class="empty-state">No products found</div>'; return; }
+        cont.innerHTML = filtered.map(p => `<div class="product-card" onclick='window.showProductDetail("${p.id}")'><div class="product-image-container">${p.imageUrl ? `<img class="product-image" src="${p.imageUrl}">` : '<span class="no-image-icon">🖼️</span>'}</div><div class="product-info"><div class="product-name">${escapeHtml(p.name)}</div><div class="sell-price">₹${p.sellingPrice}</div><div class="mrp">₹${p.mrp}</div><div class="purchase-badge">Purchase: ₹${p.purchasePrice}</div></div></div>`).join('');
+    }
+    function renderStockList() {
+        let filtered = products.filter(p => (p.name||"").toLowerCase().includes(stockSearch.toLowerCase()));
+        const cont = document.getElementById("stockListContainer");
+        if(!filtered.length) { cont.innerHTML = '<div class="empty-state">✨ No products yet. Add some!</div>'; return; }
+        cont.innerHTML = filtered.map(p => `
+            <div class="stock-item">
+                <div class="stock-image-thumb">
+                    ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${escapeHtml(p.name)}">` : `<span>📦</span>`}
+                </div>
+                <div class="stock-info-block">
+                    <div class="stock-name">${escapeHtml(p.name)}</div>
+                    <div class="stock-purchase-sell-line">Purchase: ₹${p.purchasePrice} | Sell: ₹${p.sellingPrice}</div>
+                    <div class="stock-stock-badge">📊 Stock: ${p.stock}</div>
+                    <div class="stock-actions-row">
+                        <button class="btn-sell-small" onclick="window.sellProduct('${p.id}')">🛒 Sell</button>
+                        <button class="btn-add-small" onclick="window.addStock('${p.id}')">➕ Stock</button>
+                        <button class="btn-edit-small" onclick="window.editProduct('${p.id}')">✏️ Edit</button>
+                        <button class="btn-delete-small" onclick="window.showDeleteProductModal('${p.id}')">🗑️ Delete</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    window.sellProduct = (id) => { let p = products.find(p=>p.id===id); if(p){ let q = parseInt(prompt(`Sell ${p.name}\nPrice: ₹${p.sellingPrice}\nStock: ${p.stock}`, "1")); if(q>0 && p.stock>=q){ p.stock-=q; syncToFirestore(); renderAll(); showToast(`✅ Sold ${q} for ₹${q * p.sellingPrice}`); } else alert("Insufficient stock"); } };
+    window.addStock = (id) => { let p = products.find(p=>p.id===id); if(p){ let q = parseInt(prompt(`Add stock to ${p.name}`, "10")); if(q>0){ p.stock+=q; syncToFirestore(); renderAll(); showToast(`✅ Added ${q} stock`); } } };
+    window.editProduct = (id) => { let p = products.find(p=>p.id===id); if(p){ selectedCategoryId = p.category; editingProductId = id; document.getElementById("prodName").value = p.name; document.getElementById("prodPurchasePrice").value = p.purchasePrice; document.getElementById("prodSellingPrice").value = p.sellingPrice; document.getElementById("prodMrp").value = p.mrp; document.getElementById("imgPreviewContainer").innerHTML = ""; document.getElementById("selectedCategoryDisplay").innerHTML = `📁 Category: ${categories.find(c=>c.id===p.category)?.name || "Uncategorized"}`; document.getElementById("addProductFormView").style.display = "block"; document.getElementById("addProductCategoryView").style.display = "none"; document.getElementById("addProductInitialView").style.display = "none"; switchScreen('addProduct'); } };
+    window.showDeleteProductModal = (id) => { window.pendingProductDeleteId = id; document.getElementById("deleteProductModal").style.display = "flex"; };
     window.closeDeleteProductModal = () => document.getElementById("deleteProductModal").style.display = "none";
-    function updateCategorySelect() { const sel = document.getElementById("customCategory"); if (sel) sel.innerHTML = categories.map(c => `<option value="${c.id}">${c.icon || '📦'} ${c.name}</option>`).join(''); }
-    
-    document.getElementById("backToCategoryBtn").onclick = () => { document.getElementById("categorySelectionView").style.display = "block"; document.getElementById("addProductFormView").style.display = "none"; editingId = null; editingImageData = null; };
-    document.getElementById("saveProductBtn").onclick = () => {
-        const name = document.getElementById("prodName").value.trim();
-        const purchase = parseFloat(document.getElementById("prodPurchasePrice").value);
-        const sell = parseFloat(document.getElementById("prodSalmanPrice").value);
-        const mrp = parseFloat(document.getElementById("prodDukandarPrice").value);
-        if (!currentSelectedCategory || !name || isNaN(purchase) || isNaN(sell) || isNaN(mrp)) { showToast("Fill all fields"); return; }
-        let imgBase64 = editingImageData;
-        const file = document.getElementById("prodImageFile").files[0];
-        const perform = (imageData) => {
-            if (editingId) updateProduct(editingId, { name, category: currentSelectedCategory, purchasePrice: purchase, salmanPrice: sell, dukandarPrice: mrp, stock: 100 }, imageData);
-            else addProduct({ name, category: currentSelectedCategory, purchasePrice: purchase, salmanPrice: sell, dukandarPrice: mrp, stock: 100 }, imageData);
-            clearAddForm(); document.getElementById("categorySelectionView").style.display = "block"; document.getElementById("addProductFormView").style.display = "none"; editingId = null; switchScreen('stock');
-        };
-        if (file) { const reader = new FileReader(); reader.onload = e => perform(e.target.result); reader.readAsDataURL(file); } else perform(imgBase64);
-    };
-    function clearAddForm() { document.getElementById("prodName").value = ""; document.getElementById("prodPurchasePrice").value = ""; document.getElementById("prodSalmanPrice").value = ""; document.getElementById("prodDukandarPrice").value = ""; document.getElementById("imgPreviewContainer").innerHTML = ""; document.getElementById("prodImageFile").value = ""; editingId = null; editingImageData = null; }
-    document.getElementById("prodImageFile").onchange = e => { const f = e.target.files[0]; if (f) { const reader = new FileReader(); reader.onload = ev => document.getElementById("imgPreviewContainer").innerHTML = `<img src="${ev.target.result}" class="image-preview-sm">`; reader.readAsDataURL(f); } };
-    
-    function buildIconGrid() { const grid = document.getElementById("iconGrid"); if (!grid) return; grid.innerHTML = ""; iconList.forEach(icon => { const div = document.createElement("div"); div.className = "icon-option"; if (icon === "➕") div.classList.add("green-plus"); if (icon === selectedIcon) div.classList.add("selected"); div.textContent = icon; div.addEventListener("click", () => { document.querySelectorAll("#iconGrid .icon-option").forEach(opt => opt.classList.remove("selected")); div.classList.add("selected"); selectedIcon = icon; }); grid.appendChild(div); }); }
-    window.openAddCategoryModal = () => { document.getElementById("newCategoryName").value = ""; document.getElementById("customIconInput").value = ""; selectedIcon = "📦"; buildIconGrid(); document.getElementById("categoryModal").style.display = "flex"; };
-    window.closeCategoryModal = () => document.getElementById("categoryModal").style.display = "none";
-    document.getElementById("saveCategoryBtn").onclick = () => { const name = document.getElementById("newCategoryName").value.trim(); const customIcon = document.getElementById("customIconInput").value.trim(); if (!name) return showToast("Enter name"); let iconToSave = customIcon || selectedIcon; if (customIcon && !iconList.includes(customIcon)) iconList.push(customIcon); addCategory(name, iconToSave); document.getElementById("customIconInput").value = ""; buildIconGrid(); closeCategoryModal(); };
-    
-    window.openDirectAddModal = () => { if (categories.length === 0) { showToast("Add a category first"); return; } updateCategorySelect(); document.getElementById("customItemName").value = ""; document.getElementById("customPurchasePrice").value = ""; document.getElementById("customSellingPrice").value = ""; document.getElementById("customMrp").value = ""; document.getElementById("modalImagePreviewContainer").innerHTML = ""; window.modalImageData = null; document.getElementById("customModal").style.display = "flex"; };
-    window.closeModal = () => document.getElementById("customModal").style.display = "none";
-    document.getElementById("saveCustomItemBtn").onclick = () => { const name = document.getElementById("customItemName").value.trim(); const catId = document.getElementById("customCategory").value; const purchase = parseFloat(document.getElementById("customPurchasePrice").value); const sell = parseFloat(document.getElementById("customSellingPrice").value); const mrp = parseFloat(document.getElementById("customMrp").value); if (!name || !catId || isNaN(purchase) || isNaN(sell) || isNaN(mrp)) { showToast("Fill all fields"); return; } let img = window.modalImageData; const file = document.getElementById("modalImageFile").files[0]; const perform = (imageData) => { addProduct({ name, category: catId, purchasePrice: purchase, salmanPrice: sell, dukandarPrice: mrp, stock: 100 }, imageData); closeModal(); document.getElementById("successModal").style.display = "flex"; }; if (file) { const reader = new FileReader(); reader.onload = e => perform(e.target.result); reader.readAsDataURL(file); } else perform(img); };
-    document.getElementById("modalImageFile").onchange = e => { const f = e.target.files[0]; if (f) { const reader = new FileReader(); reader.onload = ev => { window.modalImageData = ev.target.result; document.getElementById("modalImagePreviewContainer").innerHTML = `<img src="${ev.target.result}" class="image-preview-sm">`; }; reader.readAsDataURL(f); } };
-    window.closeSuccessModal = () => { document.getElementById("successModal").style.display = "none"; switchScreen('stock'); };
-    window.showProductDetail = (p) => { document.getElementById("detailTitle").innerText = p.name; document.getElementById("detailPurchasePrice").innerText = p.purchasePrice; document.getElementById("detailSalmanPrice").innerText = p.salmanPrice; document.getElementById("detailMrpPrice").innerText = p.dukandarPrice; document.getElementById("detailImage").src = p.imageBase64 || "https://via.placeholder.com/140?text=No+Image"; document.getElementById("productDetailModal").style.display = "flex"; };
+    window.showDeleteModal = (catId) => { window.pendingDeleteId = catId; document.getElementById("deleteCategoryModal").style.display = "flex"; };
+    window.closeDeleteModal = () => document.getElementById("deleteCategoryModal").style.display = "none";
+    window.showProductDetail = (id) => { let p = products.find(p=>p.id===id); if(p){ document.getElementById("detailTitle").innerText = p.name; document.getElementById("detailPurchasePrice").innerText = p.purchasePrice; document.getElementById("detailSellingPrice").innerText = p.sellingPrice; document.getElementById("detailMrp").innerText = p.mrp; document.getElementById("detailImage").src = p.imageUrl || ""; document.getElementById("productDetailModal").style.display = "flex"; } };
     window.closeProductDetail = () => document.getElementById("productDetailModal").style.display = "none";
-    
+    function renderAll() { renderCategoryChips(); renderHomeProducts(); renderStockList(); updateProfileStats(); }
     function switchScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
         document.getElementById(id + "Screen").classList.add('active-screen');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        const act = Array.from(document.querySelectorAll('.nav-item')).find(n => n.getAttribute('data-screen') === id);
-        if (act) act.classList.add('active');
-        if (id === 'home') renderHomeProducts();
-        if (id === 'stock') renderStockList();
-        if (id === 'addProduct') { if (!editingId) document.getElementById("categorySelectionView").style.display = "block"; else document.getElementById("addProductFormView").style.display = "block"; }
+        document.querySelectorAll('.nav-item').forEach(nav => { if(nav.getAttribute('data-screen') === id) nav.classList.add('active'); else nav.classList.remove('active'); });
+        if(id === 'home') renderHomeProducts();
+        if(id === 'stock') renderStockList();
+        if(id === 'profile') updateProfileStats();
     }
-    document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', () => switchScreen(n.getAttribute('data-screen'))));
+    document.getElementById("openProductBtn").onclick = () => { if(categories.length===0){ showToast("Please add a category first"); return; } document.getElementById("addProductInitialView").style.display="none"; document.getElementById("addProductCategoryView").style.display="block"; document.getElementById("categorySelectorList").innerHTML = categories.map(c => `<div class="category-item" data-cat-id="${c.id}">${c.icon||'📦'} ${c.name}</div>`).join(''); document.querySelectorAll(".category-item").forEach(item => item.addEventListener("click", ()=>{ selectedCategoryId = item.getAttribute("data-cat-id"); editingProductId=null; const catName = categories.find(c=>c.id===selectedCategoryId).name; document.getElementById("selectedCategoryDisplay").innerHTML = `📁 Selected: ${catName}`; document.getElementById("addProductCategoryView").style.display="none"; document.getElementById("addProductFormView").style.display="block"; document.getElementById("prodName").value=""; document.getElementById("prodPurchasePrice").value=""; document.getElementById("prodSellingPrice").value=""; document.getElementById("prodMrp").value=""; document.getElementById("imgPreviewContainer").innerHTML=""; document.getElementById("prodImageFile").value=""; })); };
+    document.getElementById("backToInitialViewBtn").onclick = () => { document.getElementById("addProductInitialView").style.display="block"; document.getElementById("addProductCategoryView").style.display="none"; };
+    document.getElementById("backToCategoryListViewBtn").onclick = () => { document.getElementById("addProductFormView").style.display="none"; document.getElementById("addProductCategoryView").style.display="block"; };
+    document.getElementById("cancelProductBtn").onclick = () => { document.getElementById("addProductFormView").style.display="none"; document.getElementById("addProductCategoryView").style.display="block"; };
+    document.getElementById("saveProductBtn").onclick = async () => {
+        let name = document.getElementById("prodName").value.trim();
+        if(!selectedCategoryId && !editingProductId) { showToast("Select category"); return; }
+        if(!name) { showToast("Product name required"); return; }
+        let purchase = parseFloat(document.getElementById("prodPurchasePrice").value);
+        let selling = parseFloat(document.getElementById("prodSellingPrice").value);
+        let mrp = parseFloat(document.getElementById("prodMrp").value);
+        if(isNaN(purchase) || isNaN(selling) || isNaN(mrp)) { showToast("Enter valid prices"); return; }
+        let file = document.getElementById("prodImageFile").files[0];
+        let imageUrl = null;
+        if(file) { try { showToast("Uploading image..."); imageUrl = await compressAndUpload(file); showToast("Image uploaded"); } catch(e) { showToast("Upload failed: " + e.message); return; } }
+        if(editingProductId) { let oldStock = products.find(p=>p.id===editingProductId)?.stock||100; await updateProduct(editingProductId, { name, category:selectedCategoryId, purchasePrice:purchase, sellingPrice:selling, mrp:mrp, stock:oldStock }, imageUrl); editingProductId=null; }
+        else { await addProduct({ name, category:selectedCategoryId, purchasePrice:purchase, sellingPrice:selling, mrp:mrp, stock:100 }, imageUrl); }
+        document.getElementById("prodName").value=""; document.getElementById("prodPurchasePrice").value=""; document.getElementById("prodSellingPrice").value=""; document.getElementById("prodMrp").value=""; document.getElementById("imgPreviewContainer").innerHTML=""; document.getElementById("prodImageFile").value="";
+        showToast("✅ Product saved!");
+        document.getElementById("addProductFormView").style.display="none";
+        document.getElementById("addProductInitialView").style.display="block";
+    };
+    document.getElementById("prodImageFile").onchange = e => { let f = e.target.files[0]; if(f){ let reader = new FileReader(); reader.onload = ev => document.getElementById("imgPreviewContainer").innerHTML = `<img src="${ev.target.result}" class="image-preview-sm">`; reader.readAsDataURL(f); } };
+    let selectedIcon = "📦";
+    const emojiList = ["📦","🛒","📱","👕","📚","🍕","💻","⚡"];
+    function buildIconGrid(){ let g=document.getElementById("iconGrid"); g.innerHTML=""; emojiList.forEach(icon=>{ let d=document.createElement("div"); d.className="icon-option"; if(icon===selectedIcon) d.classList.add("selected"); d.textContent=icon; d.addEventListener("click",()=>{ document.querySelectorAll("#iconGrid .icon-option").forEach(o=>o.classList.remove("selected")); d.classList.add("selected"); selectedIcon=icon; }); g.appendChild(d); }); }
+    window.openAddCategoryModal = () => { document.getElementById("newCategoryName").value=""; selectedIcon="📦"; buildIconGrid(); document.getElementById("categoryModal").style.display="flex"; };
+    window.closeCategoryModal = () => document.getElementById("categoryModal").style.display="none";
+    document.getElementById("saveCategoryBtn").onclick = () => { let n=document.getElementById("newCategoryName").value.trim(); if(!n) return showToast("Enter name"); let custom=document.getElementById("customIconInput").value.trim(); addCategory(n, custom||selectedIcon); closeCategoryModal(); };
+    document.getElementById("openCategoryBtn").onclick = openAddCategoryModal;
+    document.getElementById("confirmDeleteCatBtn").onclick = () => { if(window.pendingDeleteId) deleteCategory(window.pendingDeleteId); closeDeleteModal(); };
+    document.getElementById("confirmDeleteProdBtn").onclick = () => { if(window.pendingProductDeleteId) deleteProduct(window.pendingProductDeleteId); closeDeleteProductModal(); };
+    document.getElementById("resetDataBtn").onclick = deleteAllData;
+    document.getElementById("setTpinBtn").onclick = () => { let pin = prompt("Set TPIN (4-6 digits) or empty to disable:"); if(pin===""){ localStorage.removeItem("aamir_tpin"); userTpin=null; showToast("TPIN disabled"); } else if(/^\d{4,6}$/.test(pin)){ localStorage.setItem("aamir_tpin",pin); userTpin=pin; showToast("TPIN set"); } else showToast("Invalid TPIN"); };
+    document.getElementById("enableFingerprintBtn").onclick = async () => { await registerFingerprint(); };
+    
+    const unlockScr = document.getElementById("unlockScreen");
+    const fingerprintBtn = document.getElementById("fingerprintUnlockBtn");
+    function showUnlockIfNeeded() {
+        if (userTpin) {
+            unlockScr.style.display = "flex";
+            if (fingerprintEnabled) fingerprintBtn.style.display = "flex";
+            else fingerprintBtn.style.display = "none";
+            return new Promise(resolve => { pendingUnlockResolve = resolve; });
+        }
+        return Promise.resolve();
+    }
+    document.getElementById("unlockSubmitBtn").onclick = () => { if(document.getElementById("unlockPinInput").value === userTpin){ document.getElementById("unlockError").innerText=""; unlockScr.style.display="none"; if(pendingUnlockResolve) pendingUnlockResolve(); } else document.getElementById("unlockError").innerText="Wrong TPIN"; };
+    fingerprintBtn.onclick = async () => {
+        const success = await authenticateWithFingerprint();
+        if (success) {
+            document.getElementById("unlockError").innerText="";
+            unlockScr.style.display="none";
+            if(pendingUnlockResolve) pendingUnlockResolve();
+        } else {
+            document.getElementById("unlockError").innerText="Fingerprint not recognized";
+        }
+    };
     document.getElementById("searchInput").addEventListener('input', e => { searchQuery = e.target.value; renderHomeProducts(); });
     document.getElementById("stockSearchInput").addEventListener('input', e => { stockSearch = e.target.value; renderStockList(); });
-    document.getElementById("openCategoryBtn").onclick = openAddCategoryModal;
-    document.getElementById("openProductBtn").onclick = openDirectAddModal;
-    document.getElementById("fabBtn").onclick = openDirectAddModal;
-    
-    const statsArea = document.getElementById("secretTapArea");
-    const resetBtn = document.getElementById("resetDataBtn");
-    statsArea.addEventListener("click", () => { if (tapTimeout) clearTimeout(tapTimeout); tapCount++; if (tapCount === 5) { resetBtn.style.display = "block"; showToast("🔓 Reset button revealed!"); tapCount = 0; } else { tapTimeout = setTimeout(() => { tapCount = 0; }, 800); } });
-    resetBtn.onclick = () => deleteAllData();
-    
-    function openSetTpinFlow() { if (userTpin) document.getElementById("enterCurrentTpinModal").style.display = "flex"; else { document.getElementById("newTpinInput").value = ""; document.getElementById("setNewTpinModal").style.display = "flex"; } }
-    document.getElementById("setTpinBtn").onclick = openSetTpinFlow;
-    document.getElementById("cancelCurrentTpinBtn").onclick = () => document.getElementById("enterCurrentTpinModal").style.display = "none";
-    document.getElementById("cancelSetTpinBtn").onclick = () => document.getElementById("setNewTpinModal").style.display = "none";
-    document.getElementById("verifyCurrentTpinBtn").onclick = () => { const entered = document.getElementById("currentTpinInput").value; if (entered === userTpin) { document.getElementById("enterCurrentTpinModal").style.display = "none"; document.getElementById("newTpinInput").value = ""; document.getElementById("setNewTpinModal").style.display = "flex"; } else showToast("Incorrect current TPIN"); };
-    document.getElementById("confirmSetTpinBtn").onclick = () => { const newPin = document.getElementById("newTpinInput").value.trim(); if (newPin === "") { saveTpin(null); showToast("TPIN disabled"); document.getElementById("setNewTpinModal").style.display = "none"; } else if (/^\d{4,6}$/.test(newPin)) { saveTpin(newPin); showToast("TPIN set successfully"); document.getElementById("setNewTpinModal").style.display = "none"; } else showToast("TPIN must be 4-6 digits"); };
-    document.getElementById("enableFingerprintBtn").onclick = registerFingerprint;
-    document.getElementById("unlockPinBtn").onclick = () => { const entered = document.getElementById("unlockPinInput").value; if (entered === userTpin) hideUnlockScreen(); else document.getElementById("unlockError").innerText = "Invalid TPIN"; };
-    document.getElementById("unlockFingerprintBtn").onclick = async () => { const ok = await authenticateWithFingerprint(); if (ok) hideUnlockScreen(); else document.getElementById("unlockError").innerText = "Fingerprint not recognized"; };
-    function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[m]); }
-    
-    loadData();
-    buildIconGrid();
-    showUnlockIfNeeded().then(() => { document.getElementById("bottomNav").style.display = "flex"; document.getElementById("fabBtn").style.display = "flex"; switchScreen('home'); });
-    
-    document.getElementById("confirmDeleteProdBtn").onclick = () => { if (window.pendingProductDeleteId) { deleteProduct(window.pendingProductDeleteId); window.pendingProductDeleteId = null; closeDeleteProductModal(); } };
-    document.getElementById("confirmDeleteCatBtn").onclick = () => { if (window.pendingDeleteId) { deleteCategory(window.pendingDeleteId); window.pendingDeleteId = null; closeDeleteModal(); } };
-    window.closeDeleteModal = () => document.getElementById("deleteCategoryModal").style.display = "none";
-    window.confirmDeleteCategory = () => { if (window.pendingDeleteId) { deleteCategory(window.pendingDeleteId); window.pendingDeleteId = null; closeDeleteModal(); } };
-    window.confirmDeleteProduct = () => { if (window.pendingProductDeleteId) { deleteProduct(window.pendingProductDeleteId); window.pendingProductDeleteId = null; closeDeleteProductModal(); } };
-    window.showDeleteModal = (catId, catName) => { window.pendingDeleteId = catId; document.getElementById("deleteCategoryName").innerHTML = catName; document.getElementById("deleteCategoryModal").style.display = "flex"; };
+    document.getElementById("fabBtn").onclick = () => { if(categories.length===0) showToast("Add a category first"); else { editingProductId=null; selectedCategoryId=null; document.getElementById("addProductInitialView").style.display="block"; document.getElementById("addProductCategoryView").style.display="none"; document.getElementById("addProductFormView").style.display="none"; switchScreen('addProduct'); } };
+    document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', () => switchScreen(n.getAttribute('data-screen'))));
+    function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+    startFirestoreListener();
+    showUnlockIfNeeded().then(() => switchScreen('home'));
 </script>
 </body>
 </html>
