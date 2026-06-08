@@ -128,7 +128,7 @@
         .price-row span { background: #f1f5f9; padding: 2px 8px; border-radius: 20px; }
         .sell-price-large { font-weight: 800; color: #001959; font-size: 20px; margin: 6px 0 2px; }
         
-        /* Product Management List - without stock buttons and stock display */
+        /* Product Management List - with Edit & Delete buttons */
         .stock-list-container { display: flex; flex-direction: column; gap: 16px; }
         .stock-item {
             background: #ffffff;
@@ -157,6 +157,27 @@
         .stock-name { font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
         .stock-price-detail { font-size: 12px; color: #334155; margin: 4px 0; line-height: 1.5; }
         .stock-price-detail strong { color: #001959; }
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .action-buttons button {
+            background: #f8fafc;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.1s;
+        }
+        .action-buttons button:active { transform: scale(0.96); }
+        .btn-edit-action { background: #fff3e3; color: #b45309; }
+        .btn-delete-action { background: #fee2e2; color: #b91c1c; }
         
         /* Profile Screen */
         .profile-stats { padding: 8px 0; }
@@ -186,12 +207,8 @@
             margin-top: 20px;
             transition: all 0.3s ease;
         }
-        .reset-btn-hidden {
-            display: none;
-        }
-        .reset-btn-visible {
-            display: block;
-        }
+        .reset-btn-hidden { display: none; }
+        .reset-btn-visible { display: block; }
         .reset-button {
             background: #ef4444;
             color: white;
@@ -201,7 +218,6 @@
             width: 100%;
             font-weight: 600;
             cursor: pointer;
-            transition: 0.1s;
         }
         .reset-button:active { transform: scale(0.98); }
         .click-counter-toast {
@@ -472,18 +488,18 @@
         </div>
     </div>
 
+    <!-- Product Management Screen - with Edit & Delete buttons -->
     <div id="stockScreen" class="screen">
         <h3>📦 Product Management</h3>
         <div class="search-bar"><span>🔍</span><input type="text" id="stockSearchInput" placeholder="Search product..."></div>
         <div id="stockListContainer" class="stock-list-container"></div>
     </div>
 
-    <!-- Profile Screen - Reset button hidden, appears after 5 clicks on stats row -->
+    <!-- Profile Screen -->
     <div id="profileScreen" class="screen">
         <div class="profile-stats">
             <div class="setting-row" id="setTpinBtn"><span>🔒 Set/Change TPIN</span><span>▼</span></div>
             <div class="setting-row" id="enableFingerprintBtn"><span>🖐️ Enable Fingerprint Unlock</span><span>▼</span></div>
-            <!-- Statistics row - click target for revealing reset button -->
             <div class="stats-row" id="statsClickTarget">
                 <div class="stats-item"><div class="stats-number" id="profileTotalProducts">0</div><div>Total Products</div></div>
                 <div class="stats-item"><div class="stats-number" id="profileTotalCategories">0</div><div>Total Categories</div></div>
@@ -693,6 +709,7 @@
         `).join('');
     }
     
+    // Product Management with Edit & Delete buttons (no stock/sell)
     function renderStockList() {
         let filtered = products.filter(p => (p.name||"").toLowerCase().includes(stockSearch.toLowerCase()));
         const cont = document.getElementById("stockListContainer");
@@ -703,13 +720,41 @@
                 <div class="stock-info-block">
                     <div class="stock-name">${escapeHtml(p.name)}</div>
                     ${formatStockBilingual(p.purchasePrice, p.sellingPrice, p.mrp)}
+                    <div class="action-buttons">
+                        <button class="btn-edit-action" onclick="window.editProduct('${p.id}')">✏️ Edit / संपादन</button>
+                        <button class="btn-delete-action" onclick="window.showDeleteProductModal('${p.id}')">🗑️ Delete / हटाएँ</button>
+                    </div>
                 </div>
             </div>
         `).join('');
     }
 
+    window.editProduct = (id) => { 
+        let p = products.find(p=>p.id===id); 
+        if(p){ 
+            selectedCategoryId = p.category; 
+            editingProductId = id; 
+            document.getElementById("prodName").value = p.name; 
+            document.getElementById("prodPurchasePrice").value = p.purchasePrice; 
+            document.getElementById("prodSellingPrice").value = p.sellingPrice; 
+            document.getElementById("prodMrp").value = p.mrp; 
+            document.getElementById("imgPreviewContainer").innerHTML = ""; 
+            let catName = categories.find(c=>c.id===p.category)?.name || "Uncategorized";
+            document.getElementById("selectedCategoryDisplay").innerHTML = `📁 Category: ${catName}`; 
+            document.getElementById("addProductFormView").style.display = "block"; 
+            document.getElementById("addProductCategoryView").style.display = "none"; 
+            document.getElementById("addProductInitialView").style.display = "none"; 
+            switchScreen('addProduct'); 
+        } 
+    };
+    
     window.showProductDetail = (id) => { let p = products.find(p=>p.id===id); if(p){ document.getElementById("detailTitle").innerText = p.name; document.getElementById("detailPrices").innerHTML = formatStockBilingual(p.purchasePrice, p.sellingPrice, p.mrp); document.getElementById("detailImage").src = p.imageUrl || ""; document.getElementById("productDetailModal").style.display = "flex"; } };
     window.closeProductDetail = () => document.getElementById("productDetailModal").style.display = "none";
+    window.showDeleteProductModal = (id) => { window.pendingProductDeleteId = id; document.getElementById("deleteProductModal").style.display = "flex"; };
+    window.closeDeleteProductModal = () => document.getElementById("deleteProductModal").style.display = "none";
+    window.showDeleteModal = (catId) => { window.pendingDeleteId = catId; document.getElementById("deleteCategoryModal").style.display = "flex"; };
+    window.closeDeleteModal = () => document.getElementById("deleteCategoryModal").style.display = "none";
+    
     function renderAll() { renderCategoryChips(); renderHomeProducts(); renderStockList(); updateProfileStats(); }
     function switchScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
@@ -719,11 +764,6 @@
         if(id === 'stock') renderStockList();
         if(id === 'profile') { updateProfileStats(); updateClickMessage(); }
     }
-    
-    window.showDeleteModal = (catId) => { window.pendingDeleteId = catId; document.getElementById("deleteCategoryModal").style.display = "flex"; };
-    window.closeDeleteModal = () => document.getElementById("deleteCategoryModal").style.display = "none";
-    window.showDeleteProductModal = (id) => { window.pendingProductDeleteId = id; document.getElementById("deleteProductModal").style.display = "flex"; };
-    window.closeDeleteProductModal = () => document.getElementById("deleteProductModal").style.display = "none";
     
     document.getElementById("openProductBtn").onclick = () => { if(categories.length===0){ showToast("Please add a category first"); return; } document.getElementById("addProductInitialView").style.display="none"; document.getElementById("addProductCategoryView").style.display="block"; document.getElementById("categorySelectorList").innerHTML = categories.map(c => `<div class="category-item" data-cat-id="${c.id}">${c.icon||'📦'} ${c.name}</div>`).join(''); document.querySelectorAll(".category-item").forEach(item => item.addEventListener("click", ()=>{ selectedCategoryId = item.getAttribute("data-cat-id"); editingProductId=null; const catName = categories.find(c=>c.id===selectedCategoryId).name; document.getElementById("selectedCategoryDisplay").innerHTML = `📁 Selected: ${catName}`; document.getElementById("addProductCategoryView").style.display="none"; document.getElementById("addProductFormView").style.display="block"; document.getElementById("prodName").value=""; document.getElementById("prodPurchasePrice").value=""; document.getElementById("prodSellingPrice").value=""; document.getElementById("prodMrp").value=""; document.getElementById("imgPreviewContainer").innerHTML=""; document.getElementById("prodImageFile").value=""; })); };
     document.getElementById("backToInitialViewBtn").onclick = () => { document.getElementById("addProductInitialView").style.display="block"; document.getElementById("addProductCategoryView").style.display="none"; };
