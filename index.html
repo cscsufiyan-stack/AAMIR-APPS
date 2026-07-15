@@ -9,7 +9,6 @@
         body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f5f7fb; padding-bottom: 85px; }
         .app-main { max-width: 500px; margin: 0 auto; background: #ffffff; min-height: 100vh; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); }
         
-        /* Premium Banner */
         .premium-banner {
             position: relative;
             width: 100%;
@@ -69,7 +68,6 @@
         .curve-gold-stroke { stroke: #dfad47; stroke-width: 1.5px; fill: none; }
         .curve-white-stroke { stroke: #ffffff; stroke-width: 1px; fill: none; }
         
-        /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -107,7 +105,6 @@
         .screen.active-screen { display: block; }
         @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
         
-        /* Search & Chips */
         .search-bar { background: #f1f5f9; border-radius: 30px; padding: 12px 18px; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
         .search-bar input { background: none; border: none; flex: 1; font-size: 15px; outline: none; }
         .category-chips { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 16px; margin-bottom: 8px; white-space: nowrap; }
@@ -115,7 +112,6 @@
         .chip.active { background: #dbeafe; color: #1e3a8a; }
         .chip .delete-chip { background: none; border: none; cursor: pointer; font-size: 11px; opacity: 0.6; margin-left: 4px; color: inherit; }
         
-        /* Products Grid – Home Screen */
         .products-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
         .product-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; transition: all 0.2s ease; }
         .product-card:active { transform: scale(0.98); }
@@ -128,7 +124,6 @@
         .price-row span { background: #f1f5f9; padding: 2px 8px; border-radius: 20px; }
         .sell-price-large { font-weight: 800; color: #001959; font-size: 20px; margin: 6px 0 2px; }
         
-        /* Product Management List - with Edit & Delete buttons */
         .stock-list-container { display: flex; flex-direction: column; gap: 16px; }
         .stock-item {
             background: #ffffff;
@@ -179,32 +174,393 @@
         .btn-edit-action { background: #fff3e3; color: #b45309; }
         .btn-delete-action { background: #fee2e2; color: #b91c1c; }
         
-        /* Profile Screen */
+        /* ===== CALCULATOR ===== */
+        .simple-calc-section {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 16px;
+            margin: 12px 0;
+            border: 1px solid #e2e8f0;
+        }
+        .calc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .calc-header h4 {
+            font-size: 16px;
+            color: #0f172a;
+            font-weight: 700;
+        }
+        .calc-header .badge {
+            background: linear-gradient(135deg, #001959, #dfad47);
+            color: white;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .calc-display {
+            background: white;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 2px solid #001959;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: right;
+            color: #0f172a;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+            font-family: monospace;
+            overflow: hidden;
+            background: #f8faff;
+        }
+        .calc-display .expr { opacity: 0.6; font-weight: 400; font-size: 14px; margin-right: 10px; }
+        .calc-display .result { color: #001959; font-size: 24px; }
+        .calc-display .error { color: #ef4444; }
+        
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .calc-btn {
+            padding: 12px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            background: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.1s;
+            color: #0f172a;
+        }
+        .calc-btn:active { transform: scale(0.95); background: #f1f5f9; }
+        .calc-btn.operator { background: #eef2ff; border-color: #c7d2fe; color: #001959; }
+        .calc-btn.operator:active { background: #dbeafe; }
+        .calc-btn.equals { background: linear-gradient(135deg, #001959, #002d8a); color: white; border-color: #001959; }
+        .calc-btn.equals:active { opacity: 0.8; }
+        .calc-btn.clear { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+        .calc-btn.clear:active { background: #fecaca; }
+        
+        .note-textarea {
+            width: 100%;
+            min-height: 60px;
+            padding: 10px 12px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: white;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+        .note-textarea:focus {
+            border-color: #001959;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 25, 89, 0.1);
+        }
+        
+        .note-image-upload {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 12px;
+            border: 1.5px dashed #cbd5e1;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .note-image-upload:hover { border-color: #001959; background: #f8faff; }
+        .note-image-upload label {
+            font-size: 12px;
+            color: #475569;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .note-image-upload input[type="file"] { display: none; }
+        .note-image-preview {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 1px solid #e2e8f0;
+        }
+        .note-image-preview-placeholder {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #94a3b8;
+        }
+        
+        .note-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .note-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .note-actions button:active { transform: scale(0.97); }
+        .btn-save-note { background: #001959; color: white; }
+        .btn-clear-note { background: #f1f5f9; color: #475569; }
+        
+        .saved-notes {
+            margin-top: 10px;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        .saved-note-item {
+            background: white;
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            border: 1px solid #eef2f6;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .saved-note-item .note-thumb {
+            width: 55px;
+            height: 55px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+        }
+        .saved-note-item .note-thumb-placeholder {
+            width: 55px;
+            height: 55px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+            border: 1px solid #e2e8f0;
+        }
+        .saved-note-item .note-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .saved-note-item .note-text-display {
+            font-size: 13px;
+            color: #0f172a;
+            word-wrap: break-word;
+            font-weight: 500;
+        }
+        .saved-note-item .note-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 4px;
+        }
+        .saved-note-item .note-time {
+            font-size: 10px;
+            color: #94a3b8;
+        }
+        .saved-note-item .delete-note-btn {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0 4px;
+        }
+        .saved-note-item .note-amount-badge {
+            font-size: 11px;
+            font-weight: 700;
+            color: #001959;
+            background: #eef2ff;
+            padding: 1px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .kb-hint {
+            font-size: 10px;
+            color: #94a3b8;
+            text-align: center;
+            margin-top: 6px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 20px;
+        }
+        
+        /* ===== CASH DENOMINATION ===== */
+        .denomination-section {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 16px;
+            margin: 12px 0;
+            border: 1px solid #e2e8f0;
+        }
+        .denom-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .denom-header h4 {
+            font-size: 16px;
+            color: #0f172a;
+            font-weight: 700;
+        }
+        .denom-header .badge {
+            background: linear-gradient(135deg, #001959, #dfad47);
+            color: white;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .denom-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        .denom-table th {
+            background: #eef2ff;
+            color: #001959;
+            padding: 6px 4px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 10px;
+        }
+        .denom-table td {
+            padding: 4px 3px;
+            text-align: center;
+            border-bottom: 1px solid #eef2f6;
+        }
+        .denom-table tr:last-child td { border-bottom: none; }
+        .denom-table .denom-label {
+            font-weight: 600;
+            color: #0f172a;
+            text-align: left;
+            padding-left: 6px;
+            font-size: 11px;
+        }
+        .denom-table input[type="number"] {
+            width: 50px;
+            padding: 4px 2px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            background: white;
+            transition: 0.2s;
+        }
+        .denom-table input[type="number"]:focus {
+            border-color: #001959;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 25, 89, 0.1);
+        }
+        .denom-subtotal {
+            font-weight: 700;
+            color: #001959;
+            font-size: 13px;
+        }
+        .denom-total-box {
+            background: linear-gradient(135deg, #001959, #002d8a);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 14px;
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .denom-total-box .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .denom-total-box .total-row .label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        .denom-total-box .total-row .value {
+            font-size: 20px;
+            font-weight: 800;
+        }
+        .denom-total-box .total-row .value-small {
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .denom-total-box .total-row .grand-total {
+            font-size: 24px;
+            font-weight: 900;
+        }
+        .denom-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .denom-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 11px;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .denom-actions button:active { transform: scale(0.97); }
+        .btn-denom-clear { background: #fee2e2; color: #991b1b; }
+        .btn-denom-reset { background: #f1f5f9; color: #475569; }
+        
         .profile-stats { padding: 8px 0; }
         .setting-row {
             display: flex;
             justify-content: space-between;
             background: #f8fafc;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-radius: 20px;
-            margin: 10px 0;
+            margin: 8px 0;
             cursor: pointer;
+            font-size: 14px;
         }
         .stats-row {
             display: flex;
             justify-content: space-between;
             background: #eef2ff;
-            padding: 12px 20px;
+            padding: 10px 16px;
             border-radius: 20px;
-            margin: 15px 0;
+            margin: 12px 0;
             cursor: pointer;
             transition: 0.1s;
         }
         .stats-row:active { background: #d9e2ef; }
         .stats-item { text-align: center; flex: 1; }
-        .stats-number { font-size: 22px; font-weight: 800; color: #001959; }
+        .stats-number { font-size: 20px; font-weight: 800; color: #001959; }
         .reset-btn-container {
-            margin-top: 20px;
+            margin-top: 16px;
             transition: all 0.3s ease;
         }
         .reset-btn-hidden { display: none; }
@@ -213,7 +569,7 @@
             background: #ef4444;
             color: white;
             border: none;
-            padding: 12px;
+            padding: 10px;
             border-radius: 40px;
             width: 100%;
             font-weight: 600;
@@ -221,13 +577,12 @@
         }
         .reset-button:active { transform: scale(0.98); }
         .click-counter-toast {
-            font-size: 12px;
+            font-size: 11px;
             color: #475569;
             text-align: center;
-            margin-top: 8px;
+            margin-top: 6px;
         }
         
-        /* Modals etc. */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -320,7 +675,6 @@
         .category-list { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; max-height: 400px; overflow-y: auto; }
         .category-item { background: #f1f5f9; padding: 14px 18px; border-radius: 60px; display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; }
         
-        /* Stylish Unlock Screen */
         .unlock-screen {
             position: fixed;
             top: 0;
@@ -428,7 +782,7 @@
             padding: 6px;
             border-radius: 40px;
         }
-        h3 { font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
+        h3 { font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -488,18 +842,105 @@
         </div>
     </div>
 
-    <!-- Product Management Screen - with Edit & Delete buttons -->
     <div id="stockScreen" class="screen">
         <h3>📦 Product Management</h3>
         <div class="search-bar"><span>🔍</span><input type="text" id="stockSearchInput" placeholder="Search product..."></div>
         <div id="stockListContainer" class="stock-list-container"></div>
     </div>
 
-    <!-- Profile Screen -->
     <div id="profileScreen" class="screen">
         <div class="profile-stats">
             <div class="setting-row" id="setTpinBtn"><span>🔒 Set/Change TPIN</span><span>▼</span></div>
             <div class="setting-row" id="enableFingerprintBtn"><span>🖐️ Enable Fingerprint Unlock</span><span>▼</span></div>
+            
+            <!-- ===== CALCULATOR ===== -->
+            <div class="simple-calc-section">
+                <div class="calc-header">
+                    <h4>🧮 Calculator & Notes</h4>
+                    <span class="badge">📷 Photo</span>
+                </div>
+                <div class="calc-display" id="calcDisplay">
+                    <span class="expr" id="calcExpr"></span>
+                    <span class="result" id="calcResult">0</span>
+                </div>
+                <div class="calc-grid">
+                    <button class="calc-btn" data-value="7">7</button>
+                    <button class="calc-btn" data-value="8">8</button>
+                    <button class="calc-btn" data-value="9">9</button>
+                    <button class="calc-btn operator" data-value="+">+</button>
+                    
+                    <button class="calc-btn" data-value="4">4</button>
+                    <button class="calc-btn" data-value="5">5</button>
+                    <button class="calc-btn" data-value="6">6</button>
+                    <button class="calc-btn operator" data-value="-">−</button>
+                    
+                    <button class="calc-btn" data-value="1">1</button>
+                    <button class="calc-btn" data-value="2">2</button>
+                    <button class="calc-btn" data-value="3">3</button>
+                    <button class="calc-btn operator" data-value="*">×</button>
+                    
+                    <button class="calc-btn clear" data-value="C">C</button>
+                    <button class="calc-btn" data-value="0">0</button>
+                    <button class="calc-btn" data-value=".">.</button>
+                    <button class="calc-btn operator" data-value="/">÷</button>
+                    
+                    <button class="calc-btn" data-value="(">(</button>
+                    <button class="calc-btn" data-value=")">)</button>
+                    <button class="calc-btn equals" data-value="=">=</button>
+                    <button class="calc-btn operator" data-value="%">%</button>
+                </div>
+                <div class="kb-hint">⌨️ Type directly from keyboard (e.g., 10*5=)</div>
+                
+                <textarea id="noteText" class="note-textarea" placeholder="Write note here... (e.g., 10 × 140 = 1400)"></textarea>
+                
+                <!-- Photo Upload -->
+                <div class="note-image-upload" onclick="document.getElementById('noteImageFile').click()">
+                    <label>📷 Add Photo / फोटो जोड़ें</label>
+                    <div id="noteImagePreviewContainer">
+                        <div class="note-image-preview-placeholder">🖼️</div>
+                    </div>
+                    <input type="file" id="noteImageFile" accept="image/*">
+                </div>
+                
+                <div class="note-actions">
+                    <button class="btn-save-note" id="saveNoteBtn">💾 Save Note</button>
+                    <button class="btn-clear-note" id="clearNoteBtn">🗑️ Clear</button>
+                </div>
+                <div id="savedNotesContainer" class="saved-notes"></div>
+            </div>
+            
+            <!-- ===== CASH DENOMINATION ===== -->
+            <div class="denomination-section">
+                <div class="denom-header">
+                    <h4>💰 Cash Denomination</h4>
+                    <span class="badge">₹ Count</span>
+                </div>
+                <table class="denom-table">
+                    <thead>
+                        <tr>
+                            <th>Denomination</th>
+                            <th>Count</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="denomTableBody"></tbody>
+                </table>
+                <div class="denom-total-box">
+                    <div class="total-row">
+                        <span class="label">📊 GRAND TOTAL</span>
+                        <span class="grand-total" id="denomGrandTotal">₹0</span>
+                    </div>
+                    <div class="total-row">
+                        <span class="label" id="denomWords">Zero Rupees Only</span>
+                        <span class="value-small" id="denomStats">Notes: 0 | Coins: 0</span>
+                    </div>
+                </div>
+                <div class="denom-actions">
+                    <button class="btn-denom-clear" id="denomClearBtn">🗑️ Clear All</button>
+                    <button class="btn-denom-reset" id="denomResetBtn">↺ Reset</button>
+                </div>
+            </div>
+            
             <div class="stats-row" id="statsClickTarget">
                 <div class="stats-item"><div class="stats-number" id="profileTotalProducts">0</div><div>Total Products</div></div>
                 <div class="stats-item"><div class="stats-number" id="profileTotalCategories">0</div><div>Total Categories</div></div>
@@ -525,7 +966,6 @@
     <div id="deleteProductModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Delete Product?</div><div id="deleteProductName"></div><div style="display:flex; gap:12px;"><button class="btn-cancel" onclick="closeDeleteProductModal()">Cancel</button><button class="btn-primary" id="confirmDeleteProdBtn">Delete</button></div></div></div>
     <div id="productDetailModal" class="modal-overlay"><div class="modal-card"><img id="detailImage" style="width:100%; border-radius:20px;"><h3 id="detailTitle"></h3><p id="detailPrices"></p><button class="btn-primary" onclick="closeProductDetail()">Close</button></div></div>
 
-    <!-- Stylish Unlock Screen -->
     <div id="unlockScreen" class="unlock-screen">
         <div class="unlock-card">
             <div class="unlock-icon">🔐</div>
@@ -591,7 +1031,315 @@
     let pendingUnlockResolve = null;
     let fingerprintCredentialId = localStorage.getItem("aamir_fingerprint_id");
     let fingerprintEnabled = fingerprintCredentialId !== null;
+
+    // ===== CALCULATOR =====
+    const calcExprEl = document.getElementById("calcExpr");
+    const calcResultEl = document.getElementById("calcResult");
+    const noteText = document.getElementById("noteText");
+    let calcExpression = "";
+    let calcResult = "0";
+    let justEvaluated = false;
+    let noteImageData = null;
     
+    function updateCalcDisplay(expr, result) {
+        calcExprEl.textContent = expr || "";
+        calcResultEl.textContent = result || "0";
+    }
+    
+    function evaluateCalc(expr) {
+        try {
+            let sanitized = expr.replace(/×/g, '*').replace(/÷/g, '/').replace(/−/g, '-');
+            if (!/^[\d+\-*/%(). ]+$/.test(sanitized)) {
+                const clean = sanitized.replace(/[^0-9+\-*/%().]/g, '');
+                if (!clean) return null;
+                sanitized = clean;
+            }
+            const result = new Function(`return (${sanitized})`)();
+            if (typeof result === 'number' && !isNaN(result) && isFinite(result)) {
+                return parseFloat(result.toFixed(10));
+            }
+            return null;
+        } catch(e) {
+            return null;
+        }
+    }
+    
+    function handleCalcInput(char) {
+        if (char === 'C' || char === 'c') {
+            calcExpression = "";
+            calcResult = "0";
+            updateCalcDisplay("", "0");
+            return;
+        }
+        if (char === '=' || char === 'Enter') {
+            if (!calcExpression.trim()) return;
+            const result = evaluateCalc(calcExpression);
+            if (result !== null) {
+                calcResult = String(result);
+                updateCalcDisplay(calcExpression + " =", result);
+                noteText.value += ` = ${result}`;
+                calcExpression = "";
+                justEvaluated = true;
+            } else {
+                calcResult = "Error";
+                updateCalcDisplay(calcExpression, "❌ Error");
+                calcExpression = "";
+            }
+            return;
+        }
+        const allowed = /^[\d+\-*/%().]$/;
+        if (allowed.test(char)) {
+            if (justEvaluated) {
+                calcExpression = "";
+                justEvaluated = false;
+            }
+            calcExpression += char;
+            const preview = evaluateCalc(calcExpression);
+            if (preview !== null) {
+                calcResult = String(preview);
+                updateCalcDisplay(calcExpression, preview);
+            } else {
+                updateCalcDisplay(calcExpression, calcResult || "0");
+            }
+        }
+    }
+    
+    document.querySelectorAll('.calc-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const val = btn.dataset.value;
+            if (val === 'C') handleCalcInput('C');
+            else if (val === '=') handleCalcInput('=');
+            else handleCalcInput(val);
+        });
+    });
+    
+    document.addEventListener('keydown', (e) => {
+        const profileScreen = document.getElementById('profileScreen');
+        if (!profileScreen.classList.contains('active-screen')) return;
+        const key = e.key;
+        if (key === 'Enter') { e.preventDefault(); handleCalcInput('='); return; }
+        if (key === 'Backspace') {
+            e.preventDefault();
+            if (calcExpression.length > 0) {
+                calcExpression = calcExpression.slice(0, -1);
+                if (!calcExpression) { calcResult = "0"; updateCalcDisplay("", "0"); }
+                else { const preview = evaluateCalc(calcExpression); if (preview !== null) { calcResult = String(preview); updateCalcDisplay(calcExpression, preview); } else updateCalcDisplay(calcExpression, calcResult || "0"); }
+            }
+            return;
+        }
+        if (key === 'Escape') { e.preventDefault(); handleCalcInput('C'); return; }
+        if (/^[0-9+\-*/%().]$/.test(key)) { e.preventDefault(); handleCalcInput(key); }
+    });
+    
+    // ===== NOTE IMAGE UPLOAD =====
+    const noteImageInput = document.getElementById('noteImageFile');
+    const noteImagePreviewContainer = document.getElementById('noteImagePreviewContainer');
+    
+    noteImageInput.addEventListener('change', function(e) {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                noteImageData = ev.target.result;
+                noteImagePreviewContainer.innerHTML = `<img src="${noteImageData}" class="note-image-preview">`;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // ===== NOTES WITH PHOTO =====
+    let savedNotes = JSON.parse(localStorage.getItem("aamir_notes") || "[]");
+    
+    function renderSavedNotes() {
+        const container = document.getElementById("savedNotesContainer");
+        if (savedNotes.length === 0) {
+            container.innerHTML = '<div style="color:#94a3b8; font-size:12px; text-align:center; padding:12px;">📝 No saved notes / कोई नोट नहीं</div>';
+            return;
+        }
+        container.innerHTML = savedNotes.map((note, index) => {
+            const hasImage = note.image && note.image.startsWith('data:image');
+            // Extract amount from note text
+            let amount = 0;
+            const match = note.text.match(/=\s*([\d,]+(?:\.\d{1,2})?)/);
+            if (match) amount = parseFloat(match[1].replace(/,/g, ''));
+            else {
+                const numMatch = note.text.match(/₹?\s*([\d,]+)$/);
+                if (numMatch) amount = parseFloat(numMatch[1].replace(/,/g, ''));
+            }
+            const amountBadge = amount > 0 ? `<span class="note-amount-badge">₹${amount}</span>` : '';
+            
+            return `
+                <div class="saved-note-item">
+                    ${hasImage ? `<img src="${note.image}" class="note-thumb">` : `<div class="note-thumb-placeholder">📄</div>`}
+                    <div class="note-content">
+                        <div class="note-text-display">${escapeHtml(note.text)} ${amountBadge}</div>
+                        <div class="note-meta">
+                            <span class="note-time">${note.time}</span>
+                            <button class="delete-note-btn" data-index="${index}">✕</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        container.querySelectorAll('.delete-note-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.index);
+                savedNotes.splice(idx, 1);
+                localStorage.setItem("aamir_notes", JSON.stringify(savedNotes));
+                renderSavedNotes();
+                showToast("Note deleted / नोट हटा दिया");
+            });
+        });
+    }
+    
+    document.getElementById("saveNoteBtn").addEventListener('click', () => {
+        const text = noteText.value.trim();
+        if (!text) { showToast("Write something first! / कुछ लिखें!"); return; }
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+        const noteObj = { 
+            text: text, 
+            time: timeStr,
+            image: noteImageData || null
+        };
+        savedNotes.unshift(noteObj);
+        localStorage.setItem("aamir_notes", JSON.stringify(savedNotes));
+        renderSavedNotes();
+        showToast("✅ Note saved! / नोट सहेजा गया!");
+        noteText.value = '';
+        calcExpression = '';
+        calcResult = "0";
+        updateCalcDisplay("", "0");
+        noteImageData = null;
+        noteImagePreviewContainer.innerHTML = `<div class="note-image-preview-placeholder">🖼️</div>`;
+        noteImageInput.value = '';
+    });
+    
+    document.getElementById("clearNoteBtn").addEventListener('click', () => {
+        noteText.value = '';
+        calcExpression = '';
+        calcResult = "0";
+        updateCalcDisplay("", "0");
+        noteImageData = null;
+        noteImagePreviewContainer.innerHTML = `<div class="note-image-preview-placeholder">🖼️</div>`;
+        noteImageInput.value = '';
+        showToast("Cleared / साफ कर दिया");
+    });
+    
+    renderSavedNotes();
+
+    // ===== CASH DENOMINATION =====
+    const denominations = [
+        { value: 2000, label: '₹2000 Note' },
+        { value: 500, label: '₹500 Note' },
+        { value: 200, label: '₹200 Note' },
+        { value: 100, label: '₹100 Note' },
+        { value: 50, label: '₹50 Note' },
+        { value: 20, label: '₹20 Note' },
+        { value: 10, label: '₹10 Coin' },
+        { value: 5, label: '₹5 Coin' },
+        { value: 2, label: '₹2 Coin' },
+        { value: 1, label: '₹1 Coin' }
+    ];
+
+    let denomCounts = {};
+    let denomInputs = {};
+
+    function initDenomCounts() {
+        const saved = localStorage.getItem("aamir_denom_counts");
+        if (saved) {
+            denomCounts = JSON.parse(saved);
+        } else {
+            denominations.forEach(d => { denomCounts[d.value] = 0; });
+        }
+    }
+    initDenomCounts();
+
+    function renderDenominationTable() {
+        const tbody = document.getElementById('denomTableBody');
+        tbody.innerHTML = '';
+        denominations.forEach(d => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="denom-label">${d.label}</td>
+                <td><input type="number" id="denom_input_${d.value}" value="${denomCounts[d.value] || 0}" min="0" step="1"></td>
+                <td class="denom-subtotal" id="denom_subtotal_${d.value}">₹${(denomCounts[d.value] || 0) * d.value}</td>
+            `;
+            tbody.appendChild(tr);
+            
+            const input = tr.querySelector('input');
+            input.addEventListener('input', function() {
+                const val = parseInt(this.value) || 0;
+                denomCounts[d.value] = val;
+                updateDenomTotals();
+                localStorage.setItem("aamir_denom_counts", JSON.stringify(denomCounts));
+            });
+            denomInputs[d.value] = input;
+        });
+        updateDenomTotals();
+    }
+
+    function updateDenomTotals() {
+        let grandTotal = 0;
+        let totalNotes = 0;
+        let totalCoins = 0;
+        const coinValues = [10, 5, 2, 1];
+        
+        denominations.forEach(d => {
+            const count = denomCounts[d.value] || 0;
+            const subtotal = count * d.value;
+            grandTotal += subtotal;
+            const subtotalEl = document.getElementById(`denom_subtotal_${d.value}`);
+            if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toLocaleString()}`;
+            
+            if (coinValues.includes(d.value)) {
+                totalCoins += count;
+            } else {
+                totalNotes += count;
+            }
+        });
+        
+        document.getElementById('denomGrandTotal').textContent = `₹${grandTotal.toLocaleString()}`;
+        document.getElementById('denomStats').textContent = `Notes: ${totalNotes} | Coins: ${totalCoins}`;
+        document.getElementById('denomWords').textContent = numberToWords(grandTotal) + ' Rupees Only';
+    }
+
+    function numberToWords(num) {
+        if (num === 0) return 'Zero';
+        const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+        const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+        
+        function convert(n) {
+            if (n < 20) return ones[n];
+            if (n < 100) return tens[Math.floor(n/10)] + (n%10 ? ' ' + ones[n%10] : '');
+            if (n < 1000) return ones[Math.floor(n/100)] + ' Hundred' + (n%100 ? ' ' + convert(n%100) : '');
+            if (n < 100000) return convert(Math.floor(n/1000)) + ' Thousand' + (n%1000 ? ' ' + convert(n%1000) : '');
+            if (n < 10000000) return convert(Math.floor(n/100000)) + ' Lakh' + (n%100000 ? ' ' + convert(n%100000) : '');
+            return convert(Math.floor(n/10000000)) + ' Crore' + (n%10000000 ? ' ' + convert(n%10000000) : '');
+        }
+        return convert(num);
+    }
+
+    document.getElementById('denomClearBtn').addEventListener('click', () => {
+        if (confirm('Clear all denomination counts?')) {
+            denominations.forEach(d => { denomCounts[d.value] = 0; });
+            Object.values(denomInputs).forEach(inp => { inp.value = 0; });
+            localStorage.setItem("aamir_denom_counts", JSON.stringify(denomCounts));
+            updateDenomTotals();
+            showToast('All counts cleared');
+        }
+    });
+
+    document.getElementById('denomResetBtn').addEventListener('click', () => {
+        denominations.forEach(d => { denomCounts[d.value] = 0; });
+        Object.values(denomInputs).forEach(inp => { inp.value = 0; });
+        localStorage.setItem("aamir_denom_counts", JSON.stringify(denomCounts));
+        updateDenomTotals();
+        showToast('Reset to zero');
+    });
+
+    renderDenominationTable();
+
     // Click counter for reset button reveal
     let clickCount = 0;
     const REQUIRED_CLICKS = 5;
@@ -709,7 +1457,6 @@
         `).join('');
     }
     
-    // Product Management with Edit & Delete buttons (no stock/sell)
     function renderStockList() {
         let filtered = products.filter(p => (p.name||"").toLowerCase().includes(stockSearch.toLowerCase()));
         const cont = document.getElementById("stockListContainer");
@@ -762,7 +1509,7 @@
         document.querySelectorAll('.nav-item').forEach(nav => { if(nav.getAttribute('data-screen') === id) nav.classList.add('active'); else nav.classList.remove('active'); });
         if(id === 'home') renderHomeProducts();
         if(id === 'stock') renderStockList();
-        if(id === 'profile') { updateProfileStats(); updateClickMessage(); }
+        if(id === 'profile') { updateProfileStats(); updateClickMessage(); renderSavedNotes(); }
     }
     
     document.getElementById("openProductBtn").onclick = () => { if(categories.length===0){ showToast("Please add a category first"); return; } document.getElementById("addProductInitialView").style.display="none"; document.getElementById("addProductCategoryView").style.display="block"; document.getElementById("categorySelectorList").innerHTML = categories.map(c => `<div class="category-item" data-cat-id="${c.id}">${c.icon||'📦'} ${c.name}</div>`).join(''); document.querySelectorAll(".category-item").forEach(item => item.addEventListener("click", ()=>{ selectedCategoryId = item.getAttribute("data-cat-id"); editingProductId=null; const catName = categories.find(c=>c.id===selectedCategoryId).name; document.getElementById("selectedCategoryDisplay").innerHTML = `📁 Selected: ${catName}`; document.getElementById("addProductCategoryView").style.display="none"; document.getElementById("addProductFormView").style.display="block"; document.getElementById("prodName").value=""; document.getElementById("prodPurchasePrice").value=""; document.getElementById("prodSellingPrice").value=""; document.getElementById("prodMrp").value=""; document.getElementById("imgPreviewContainer").innerHTML=""; document.getElementById("prodImageFile").value=""; })); };
