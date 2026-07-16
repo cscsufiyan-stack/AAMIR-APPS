@@ -290,21 +290,21 @@
         }
         .note-image-upload input[type="file"] { display: none; }
         .note-image-preview {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             border-radius: 12px;
             object-fit: cover;
             border: 1px solid #e2e8f0;
         }
         .note-image-preview-placeholder {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             border-radius: 12px;
             background: #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 36px;
             color: #94a3b8;
         }
         
@@ -327,62 +327,64 @@
         .btn-save-note { background: #001959; color: white; }
         .btn-clear-note { background: #f1f5f9; color: #475569; }
         
-        /* ===== SAVED NOTES - LARGER THUMBNAILS ===== */
+        /* ===== SAVED NOTES - EXTRA LARGE THUMBNAILS ===== */
         .saved-notes {
             margin-top: 10px;
-            max-height: 350px;
+            max-height: 400px;
             overflow-y: auto;
         }
         .saved-note-item {
             background: white;
-            padding: 12px;
-            border-radius: 14px;
-            margin-bottom: 10px;
+            padding: 14px;
+            border-radius: 16px;
+            margin-bottom: 12px;
             border: 1px solid #eef2f6;
             display: flex;
-            gap: 14px;
+            gap: 16px;
             align-items: flex-start;
         }
         .saved-note-item .note-thumb {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
+            width: 110px;
+            height: 110px;
+            border-radius: 14px;
             object-fit: cover;
             flex-shrink: 0;
             background: #f1f5f9;
-            border: 1px solid #e2e8f0;
+            border: 2px solid #e2e8f0;
         }
         .saved-note-item .note-thumb-placeholder {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
+            width: 110px;
+            height: 110px;
+            border-radius: 14px;
             background: #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
+            font-size: 56px;
             flex-shrink: 0;
-            border: 1px solid #e2e8f0;
+            border: 2px solid #e2e8f0;
         }
         .saved-note-item .note-content {
             flex: 1;
             min-width: 0;
         }
         .saved-note-item .note-text-display {
-            font-size: 15px;
+            font-size: 17px;
             color: #0f172a;
             word-wrap: break-word;
-            font-weight: 500;
-            line-height: 1.4;
+            font-weight: 600;
+            line-height: 1.5;
         }
         .saved-note-item .note-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 6px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+            gap: 6px;
         }
         .saved-note-item .note-time {
-            font-size: 11px;
+            font-size: 12px;
             color: #94a3b8;
         }
         .saved-note-item .delete-note-btn {
@@ -390,15 +392,15 @@
             border: none;
             color: #ef4444;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             padding: 0 4px;
         }
         .saved-note-item .note-amount-badge {
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 700;
             color: #001959;
             background: #eef2ff;
-            padding: 2px 14px;
+            padding: 3px 16px;
             border-radius: 20px;
             display: inline-block;
         }
@@ -500,13 +502,13 @@
         .denom-table th {
             background: #eef2ff;
             color: #001959;
-            padding: 6px 4px;
+            padding: 8px 4px;
             text-align: center;
             font-weight: 700;
-            font-size: 10px;
+            font-size: 11px;
         }
         .denom-table td {
-            padding: 4px 3px;
+            padding: 6px 3px;
             text-align: center;
             border-bottom: 1px solid #eef2f6;
         }
@@ -516,32 +518,32 @@
             color: #0f172a;
             text-align: left;
             padding-left: 6px;
-            font-size: 11px;
+            font-size: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         .denom-table .denom-label .denom-icon {
-            width: 50px;
-            height: 34px;
+            width: 60px;
+            height: 40px;
             object-fit: contain;
-            border-radius: 4px;
+            border-radius: 6px;
             background: #f1f5f9;
             padding: 2px;
             border: 1px solid #e2e8f0;
             flex-shrink: 0;
         }
         .denom-table .denom-label .denom-emoji {
-            font-size: 24px;
+            font-size: 28px;
             flex-shrink: 0;
         }
         .denom-table input[type="number"] {
-            width: 55px;
-            padding: 6px 2px;
+            width: 65px;
+            padding: 8px 2px;
             border: 1.5px solid #e2e8f0;
-            border-radius: 8px;
+            border-radius: 10px;
             text-align: center;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 600;
             background: white;
             transition: 0.2s;
@@ -558,17 +560,17 @@
         .denom-subtotal {
             font-weight: 700;
             color: #001959;
-            font-size: 14px;
+            font-size: 15px;
         }
         .denom-total-box {
             background: linear-gradient(135deg, #001959, #002d8a);
             color: white;
-            padding: 12px 16px;
+            padding: 14px 18px;
             border-radius: 14px;
             margin-top: 12px;
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 4px;
         }
         .denom-total-box .total-row {
             display: flex;
@@ -576,19 +578,19 @@
             align-items: center;
         }
         .denom-total-box .total-row .label {
-            font-size: 12px;
+            font-size: 13px;
             opacity: 0.8;
         }
         .denom-total-box .total-row .value {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 800;
         }
         .denom-total-box .total-row .value-small {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 600;
         }
         .denom-total-box .total-row .grand-total {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 900;
         }
         .denom-actions {
@@ -1276,13 +1278,13 @@
         }
     });
     
-    // ===== NOTES WITH LARGER PHOTO THUMBNAILS =====
+    // ===== NOTES WITH EXTRA LARGE PHOTO THUMBNAILS =====
     let savedNotes = JSON.parse(localStorage.getItem("aamir_notes") || "[]");
     
     function renderSavedNotes() {
         const container = document.getElementById("savedNotesContainer");
         if (savedNotes.length === 0) {
-            container.innerHTML = '<div style="color:#94a3b8; font-size:13px; text-align:center; padding:15px;">📝 No saved notes / कोई नोट नहीं</div>';
+            container.innerHTML = '<div style="color:#94a3b8; font-size:14px; text-align:center; padding:20px;">📝 No saved notes / कोई नोट नहीं</div>';
             return;
         }
         container.innerHTML = savedNotes.map((note, index) => {
