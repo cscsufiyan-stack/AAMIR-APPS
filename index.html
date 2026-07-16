@@ -290,21 +290,21 @@
         }
         .note-image-upload input[type="file"] { display: none; }
         .note-image-preview {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
             object-fit: cover;
             border: 1px solid #e2e8f0;
         }
         .note-image-preview-placeholder {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
             background: #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 28px;
             color: #94a3b8;
         }
         
@@ -327,6 +327,7 @@
         .btn-save-note { background: #001959; color: white; }
         .btn-clear-note { background: #f1f5f9; color: #475569; }
         
+        /* ===== SAVED NOTES - LARGER THUMBNAILS ===== */
         .saved-notes {
             margin-top: 10px;
             max-height: 350px;
@@ -334,32 +335,32 @@
         }
         .saved-note-item {
             background: white;
-            padding: 10px;
-            border-radius: 12px;
-            margin-bottom: 8px;
+            padding: 12px;
+            border-radius: 14px;
+            margin-bottom: 10px;
             border: 1px solid #eef2f6;
             display: flex;
-            gap: 12px;
+            gap: 14px;
             align-items: flex-start;
         }
         .saved-note-item .note-thumb {
-            width: 55px;
-            height: 55px;
-            border-radius: 10px;
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
             object-fit: cover;
             flex-shrink: 0;
             background: #f1f5f9;
             border: 1px solid #e2e8f0;
         }
         .saved-note-item .note-thumb-placeholder {
-            width: 55px;
-            height: 55px;
-            border-radius: 10px;
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
             background: #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 40px;
             flex-shrink: 0;
             border: 1px solid #e2e8f0;
         }
@@ -368,19 +369,20 @@
             min-width: 0;
         }
         .saved-note-item .note-text-display {
-            font-size: 13px;
+            font-size: 15px;
             color: #0f172a;
             word-wrap: break-word;
             font-weight: 500;
+            line-height: 1.4;
         }
         .saved-note-item .note-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 4px;
+            margin-top: 6px;
         }
         .saved-note-item .note-time {
-            font-size: 10px;
+            font-size: 11px;
             color: #94a3b8;
         }
         .saved-note-item .delete-note-btn {
@@ -388,15 +390,15 @@
             border: none;
             color: #ef4444;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             padding: 0 4px;
         }
         .saved-note-item .note-amount-badge {
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 700;
             color: #001959;
             background: #eef2ff;
-            padding: 1px 10px;
+            padding: 2px 14px;
             border-radius: 20px;
             display: inline-block;
         }
@@ -411,6 +413,54 @@
             border-radius: 20px;
         }
         
+        /* ===== TOGGLE SWITCH ===== */
+        .mode-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 40px;
+            border: 1.5px solid #e2e8f0;
+            margin-bottom: 12px;
+        }
+        .mode-toggle span {
+            font-size: 12px;
+            font-weight: 600;
+            color: #94a3b8;
+            transition: 0.2s;
+        }
+        .mode-toggle span.active {
+            color: #001959;
+        }
+        .toggle-switch {
+            width: 50px;
+            height: 28px;
+            background: #cbd5e1;
+            border-radius: 30px;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+        }
+        .toggle-switch.active {
+            background: linear-gradient(135deg, #001959, #002d8a);
+        }
+        .toggle-switch .toggle-knob {
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            transition: 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .toggle-switch.active .toggle-knob {
+            left: 25px;
+        }
+        
         /* ===== CASH DENOMINATION ===== */
         .denomination-section {
             background: #f8fafc;
@@ -418,6 +468,10 @@
             padding: 16px;
             margin: 12px 0;
             border: 1px solid #e2e8f0;
+            display: none;
+        }
+        .denomination-section.active {
+            display: block;
         }
         .denom-header {
             display: flex;
@@ -463,14 +517,31 @@
             text-align: left;
             padding-left: 6px;
             font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .denom-table .denom-label .denom-icon {
+            width: 50px;
+            height: 34px;
+            object-fit: contain;
+            border-radius: 4px;
+            background: #f1f5f9;
+            padding: 2px;
+            border: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+        .denom-table .denom-label .denom-emoji {
+            font-size: 24px;
+            flex-shrink: 0;
         }
         .denom-table input[type="number"] {
-            width: 50px;
-            padding: 4px 2px;
+            width: 55px;
+            padding: 6px 2px;
             border: 1.5px solid #e2e8f0;
             border-radius: 8px;
             text-align: center;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             background: white;
             transition: 0.2s;
@@ -480,10 +551,14 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 25, 89, 0.1);
         }
+        .denom-table input[type="number"]:focus-visible {
+            outline: 2px solid #001959;
+            outline-offset: 2px;
+        }
         .denom-subtotal {
             font-weight: 700;
             color: #001959;
-            font-size: 13px;
+            font-size: 14px;
         }
         .denom-total-box {
             background: linear-gradient(135deg, #001959, #002d8a);
@@ -534,6 +609,10 @@
         .denom-actions button:active { transform: scale(0.97); }
         .btn-denom-clear { background: #fee2e2; color: #991b1b; }
         .btn-denom-reset { background: #f1f5f9; color: #475569; }
+        
+        .simple-calc-section.hidden {
+            display: none;
+        }
         
         .profile-stats { padding: 8px 0; }
         .setting-row {
@@ -853,8 +932,15 @@
             <div class="setting-row" id="setTpinBtn"><span>🔒 Set/Change TPIN</span><span>▼</span></div>
             <div class="setting-row" id="enableFingerprintBtn"><span>🖐️ Enable Fingerprint Unlock</span><span>▼</span></div>
             
-            <!-- ===== CALCULATOR ===== -->
-            <div class="simple-calc-section">
+            <div class="mode-toggle">
+                <span id="calcModeLabel" class="active">🧮 Calculator</span>
+                <div class="toggle-switch active" id="modeToggle">
+                    <div class="toggle-knob"></div>
+                </div>
+                <span id="denomModeLabel">💰 Denomination</span>
+            </div>
+            
+            <div class="simple-calc-section" id="calculatorSection">
                 <div class="calc-header">
                     <h4>🧮 Calculator & Notes</h4>
                     <span class="badge">📷 Photo</span>
@@ -893,7 +979,6 @@
                 
                 <textarea id="noteText" class="note-textarea" placeholder="Write note here... (e.g., 10 × 140 = 1400)"></textarea>
                 
-                <!-- Photo Upload -->
                 <div class="note-image-upload" onclick="document.getElementById('noteImageFile').click()">
                     <label>📷 Add Photo / फोटो जोड़ें</label>
                     <div id="noteImagePreviewContainer">
@@ -909,12 +994,12 @@
                 <div id="savedNotesContainer" class="saved-notes"></div>
             </div>
             
-            <!-- ===== CASH DENOMINATION ===== -->
-            <div class="denomination-section">
+            <div class="denomination-section active" id="denominationSection">
                 <div class="denom-header">
                     <h4>💰 Cash Denomination</h4>
-                    <span class="badge">₹ Count</span>
+                    <span class="badge">⌨️ Keyboard</span>
                 </div>
+                <div class="kb-hint" style="margin-bottom:10px;">⌨️ Type numbers directly in the count fields | Tab to navigate</div>
                 <table class="denom-table">
                     <thead>
                         <tr>
@@ -1032,6 +1117,49 @@
     let fingerprintCredentialId = localStorage.getItem("aamir_fingerprint_id");
     let fingerprintEnabled = fingerprintCredentialId !== null;
 
+    // ===== TOGGLE =====
+    let currentMode = 'calculator';
+    const toggleSwitch = document.getElementById('modeToggle');
+    const calcSection = document.getElementById('calculatorSection');
+    const denomSection = document.getElementById('denominationSection');
+    const calcLabel = document.getElementById('calcModeLabel');
+    const denomLabel = document.getElementById('denomModeLabel');
+
+    function setMode(mode) {
+        currentMode = mode;
+        if (mode === 'calculator') {
+            calcSection.style.display = 'block';
+            denomSection.classList.remove('active');
+            denomSection.style.display = 'none';
+            toggleSwitch.classList.add('active');
+            calcLabel.classList.add('active');
+            denomLabel.classList.remove('active');
+            document.removeEventListener('keydown', handleDenomKeydown);
+        } else {
+            calcSection.style.display = 'none';
+            denomSection.classList.add('active');
+            denomSection.style.display = 'block';
+            toggleSwitch.classList.remove('active');
+            calcLabel.classList.remove('active');
+            denomLabel.classList.add('active');
+            document.addEventListener('keydown', handleDenomKeydown);
+            setTimeout(() => {
+                const firstInput = document.querySelector('#denomTableBody input[type="number"]');
+                if (firstInput) firstInput.focus();
+            }, 150);
+        }
+    }
+
+    toggleSwitch.addEventListener('click', () => {
+        if (currentMode === 'calculator') {
+            setMode('denomination');
+            showToast('💰 Denomination mode');
+        } else {
+            setMode('calculator');
+            showToast('🧮 Calculator mode');
+        }
+    });
+
     // ===== CALCULATOR =====
     const calcExprEl = document.getElementById("calcExpr");
     const calcResultEl = document.getElementById("calcResult");
@@ -1116,6 +1244,7 @@
     document.addEventListener('keydown', (e) => {
         const profileScreen = document.getElementById('profileScreen');
         if (!profileScreen.classList.contains('active-screen')) return;
+        if (currentMode !== 'calculator') return;
         const key = e.key;
         if (key === 'Enter') { e.preventDefault(); handleCalcInput('='); return; }
         if (key === 'Backspace') {
@@ -1147,18 +1276,17 @@
         }
     });
     
-    // ===== NOTES WITH PHOTO =====
+    // ===== NOTES WITH LARGER PHOTO THUMBNAILS =====
     let savedNotes = JSON.parse(localStorage.getItem("aamir_notes") || "[]");
     
     function renderSavedNotes() {
         const container = document.getElementById("savedNotesContainer");
         if (savedNotes.length === 0) {
-            container.innerHTML = '<div style="color:#94a3b8; font-size:12px; text-align:center; padding:12px;">📝 No saved notes / कोई नोट नहीं</div>';
+            container.innerHTML = '<div style="color:#94a3b8; font-size:13px; text-align:center; padding:15px;">📝 No saved notes / कोई नोट नहीं</div>';
             return;
         }
         container.innerHTML = savedNotes.map((note, index) => {
             const hasImage = note.image && note.image.startsWith('data:image');
-            // Extract amount from note text
             let amount = 0;
             const match = note.text.match(/=\s*([\d,]+(?:\.\d{1,2})?)/);
             if (match) amount = parseFloat(match[1].replace(/,/g, ''));
@@ -1228,18 +1356,34 @@
     
     renderSavedNotes();
 
+    // ============================================================
     // ===== CASH DENOMINATION =====
+    // ============================================================
+    
+    const noteImages = {
+        2000: 'https://cdn.phototourl.com/free/2026-07-16-f46ca8b3-e694-48e1-8375-b2377a30bfc8.jpg',
+        500: 'https://cdn.phototourl.com/free/2026-07-16-8e2928a4-5ee1-423c-8b95-4fee9d0c6272.jpg',
+        200: 'https://cdn.phototourl.com/free/2026-07-16-701ae87b-0016-477c-860b-129e59a7afd0.jpg',
+        100: 'https://cdn.phototourl.com/free/2026-07-16-6eb640f6-6e21-4768-97c3-91df5d8076b8.jpg',
+        50: 'https://cdn.phototourl.com/free/2026-07-16-8e2928a4-5ee1-423c-8b95-4fee9d0c6272.jpg',
+        20: 'https://cdn.phototourl.com/free/2026-07-16-d428bdf6-06fa-4995-99b5-6159edde0aea.jpg',
+        10: 'https://iili.io/Ch5hq3x.jpg',
+        5: 'https://cdn.phototourl.com/free/2026-07-16-d428bdf6-06fa-4995-99b5-6159edde0aea.jpg',
+        2: 'https://cdn.phototourl.com/free/2026-07-16-88d524a8-2cef-40dc-bab6-4156eadcbb94.jpg',
+        1: 'https://cdn.phototourl.com/free/2026-07-16-28e6f9e1-52f6-4822-8d02-ac6f9177de66.jpg'
+    };
+
     const denominations = [
-        { value: 2000, label: '₹2000 Note' },
-        { value: 500, label: '₹500 Note' },
-        { value: 200, label: '₹200 Note' },
-        { value: 100, label: '₹100 Note' },
-        { value: 50, label: '₹50 Note' },
-        { value: 20, label: '₹20 Note' },
-        { value: 10, label: '₹10 Coin' },
-        { value: 5, label: '₹5 Coin' },
-        { value: 2, label: '₹2 Coin' },
-        { value: 1, label: '₹1 Coin' }
+        { value: 2000, label: '₹2000 Note', icon: noteImages[2000] || '🏦' },
+        { value: 500, label: '₹500 Note', icon: noteImages[500] || '🏦' },
+        { value: 200, label: '₹200 Note', icon: noteImages[200] || '🏦' },
+        { value: 100, label: '₹100 Note', icon: noteImages[100] || '🏦' },
+        { value: 50, label: '₹50 Note', icon: noteImages[50] || '🏦' },
+        { value: 20, label: '₹20 Note', icon: noteImages[20] || '🏦' },
+        { value: 10, label: '₹10 Coin', icon: noteImages[10] || '🪙' },
+        { value: 5, label: '₹5 Coin', icon: noteImages[5] || '🪙' },
+        { value: 2, label: '₹2 Coin', icon: noteImages[2] || '🪙' },
+        { value: 1, label: '₹1 Coin', icon: noteImages[1] || '🪙' }
     ];
 
     let denomCounts = {};
@@ -1260,23 +1404,75 @@
         tbody.innerHTML = '';
         denominations.forEach(d => {
             const tr = document.createElement('tr');
+            const isUrl = d.icon && d.icon.startsWith('http');
+            const iconHtml = isUrl 
+                ? `<img src="${d.icon}" class="denom-icon" alt="${d.label}" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML+='<span class=\\'denom-emoji\\'>💰</span>'">`
+                : `<span class="denom-emoji">${d.icon || '💰'}</span>`;
             tr.innerHTML = `
-                <td class="denom-label">${d.label}</td>
+                <td class="denom-label">${iconHtml} ${d.label}</td>
                 <td><input type="number" id="denom_input_${d.value}" value="${denomCounts[d.value] || 0}" min="0" step="1"></td>
                 <td class="denom-subtotal" id="denom_subtotal_${d.value}">₹${(denomCounts[d.value] || 0) * d.value}</td>
             `;
             tbody.appendChild(tr);
             
             const input = tr.querySelector('input');
+            input.addEventListener('keydown', function(e) {
+                const allowedKeys = ['0','1','2','3','4','5','6','7','8','9','Backspace','Delete','Tab','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter','Home','End'];
+                if (!allowedKeys.includes(e.key) && !e.key.startsWith('Arrow')) {
+                    e.preventDefault();
+                }
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const inputs = document.querySelectorAll('#denomTableBody input[type="number"]');
+                    const idx = Array.from(inputs).indexOf(this);
+                    if (idx < inputs.length - 1) {
+                        inputs[idx + 1].focus();
+                    }
+                }
+            });
             input.addEventListener('input', function() {
                 const val = parseInt(this.value) || 0;
                 denomCounts[d.value] = val;
                 updateDenomTotals();
                 localStorage.setItem("aamir_denom_counts", JSON.stringify(denomCounts));
             });
+            input.addEventListener('blur', function() {
+                if (this.value === '' || isNaN(parseInt(this.value))) {
+                    this.value = 0;
+                    denomCounts[d.value] = 0;
+                    updateDenomTotals();
+                    localStorage.setItem("aamir_denom_counts", JSON.stringify(denomCounts));
+                }
+            });
             denomInputs[d.value] = input;
         });
         updateDenomTotals();
+    }
+
+    function handleDenomKeydown(e) {
+        if (currentMode !== 'denomination') return;
+        const profileScreen = document.getElementById('profileScreen');
+        if (!profileScreen.classList.contains('active-screen')) return;
+        
+        if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+            const allowed = ['0','1','2','3','4','5','6','7','8','9','Backspace','Delete','Tab','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter','Home','End'];
+            if (allowed.includes(e.key) || e.key.startsWith('Arrow')) {
+                return;
+            }
+            e.preventDefault();
+            return;
+        }
+        
+        if (/^[0-9]$/.test(e.key)) {
+            const firstInput = document.querySelector('#denomTableBody input[type="number"]');
+            if (firstInput) {
+                e.preventDefault();
+                firstInput.focus();
+                firstInput.value = e.key;
+                const event = new Event('input', { bubbles: true });
+                firstInput.dispatchEvent(event);
+            }
+        }
     }
 
     function updateDenomTotals() {
@@ -1339,6 +1535,7 @@
     });
 
     renderDenominationTable();
+    setMode('calculator');
 
     // Click counter for reset button reveal
     let clickCount = 0;
