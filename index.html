@@ -327,40 +327,40 @@
         .btn-save-note { background: #001959; color: white; }
         .btn-clear-note { background: #f1f5f9; color: #475569; }
         
-        /* ===== SAVED NOTES - EXTRA LARGE THUMBNAILS ===== */
+        /* ===== SAVED NOTES - 2X LARGER THUMBNAILS ===== */
         .saved-notes {
             margin-top: 10px;
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
         }
         .saved-note-item {
             background: white;
-            padding: 14px;
-            border-radius: 16px;
-            margin-bottom: 12px;
+            padding: 18px;
+            border-radius: 20px;
+            margin-bottom: 16px;
             border: 1px solid #eef2f6;
             display: flex;
-            gap: 16px;
+            gap: 20px;
             align-items: flex-start;
         }
         .saved-note-item .note-thumb {
-            width: 110px;
-            height: 110px;
-            border-radius: 14px;
+            width: 160px;
+            height: 160px;
+            border-radius: 18px;
             object-fit: cover;
             flex-shrink: 0;
             background: #f1f5f9;
             border: 2px solid #e2e8f0;
         }
         .saved-note-item .note-thumb-placeholder {
-            width: 110px;
-            height: 110px;
-            border-radius: 14px;
+            width: 160px;
+            height: 160px;
+            border-radius: 18px;
             background: #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 56px;
+            font-size: 80px;
             flex-shrink: 0;
             border: 2px solid #e2e8f0;
         }
@@ -369,22 +369,22 @@
             min-width: 0;
         }
         .saved-note-item .note-text-display {
-            font-size: 17px;
+            font-size: 20px;
             color: #0f172a;
             word-wrap: break-word;
-            font-weight: 600;
+            font-weight: 700;
             line-height: 1.5;
         }
         .saved-note-item .note-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 8px;
+            margin-top: 10px;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 8px;
         }
         .saved-note-item .note-time {
-            font-size: 12px;
+            font-size: 14px;
             color: #94a3b8;
         }
         .saved-note-item .delete-note-btn {
@@ -392,16 +392,16 @@
             border: none;
             color: #ef4444;
             cursor: pointer;
-            font-size: 18px;
-            padding: 0 4px;
+            font-size: 22px;
+            padding: 0 6px;
         }
         .saved-note-item .note-amount-badge {
-            font-size: 15px;
+            font-size: 18px;
             font-weight: 700;
             color: #001959;
             background: #eef2ff;
-            padding: 3px 16px;
-            border-radius: 20px;
+            padding: 4px 20px;
+            border-radius: 24px;
             display: inline-block;
         }
         
@@ -1278,13 +1278,13 @@
         }
     });
     
-    // ===== NOTES WITH EXTRA LARGE PHOTO THUMBNAILS =====
+    // ===== NOTES WITH 2X LARGER THUMBNAILS =====
     let savedNotes = JSON.parse(localStorage.getItem("aamir_notes") || "[]");
     
     function renderSavedNotes() {
         const container = document.getElementById("savedNotesContainer");
         if (savedNotes.length === 0) {
-            container.innerHTML = '<div style="color:#94a3b8; font-size:14px; text-align:center; padding:20px;">📝 No saved notes / कोई नोट नहीं</div>';
+            container.innerHTML = '<div style="color:#94a3b8; font-size:16px; text-align:center; padding:25px;">📝 No saved notes / कोई नोट नहीं</div>';
             return;
         }
         container.innerHTML = savedNotes.map((note, index) => {
