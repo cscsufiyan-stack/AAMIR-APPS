@@ -247,6 +247,10 @@
         .calc-btn.equals:active { opacity: 0.8; }
         .calc-btn.clear { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
         .calc-btn.clear:active { background: #fecaca; }
+        .calc-btn.ac { background: #f59e0b; border-color: #d97706; color: white; }
+        .calc-btn.ac:active { background: #d97706; }
+        .calc-btn.del { background: #f59e0b; border-color: #d97706; color: white; }
+        .calc-btn.del:active { background: #d97706; }
         
         .note-textarea {
             width: 100%;
@@ -942,6 +946,7 @@
                 <span id="denomModeLabel">💰 Denomination</span>
             </div>
             
+            <!-- ===== CALCULATOR WITH DEL BUTTON ===== -->
             <div class="simple-calc-section" id="calculatorSection">
                 <div class="calc-header">
                     <h4>🧮 Calculator & Notes</h4>
@@ -975,9 +980,9 @@
                     <button class="calc-btn" data-value="(">(</button>
                     <button class="calc-btn" data-value=")">)</button>
                     <button class="calc-btn equals" data-value="=">=</button>
-                    <button class="calc-btn operator" data-value="%">%</button>
+                    <button class="calc-btn del" data-value="DEL">⌫</button>
                 </div>
-                <div class="kb-hint">⌨️ Type directly from keyboard (e.g., 10*5=)</div>
+                <div class="kb-hint">⌨️ Type directly from keyboard | ⌫ = Delete last character</div>
                 
                 <textarea id="noteText" class="note-textarea" placeholder="Write note here... (e.g., 10 × 140 = 1400)"></textarea>
                 
@@ -996,6 +1001,7 @@
                 <div id="savedNotesContainer" class="saved-notes"></div>
             </div>
             
+            <!-- ===== CASH DENOMINATION ===== -->
             <div class="denomination-section active" id="denominationSection">
                 <div class="denom-header">
                     <h4>💰 Cash Denomination</h4>
@@ -1162,7 +1168,7 @@
         }
     });
 
-    // ===== CALCULATOR =====
+    // ===== CALCULATOR WITH DEL BUTTON (Backspace like) =====
     const calcExprEl = document.getElementById("calcExpr");
     const calcResultEl = document.getElementById("calcResult");
     const noteText = document.getElementById("noteText");
@@ -1195,6 +1201,25 @@
     }
     
     function handleCalcInput(char) {
+        // DEL - Delete last character (Backspace)
+        if (char === 'DEL' || char === 'del' || char === '⌫' || char === 'Backspace') {
+            if (calcExpression.length > 0) {
+                calcExpression = calcExpression.slice(0, -1);
+                if (!calcExpression) {
+                    calcResult = "0";
+                    updateCalcDisplay("", "0");
+                } else {
+                    const preview = evaluateCalc(calcExpression);
+                    if (preview !== null) {
+                        calcResult = String(preview);
+                        updateCalcDisplay(calcExpression, preview);
+                    } else {
+                        updateCalcDisplay(calcExpression, calcResult || "0");
+                    }
+                }
+            }
+            return;
+        }
         if (char === 'C' || char === 'c') {
             calcExpression = "";
             calcResult = "0";
@@ -1237,9 +1262,15 @@
     document.querySelectorAll('.calc-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const val = btn.dataset.value;
-            if (val === 'C') handleCalcInput('C');
-            else if (val === '=') handleCalcInput('=');
-            else handleCalcInput(val);
+            if (val === 'DEL') {
+                handleCalcInput('DEL');
+            } else if (val === 'C') {
+                handleCalcInput('C');
+            } else if (val === '=') {
+                handleCalcInput('=');
+            } else {
+                handleCalcInput(val);
+            }
         });
     });
     
@@ -1251,11 +1282,7 @@
         if (key === 'Enter') { e.preventDefault(); handleCalcInput('='); return; }
         if (key === 'Backspace') {
             e.preventDefault();
-            if (calcExpression.length > 0) {
-                calcExpression = calcExpression.slice(0, -1);
-                if (!calcExpression) { calcResult = "0"; updateCalcDisplay("", "0"); }
-                else { const preview = evaluateCalc(calcExpression); if (preview !== null) { calcResult = String(preview); updateCalcDisplay(calcExpression, preview); } else updateCalcDisplay(calcExpression, calcResult || "0"); }
-            }
+            handleCalcInput('DEL');
             return;
         }
         if (key === 'Escape') { e.preventDefault(); handleCalcInput('C'); return; }
@@ -1278,7 +1305,7 @@
         }
     });
     
-    // ===== NOTES WITH 2X LARGER THUMBNAILS =====
+    // ===== NOTES =====
     let savedNotes = JSON.parse(localStorage.getItem("aamir_notes") || "[]");
     
     function renderSavedNotes() {
@@ -1359,16 +1386,16 @@
     renderSavedNotes();
 
     // ============================================================
-    // ===== CASH DENOMINATION =====
+    // ===== CASH DENOMINATION WITH ₹500 & ₹20 IMAGES =====
     // ============================================================
     
     const noteImages = {
         2000: 'https://cdn.phototourl.com/free/2026-07-16-f46ca8b3-e694-48e1-8375-b2377a30bfc8.jpg',
-        500: 'https://cdn.phototourl.com/free/2026-07-16-8e2928a4-5ee1-423c-8b95-4fee9d0c6272.jpg',
+        500: 'https://iili.io/CjHzkSj.jpg',
         200: 'https://cdn.phototourl.com/free/2026-07-16-701ae87b-0016-477c-860b-129e59a7afd0.jpg',
         100: 'https://cdn.phototourl.com/free/2026-07-16-6eb640f6-6e21-4768-97c3-91df5d8076b8.jpg',
         50: 'https://cdn.phototourl.com/free/2026-07-16-8e2928a4-5ee1-423c-8b95-4fee9d0c6272.jpg',
-        20: 'https://cdn.phototourl.com/free/2026-07-16-d428bdf6-06fa-4995-99b5-6159edde0aea.jpg',
+        20: 'https://iili.io/CjHIgdG.jpg',
         10: 'https://iili.io/Ch5hq3x.jpg',
         5: 'https://cdn.phototourl.com/free/2026-07-16-d428bdf6-06fa-4995-99b5-6159edde0aea.jpg',
         2: 'https://cdn.phototourl.com/free/2026-07-16-88d524a8-2cef-40dc-bab6-4156eadcbb94.jpg',
