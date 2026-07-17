@@ -247,8 +247,6 @@
         .calc-btn.equals:active { opacity: 0.8; }
         .calc-btn.clear { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
         .calc-btn.clear:active { background: #fecaca; }
-        .calc-btn.ac { background: #f59e0b; border-color: #d97706; color: white; }
-        .calc-btn.ac:active { background: #d97706; }
         .calc-btn.del { background: #f59e0b; border-color: #d97706; color: white; }
         .calc-btn.del:active { background: #d97706; }
         
@@ -467,7 +465,7 @@
             left: 25px;
         }
         
-        /* ===== CASH DENOMINATION ===== */
+        /* ===== CASH DENOMINATION - FIXED INPUT ===== */
         .denomination-section {
             background: #f8fafc;
             border-radius: 24px;
@@ -541,7 +539,8 @@
             font-size: 28px;
             flex-shrink: 0;
         }
-        .denom-table input[type="number"] {
+        /* FIXED: text input instead of number input - no auto 0 */
+        .denom-table input[type="text"] {
             width: 65px;
             padding: 8px 2px;
             border: 1.5px solid #e2e8f0;
@@ -552,12 +551,12 @@
             background: white;
             transition: 0.2s;
         }
-        .denom-table input[type="number"]:focus {
+        .denom-table input[type="text"]:focus {
             border-color: #001959;
             outline: none;
             box-shadow: 0 0 0 3px rgba(0, 25, 89, 0.1);
         }
-        .denom-table input[type="number"]:focus-visible {
+        .denom-table input[type="text"]:focus-visible {
             outline: 2px solid #001959;
             outline-offset: 2px;
         }
@@ -946,7 +945,7 @@
                 <span id="denomModeLabel">💰 Denomination</span>
             </div>
             
-            <!-- ===== CALCULATOR WITH DEL BUTTON ===== -->
+            <!-- ===== CALCULATOR ===== -->
             <div class="simple-calc-section" id="calculatorSection">
                 <div class="calc-header">
                     <h4>🧮 Calculator & Notes</h4>
@@ -1001,7 +1000,7 @@
                 <div id="savedNotesContainer" class="saved-notes"></div>
             </div>
             
-            <!-- ===== CASH DENOMINATION ===== -->
+            <!-- ===== CASH DENOMINATION - FIXED ===== -->
             <div class="denomination-section active" id="denominationSection">
                 <div class="denom-header">
                     <h4>💰 Cash Denomination</h4>
@@ -1152,7 +1151,7 @@
             denomLabel.classList.add('active');
             document.addEventListener('keydown', handleDenomKeydown);
             setTimeout(() => {
-                const firstInput = document.querySelector('#denomTableBody input[type="number"]');
+                const firstInput = document.querySelector('#denomTableBody input[type="text"]');
                 if (firstInput) firstInput.focus();
             }, 150);
         }
@@ -1168,7 +1167,7 @@
         }
     });
 
-    // ===== CALCULATOR WITH DEL BUTTON (Backspace like) =====
+    // ===== CALCULATOR =====
     const calcExprEl = document.getElementById("calcExpr");
     const calcResultEl = document.getElementById("calcResult");
     const noteText = document.getElementById("noteText");
@@ -1201,7 +1200,6 @@
     }
     
     function handleCalcInput(char) {
-        // DEL - Delete last character (Backspace)
         if (char === 'DEL' || char === 'del' || char === '⌫' || char === 'Backspace') {
             if (calcExpression.length > 0) {
                 calcExpression = calcExpression.slice(0, -1);
@@ -1386,7 +1384,7 @@
     renderSavedNotes();
 
     // ============================================================
-    // ===== CASH DENOMINATION WITH ₹500 & ₹20 IMAGES =====
+    // ===== CASH DENOMINATION - FIXED INPUT (text type) =====
     // ============================================================
     
     const noteImages = {
@@ -1439,12 +1437,14 @@
                 : `<span class="denom-emoji">${d.icon || '💰'}</span>`;
             tr.innerHTML = `
                 <td class="denom-label">${iconHtml} ${d.label}</td>
-                <td><input type="number" id="denom_input_${d.value}" value="${denomCounts[d.value] || 0}" min="0" step="1"></td>
+                <td><input type="text" id="denom_input_${d.value}" value="${denomCounts[d.value] || ''}" inputmode="numeric" pattern="[0-9]*"></td>
                 <td class="denom-subtotal" id="denom_subtotal_${d.value}">₹${(denomCounts[d.value] || 0) * d.value}</td>
             `;
             tbody.appendChild(tr);
             
             const input = tr.querySelector('input');
+            
+            // Only allow numbers
             input.addEventListener('keydown', function(e) {
                 const allowedKeys = ['0','1','2','3','4','5','6','7','8','9','Backspace','Delete','Tab','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter','Home','End'];
                 if (!allowedKeys.includes(e.key) && !e.key.startsWith('Arrow')) {
@@ -1452,22 +1452,27 @@
                 }
                 if (e.key === 'Enter') {
                     e.preventDefault();
-                    const inputs = document.querySelectorAll('#denomTableBody input[type="number"]');
+                    const inputs = document.querySelectorAll('#denomTableBody input[type="text"]');
                     const idx = Array.from(inputs).indexOf(this);
                     if (idx < inputs.length - 1) {
                         inputs[idx + 1].focus();
                     }
                 }
             });
+            
+            // Restrict input to numbers only
             input.addEventListener('input', function() {
+                // Remove any non-numeric characters
+                this.value = this.value.replace(/[^0-9]/g, '');
                 const val = parseInt(this.value) || 0;
                 denomCounts[d.value] = val;
                 updateDenomTotals();
                 localStorage.setItem("aamir_denom_counts", JSON.stringify(denomCounts));
             });
+            
             input.addEventListener('blur', function() {
-                if (this.value === '' || isNaN(parseInt(this.value))) {
-                    this.value = 0;
+                if (this.value === '') {
+                    this.value = '';
                     denomCounts[d.value] = 0;
                     updateDenomTotals();
                     localStorage.setItem("aamir_denom_counts", JSON.stringify(denomCounts));
@@ -1483,7 +1488,7 @@
         const profileScreen = document.getElementById('profileScreen');
         if (!profileScreen.classList.contains('active-screen')) return;
         
-        if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+        if (e.target.tagName === 'INPUT' && e.target.type === 'text') {
             const allowed = ['0','1','2','3','4','5','6','7','8','9','Backspace','Delete','Tab','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter','Home','End'];
             if (allowed.includes(e.key) || e.key.startsWith('Arrow')) {
                 return;
@@ -1493,7 +1498,7 @@
         }
         
         if (/^[0-9]$/.test(e.key)) {
-            const firstInput = document.querySelector('#denomTableBody input[type="number"]');
+            const firstInput = document.querySelector('#denomTableBody input[type="text"]');
             if (firstInput) {
                 e.preventDefault();
                 firstInput.focus();
@@ -1548,7 +1553,7 @@
     document.getElementById('denomClearBtn').addEventListener('click', () => {
         if (confirm('Clear all denomination counts?')) {
             denominations.forEach(d => { denomCounts[d.value] = 0; });
-            Object.values(denomInputs).forEach(inp => { inp.value = 0; });
+            Object.values(denomInputs).forEach(inp => { inp.value = ''; });
             localStorage.setItem("aamir_denom_counts", JSON.stringify(denomCounts));
             updateDenomTotals();
             showToast('All counts cleared');
@@ -1557,7 +1562,7 @@
 
     document.getElementById('denomResetBtn').addEventListener('click', () => {
         denominations.forEach(d => { denomCounts[d.value] = 0; });
-        Object.values(denomInputs).forEach(inp => { inp.value = 0; });
+        Object.values(denomInputs).forEach(inp => { inp.value = ''; });
         localStorage.setItem("aamir_denom_counts", JSON.stringify(denomCounts));
         updateDenomTotals();
         showToast('Reset to zero');
