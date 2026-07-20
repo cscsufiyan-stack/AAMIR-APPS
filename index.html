@@ -465,7 +465,7 @@
             left: 25px;
         }
         
-        /* ===== CASH DENOMINATION - FIXED INPUT ===== */
+        /* ===== CASH DENOMINATION ===== */
         .denomination-section {
             background: #f8fafc;
             border-radius: 24px;
@@ -539,7 +539,6 @@
             font-size: 28px;
             flex-shrink: 0;
         }
-        /* FIXED: text input instead of number input - no auto 0 */
         .denom-table input[type="text"] {
             width: 65px;
             padding: 8px 2px;
@@ -600,9 +599,11 @@
             display: flex;
             gap: 8px;
             margin-top: 10px;
+            justify-content: center;
         }
         .denom-actions button {
             flex: 1;
+            max-width: 200px;
             padding: 8px;
             border: none;
             border-radius: 30px;
@@ -612,7 +613,6 @@
             transition: 0.1s;
         }
         .denom-actions button:active { transform: scale(0.97); }
-        .btn-denom-clear { background: #fee2e2; color: #991b1b; }
         .btn-denom-reset { background: #f1f5f9; color: #475569; }
         
         .simple-calc-section.hidden {
@@ -643,28 +643,226 @@
         .stats-row:active { background: #d9e2ef; }
         .stats-item { text-align: center; flex: 1; }
         .stats-number { font-size: 20px; font-weight: 800; color: #001959; }
-        .reset-btn-container {
-            margin-top: 16px;
-            transition: all 0.3s ease;
+        
+        /* ===== RECYCLE BIN ===== */
+        .recycle-section {
+            background: #fef2f2;
+            border-radius: 20px;
+            padding: 14px;
+            margin: 12px 0;
+            border: 1px solid #fca5a5;
         }
-        .reset-btn-hidden { display: none; }
-        .reset-btn-visible { display: block; }
-        .reset-button {
-            background: #ef4444;
+        .recycle-section .recycle-header {
+            font-size: 14px;
+            font-weight: 700;
+            color: #991b1b;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .recycle-section .recycle-header span { font-size: 18px; }
+        .recycle-item {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #fee2e2;
+            font-size: 13px;
+        }
+        .recycle-item .recycle-name { font-weight: 500; color: #0f172a; }
+        .recycle-item .recycle-time { font-size: 10px; color: #94a3b8; }
+        .recycle-item .recycle-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .recycle-item .recycle-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            transition: 0.1s;
+        }
+        .recycle-item .recycle-actions button:active { transform: scale(0.9); }
+        .btn-restore-item { color: #15803d; }
+        .btn-restore-item:hover { background: #dcfce7; }
+        .btn-permanent-delete { color: #dc2626; }
+        .btn-permanent-delete:hover { background: #fee2e2; }
+        .recycle-empty {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            padding: 12px;
+        }
+        .recycle-clear-all {
+            background: #dc2626;
             color: white;
             border: none;
-            padding: 10px;
-            border-radius: 40px;
-            width: 100%;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
             font-weight: 600;
             cursor: pointer;
+            transition: 0.1s;
         }
-        .reset-button:active { transform: scale(0.98); }
-        .click-counter-toast {
-            font-size: 11px;
-            color: #475569;
+        .recycle-clear-all:active { transform: scale(0.97); }
+        
+        /* ============================================================ */
+        /* ===== PRODUCT DETAIL MODAL - EXACTLY AS PER IMAGE ===== */
+        /* ============================================================ */
+        .product-detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 500;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.25s ease;
+        }
+        .product-detail-modal.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .product-detail-card {
+            background: white;
+            border-radius: 28px;
+            max-width: 360px;
+            width: 100%;
+            padding: 28px 24px 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .product-detail-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #001959, #dfad47, #001959);
+        }
+        .product-detail-image {
+            width: 100%;
+            height: 180px;
+            background: #f8fafc;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+        .product-detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .product-detail-image .no-img {
+            font-size: 64px;
+            color: #cbd5e1;
+        }
+        .product-detail-name {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f172a;
             text-align: center;
-            margin-top: 6px;
+            margin-bottom: 2px;
+            letter-spacing: -0.3px;
+        }
+        .product-detail-sub {
+            font-size: 13px;
+            font-weight: 500;
+            color: #94a3b8;
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .product-detail-category {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+            background: #f1f5f9;
+            display: inline-block;
+            padding: 3px 18px;
+            border-radius: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            width: fit-content;
+        }
+        .product-detail-divider {
+            border: none;
+            border-top: 1px solid #eef2f6;
+            margin: 14px 0;
+        }
+        .product-detail-prices {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 4px 0 20px;
+        }
+        .product-detail-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px;
+            border-radius: 14px;
+            background: #f8fafc;
+            border: 1px solid #eef2f6;
+        }
+        .product-detail-price-row .label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .product-detail-price-row .label .icon {
+            font-size: 18px;
+        }
+        .product-detail-price-row .value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .product-detail-price-row .value.purchase { color: #dc2626; }
+        .product-detail-price-row .value.selling { color: #16a34a; }
+        .product-detail-price-row .value.mrp { color: #94a3b8; text-decoration: line-through; }
+        .product-detail-close-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 40px;
+            background: linear-gradient(135deg, #001959, #002d8a);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.1s;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+        }
+        .product-detail-close-btn:active {
+            transform: scale(0.97);
+            opacity: 0.8;
         }
         
         .modal-overlay {
@@ -689,6 +887,9 @@
             width: 90%;
             text-align: center;
         }
+        .modal-card .modal-icon { font-size: 48px; margin-bottom: 10px; }
+        .modal-card .modal-title { font-size: 20px; font-weight: 700; color: #0f172a; }
+        .modal-card .modal-sub { font-size: 14px; color: #475569; margin: 8px 0 16px; }
         .modal-input {
             width: 100%;
             padding: 14px;
@@ -700,6 +901,16 @@
         }
         .btn-primary {
             background: linear-gradient(135deg, #001959, #002d8a);
+            color: white;
+            padding: 12px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-danger {
+            background: #dc2626;
             color: white;
             padding: 12px;
             border-radius: 40px;
@@ -945,7 +1156,6 @@
                 <span id="denomModeLabel">💰 Denomination</span>
             </div>
             
-            <!-- ===== CALCULATOR ===== -->
             <div class="simple-calc-section" id="calculatorSection">
                 <div class="calc-header">
                     <h4>🧮 Calculator & Notes</h4>
@@ -1000,7 +1210,6 @@
                 <div id="savedNotesContainer" class="saved-notes"></div>
             </div>
             
-            <!-- ===== CASH DENOMINATION - FIXED ===== -->
             <div class="denomination-section active" id="denominationSection">
                 <div class="denom-header">
                     <h4>💰 Cash Denomination</h4>
@@ -1028,7 +1237,6 @@
                     </div>
                 </div>
                 <div class="denom-actions">
-                    <button class="btn-denom-clear" id="denomClearBtn">🗑️ Clear All</button>
                     <button class="btn-denom-reset" id="denomResetBtn">↺ Reset</button>
                 </div>
             </div>
@@ -1037,9 +1245,13 @@
                 <div class="stats-item"><div class="stats-number" id="profileTotalProducts">0</div><div>Total Products</div></div>
                 <div class="stats-item"><div class="stats-number" id="profileTotalCategories">0</div><div>Total Categories</div></div>
             </div>
-            <div id="clickCounterMessage" class="click-counter-toast"></div>
-            <div id="resetButtonContainer" class="reset-btn-container reset-btn-hidden">
-                <button id="resetDataBtn" class="reset-button">🔄 Reset All Data</button>
+            
+            <div class="recycle-section" id="recycleBinSection">
+                <div class="recycle-header">
+                    <span>🗑️ Recently Deleted</span>
+                    <button class="recycle-clear-all" id="clearRecycleBtn">Clear All</button>
+                </div>
+                <div id="recycleListContainer"></div>
             </div>
         </div>
     </div>
@@ -1056,7 +1268,48 @@
     <div id="categoryModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">📁 New Category</div><input type="text" id="newCategoryName" class="modal-input" placeholder="Category name"><div class="icon-grid" id="iconGrid"></div><input type="text" id="customIconInput" class="modal-input" placeholder="Or enter your own emoji" maxlength="2"><div style="display:flex; gap:12px;"><button class="btn-cancel" onclick="closeCategoryModal()">Cancel</button><button class="btn-primary" id="saveCategoryBtn">Save</button></div></div></div>
     <div id="deleteCategoryModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Delete Category?</div><div id="deleteCategoryName"></div><div style="display:flex; gap:12px;"><button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button><button class="btn-primary" id="confirmDeleteCatBtn">Delete</button></div></div></div>
     <div id="deleteProductModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Delete Product?</div><div id="deleteProductName"></div><div style="display:flex; gap:12px;"><button class="btn-cancel" onclick="closeDeleteProductModal()">Cancel</button><button class="btn-primary" id="confirmDeleteProdBtn">Delete</button></div></div></div>
-    <div id="productDetailModal" class="modal-overlay"><div class="modal-card"><img id="detailImage" style="width:100%; border-radius:20px;"><h3 id="detailTitle"></h3><p id="detailPrices"></p><button class="btn-primary" onclick="closeProductDetail()">Close</button></div></div>
+
+    <!-- ===== NEW PRODUCT DETAIL MODAL ===== -->
+    <div id="productDetailModal" class="product-detail-modal">
+        <div class="product-detail-card">
+            <div class="product-detail-image" id="detailImageContainer">
+                <span class="no-img" id="detailNoImage">🖼️</span>
+                <img id="detailImage" style="display:none;" alt="Product">
+            </div>
+            <div class="product-detail-name" id="detailTitle">Product Name</div>
+            <div class="product-detail-sub" id="detailSub"></div>
+            <div class="product-detail-category" id="detailCategory">CATEGORY</div>
+            <hr class="product-detail-divider">
+            <div class="product-detail-prices">
+                <div class="product-detail-price-row">
+                    <span class="label"><span class="icon">🛒</span> PURCHASE PRICE</span>
+                    <span class="value purchase" id="detailPurchasePrice">₹0</span>
+                </div>
+                <div class="product-detail-price-row">
+                    <span class="label"><span class="icon">💰</span> SELLING PRICE</span>
+                    <span class="value selling" id="detailSellingPrice">₹0</span>
+                </div>
+                <div class="product-detail-price-row">
+                    <span class="label"><span class="icon">🏷️</span> MRP</span>
+                    <span class="value mrp" id="detailMrp">₹0</span>
+                </div>
+            </div>
+            <button class="product-detail-close-btn" onclick="closeProductDetail()">✕ CLOSE</button>
+        </div>
+    </div>
+
+    <!-- Restore Confirm Modal -->
+    <div id="restoreConfirmModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-icon">♻️</div>
+            <div class="modal-title">Restore Item?</div>
+            <div class="modal-sub">This will restore the deleted item back to your inventory.</div>
+            <div style="display:flex; gap:12px;">
+                <button class="btn-cancel" onclick="closeRestoreModal()">Cancel</button>
+                <button class="btn-primary" id="confirmRestoreBtn" style="background:#15803d;">Yes, Restore</button>
+            </div>
+        </div>
+    </div>
 
     <div id="unlockScreen" class="unlock-screen">
         <div class="unlock-card">
@@ -1123,6 +1376,132 @@
     let pendingUnlockResolve = null;
     let fingerprintCredentialId = localStorage.getItem("aamir_fingerprint_id");
     let fingerprintEnabled = fingerprintCredentialId !== null;
+
+    // ===== RECYCLE BIN =====
+    let recycleBin = JSON.parse(localStorage.getItem("aamir_recycle_bin") || "[]");
+    let pendingRestoreItem = null;
+
+    function saveRecycleBin() {
+        localStorage.setItem("aamir_recycle_bin", JSON.stringify(recycleBin));
+        renderRecycleBin();
+    }
+
+    function addToRecycleBin(item, type) {
+        const recycleItem = {
+            id: item.id || Date.now() + Math.random().toString(36).substr(2, 5),
+            data: item,
+            type: type,
+            deletedAt: Date.now()
+        };
+        recycleBin.unshift(recycleItem);
+        if (recycleBin.length > 50) {
+            recycleBin = recycleBin.slice(0, 50);
+        }
+        saveRecycleBin();
+    }
+
+    function restoreFromRecycleBin(id) {
+        const index = recycleBin.findIndex(item => item.id === id);
+        if (index === -1) return false;
+        const recycleItem = recycleBin[index];
+        
+        if (recycleItem.type === 'product') {
+            products.unshift({ ...recycleItem.data, id: Date.now() + Math.random().toString(36).substr(2, 5) });
+            syncToFirestore();
+            renderAll();
+            showToast('✅ Product restored!');
+        } else if (recycleItem.type === 'category') {
+            const exists = categories.some(c => c.name === recycleItem.data.name);
+            if (!exists) {
+                categories.push({ ...recycleItem.data, id: Date.now() + Math.random().toString(36).substr(2, 5) });
+                syncToFirestore();
+                renderAll();
+                showToast('✅ Category restored!');
+            } else {
+                showToast('⚠️ Category already exists');
+                return false;
+            }
+        } else if (recycleItem.type === 'note') {
+            savedNotes.unshift({ ...recycleItem.data });
+            localStorage.setItem("aamir_notes", JSON.stringify(savedNotes));
+            renderSavedNotes();
+            showToast('✅ Note restored!');
+        }
+        
+        recycleBin.splice(index, 1);
+        saveRecycleBin();
+        return true;
+    }
+
+    function permanentDeleteFromRecycle(id) {
+        const index = recycleBin.findIndex(item => item.id === id);
+        if (index === -1) return;
+        recycleBin.splice(index, 1);
+        saveRecycleBin();
+        showToast('🗑️ Permanently deleted');
+    }
+
+    function clearRecycleBin() {
+        if (recycleBin.length === 0) return;
+        if (confirm('Delete all items permanently from recycle bin?')) {
+            recycleBin = [];
+            saveRecycleBin();
+            showToast('🗑️ Recycle bin cleared');
+        }
+    }
+
+    function renderRecycleBin() {
+        const container = document.getElementById('recycleListContainer');
+        if (recycleBin.length === 0) {
+            container.innerHTML = '<div class="recycle-empty">🗑️ No deleted items</div>';
+            return;
+        }
+        container.innerHTML = recycleBin.map(item => {
+            const time = new Date(item.deletedAt).toLocaleString('en-IN', { 
+                day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' 
+            });
+            const label = item.type === 'product' ? '📦' : item.type === 'category' ? '📁' : '📝';
+            const name = item.data.name || item.data.text || 'Unnamed';
+            return `
+                <div class="recycle-item">
+                    <div>
+                        <span class="recycle-name">${label} ${escapeHtml(name)}</span>
+                        <div class="recycle-time">${time}</div>
+                    </div>
+                    <div class="recycle-actions">
+                        <button class="btn-restore-item" onclick="window.restoreItem('${item.id}')" title="Restore">♻️</button>
+                        <button class="btn-permanent-delete" onclick="window.permanentDeleteItem('${item.id}')" title="Permanently Delete">🗑️</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    window.restoreItem = function(id) {
+        pendingRestoreItem = id;
+        document.getElementById('restoreConfirmModal').style.display = 'flex';
+    };
+
+    window.permanentDeleteItem = function(id) {
+        if (confirm('Permanently delete this item? This cannot be undone.')) {
+            permanentDeleteFromRecycle(id);
+        }
+    };
+
+    window.closeRestoreModal = function() {
+        document.getElementById('restoreConfirmModal').style.display = 'none';
+        pendingRestoreItem = null;
+    };
+
+    document.getElementById('confirmRestoreBtn').addEventListener('click', () => {
+        if (pendingRestoreItem) {
+            restoreFromRecycleBin(pendingRestoreItem);
+            pendingRestoreItem = null;
+        }
+        closeRestoreModal();
+    });
+
+    document.getElementById('clearRecycleBtn').addEventListener('click', clearRecycleBin);
 
     // ===== TOGGLE =====
     let currentMode = 'calculator';
@@ -1339,10 +1718,12 @@
         container.querySelectorAll('.delete-note-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const idx = parseInt(btn.dataset.index);
+                const note = savedNotes[idx];
+                if (note) addToRecycleBin(note, 'note');
                 savedNotes.splice(idx, 1);
                 localStorage.setItem("aamir_notes", JSON.stringify(savedNotes));
                 renderSavedNotes();
-                showToast("Note deleted / नोट हटा दिया");
+                showToast("Note deleted / नोट हटा दिया (moved to recycle bin)");
             });
         });
     }
@@ -1384,7 +1765,7 @@
     renderSavedNotes();
 
     // ============================================================
-    // ===== CASH DENOMINATION - FIXED INPUT (text type) =====
+    // ===== CASH DENOMINATION =====
     // ============================================================
     
     const noteImages = {
@@ -1444,7 +1825,6 @@
             
             const input = tr.querySelector('input');
             
-            // Only allow numbers
             input.addEventListener('keydown', function(e) {
                 const allowedKeys = ['0','1','2','3','4','5','6','7','8','9','Backspace','Delete','Tab','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter','Home','End'];
                 if (!allowedKeys.includes(e.key) && !e.key.startsWith('Arrow')) {
@@ -1460,9 +1840,7 @@
                 }
             });
             
-            // Restrict input to numbers only
             input.addEventListener('input', function() {
-                // Remove any non-numeric characters
                 this.value = this.value.replace(/[^0-9]/g, '');
                 const val = parseInt(this.value) || 0;
                 denomCounts[d.value] = val;
@@ -1550,88 +1928,131 @@
         return convert(num);
     }
 
-    document.getElementById('denomClearBtn').addEventListener('click', () => {
-        if (confirm('Clear all denomination counts?')) {
-            denominations.forEach(d => { denomCounts[d.value] = 0; });
-            Object.values(denomInputs).forEach(inp => { inp.value = ''; });
-            localStorage.setItem("aamir_denom_counts", JSON.stringify(denomCounts));
-            updateDenomTotals();
-            showToast('All counts cleared');
-        }
-    });
-
     document.getElementById('denomResetBtn').addEventListener('click', () => {
         denominations.forEach(d => { denomCounts[d.value] = 0; });
         Object.values(denomInputs).forEach(inp => { inp.value = ''; });
         localStorage.setItem("aamir_denom_counts", JSON.stringify(denomCounts));
         updateDenomTotals();
-        showToast('Reset to zero');
+        showToast('↺ Reset to zero');
     });
 
     renderDenominationTable();
     setMode('calculator');
 
-    // Click counter for reset button reveal
-    let clickCount = 0;
-    const REQUIRED_CLICKS = 5;
-    const statsRow = document.getElementById("statsClickTarget");
-    const resetContainer = document.getElementById("resetButtonContainer");
-    const clickMsg = document.getElementById("clickCounterMessage");
+    // Override delete functions to use recycle bin
+    async function deleteProductWithRecycle(id) {
+        const product = products.find(p => p.id === id);
+        if (product) {
+            addToRecycleBin(product, 'product');
+        }
+        products = products.filter(p => p.id !== id);
+        await syncToFirestore();
+        renderAll();
+        showToast('🗑️ Product moved to recycle bin');
+    }
 
-    function updateClickMessage() {
-        let remaining = REQUIRED_CLICKS - clickCount;
-        if (remaining > 0) {
-            clickMsg.innerText = `👆 Tap ${remaining} more time${remaining > 1 ? 's' : ''} to enable Reset`;
+    async function deleteCategoryWithRecycle(id) {
+        const category = categories.find(c => c.id === id);
+        if (category) {
+            addToRecycleBin(category, 'category');
+        }
+        products = products.map(p => p.category === id ? {...p, category: null} : p);
+        categories = categories.filter(c => c.id !== id);
+        if (currentFilter === id) currentFilter = "All";
+        await syncToFirestore();
+        renderAll();
+        showToast('🗑️ Category moved to recycle bin');
+    }
+
+    window.deleteProduct = deleteProductWithRecycle;
+    window.deleteCategory = deleteCategoryWithRecycle;
+
+    window.showDeleteProductModal = (id) => {
+        window.pendingProductDeleteId = id;
+        document.getElementById('deleteProductModal').style.display = 'flex';
+    };
+
+    window.closeDeleteProductModal = () => {
+        document.getElementById('deleteProductModal').style.display = 'none';
+    };
+
+    window.showDeleteModal = (catId) => {
+        window.pendingDeleteId = catId;
+        document.getElementById('deleteCategoryModal').style.display = 'flex';
+    };
+
+    window.closeDeleteModal = () => {
+        document.getElementById('deleteCategoryModal').style.display = 'none';
+    };
+
+    document.getElementById('confirmDeleteProdBtn').onclick = async () => {
+        if (window.pendingProductDeleteId) {
+            await deleteProductWithRecycle(window.pendingProductDeleteId);
+        }
+        closeDeleteProductModal();
+    };
+
+    document.getElementById('confirmDeleteCatBtn').onclick = async () => {
+        if (window.pendingDeleteId) {
+            await deleteCategoryWithRecycle(window.pendingDeleteId);
+        }
+        closeDeleteModal();
+    };
+
+    // ============================================================
+    // ===== PRODUCT DETAIL - NEW DESIGN =====
+    // ============================================================
+    window.showProductDetail = function(id) {
+        const p = products.find(p => p.id === id);
+        if (!p) return;
+        
+        const modal = document.getElementById('productDetailModal');
+        const img = document.getElementById('detailImage');
+        const noImg = document.getElementById('detailNoImage');
+        const title = document.getElementById('detailTitle');
+        const sub = document.getElementById('detailSub');
+        const category = document.getElementById('detailCategory');
+        const purchase = document.getElementById('detailPurchasePrice');
+        const selling = document.getElementById('detailSellingPrice');
+        const mrp = document.getElementById('detailMrp');
+        
+        title.textContent = p.name || 'Product';
+        
+        // Sub title (if any)
+        sub.textContent = p.sub || '';
+        
+        // Category
+        const cat = categories.find(c => c.id === p.category);
+        category.textContent = cat ? cat.name.toUpperCase() : 'UNCATEGORIZED';
+        
+        // Prices
+        purchase.textContent = `₹${p.purchasePrice || 0}`;
+        selling.textContent = `₹${p.sellingPrice || 0}`;
+        mrp.textContent = `₹${p.mrp || 0}`;
+        
+        // Image
+        if (p.imageUrl) {
+            img.src = p.imageUrl;
+            img.style.display = 'block';
+            noImg.style.display = 'none';
         } else {
-            clickMsg.innerText = "✅ Reset button is now visible";
+            img.style.display = 'none';
+            noImg.style.display = 'block';
         }
-    }
+        
+        modal.classList.add('active');
+    };
 
-    function handleStatsClick() {
-        if (clickCount >= REQUIRED_CLICKS) return;
-        clickCount++;
-        updateClickMessage();
-        if (clickCount >= REQUIRED_CLICKS) {
-            resetContainer.classList.remove("reset-btn-hidden");
-            resetContainer.classList.add("reset-btn-visible");
-            showToast("Reset All Data button unlocked!");
+    window.closeProductDetail = function() {
+        document.getElementById('productDetailModal').classList.remove('active');
+    };
+
+    // Close modal on outside click
+    document.getElementById('productDetailModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeProductDetail();
         }
-    }
-
-    statsRow.addEventListener("click", handleStatsClick);
-    
-    async function registerFingerprint() {
-        if (!window.PublicKeyCredential) { showToast("Fingerprint not supported"); return false; }
-        try {
-            const challenge = new Uint8Array(32);
-            window.crypto.getRandomValues(challenge);
-            const credential = await navigator.credentials.create({
-                publicKey: {
-                    challenge, rp: { name: "Aamir Trading", id: location.hostname },
-                    user: { id: new Uint8Array(16), name: "aamir_user", displayName: "Aamir User" },
-                    pubKeyCredParams: [{ type: "public-key", alg: -7 }],
-                    authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" },
-                    timeout: 60000
-                }
-            });
-            const credId = btoa(String.fromCharCode(...new Uint8Array(credential.rawId)));
-            localStorage.setItem("aamir_fingerprint_id", credId);
-            fingerprintCredentialId = credId;
-            fingerprintEnabled = true;
-            showToast("✅ Fingerprint registered!");
-            return true;
-        } catch (err) { showToast("Registration failed: " + err.message); return false; }
-    }
-    async function authenticateWithFingerprint() {
-        if (!fingerprintCredentialId) return false;
-        try {
-            const challenge = new Uint8Array(32);
-            window.crypto.getRandomValues(challenge);
-            const allowedCredential = { id: Uint8Array.from(atob(fingerprintCredentialId), c=>c.charCodeAt(0)), type: "public-key" };
-            const assertion = await navigator.credentials.get({ publicKey: { challenge, allowCredentials: [allowedCredential], userVerification: "required", timeout: 60000 } });
-            return !!assertion;
-        } catch (err) { return false; }
-    }
+    });
 
     function showToast(msg) { const t = document.getElementById("toastMsg"); t.innerText = msg; t.style.display = "block"; setTimeout(() => t.style.display = "none", 2000); }
     async function syncToFirestore() { await setDoc(doc(db, "inventory", "master"), { categories, products, updatedAt: new Date() }); localStorage.setItem("aamir_products_backup", JSON.stringify(products)); localStorage.setItem("aamir_categories_backup", JSON.stringify(categories)); }
@@ -1642,11 +2063,8 @@
         });
     }
     async function addCategory(n, i) { const id = Date.now()+Math.random().toString(36).substr(2,5); categories.push({ id, name:n, icon:i }); await syncToFirestore(); renderAll(); showToast(`✅ Category "${n}" added`); }
-    async function deleteCategory(id) { products = products.map(p => p.category === id ? {...p, category:null} : p); categories = categories.filter(c => c.id !== id); if (currentFilter === id) currentFilter = "All"; await syncToFirestore(); renderAll(); showToast("Category removed"); }
     async function addProduct(pd, imgUrl) { const id = Date.now()+Math.random().toString(36).substr(2,5); products.unshift({ ...pd, id, stock:100, imageUrl: imgUrl || null }); await syncToFirestore(); renderAll(); showToast("✅ Product saved!"); }
     async function updateProduct(id, up, imgUrl) { const idx = products.findIndex(p => p.id === id); if (idx !== -1) { products[idx] = { ...products[idx], ...up }; if (imgUrl !== undefined) products[idx].imageUrl = imgUrl; await syncToFirestore(); renderAll(); showToast("✅ Updated"); } }
-    async function deleteProduct(id) { products = products.filter(p => p.id !== id); await syncToFirestore(); renderAll(); }
-    async function deleteAllData() { if (confirm("⚠️ Delete all products and categories? This action cannot be undone.")) { products = []; categories = []; await syncToFirestore(); renderAll(); showToast("All data reset successfully!"); clickCount = 0; resetContainer.classList.remove("reset-btn-visible"); resetContainer.classList.add("reset-btn-hidden"); updateClickMessage(); } }
     function updateProfileStats() {
         document.getElementById("profileTotalProducts").innerText = products.length;
         document.getElementById("profileTotalCategories").innerText = categories.length;
@@ -1726,21 +2144,14 @@
         } 
     };
     
-    window.showProductDetail = (id) => { let p = products.find(p=>p.id===id); if(p){ document.getElementById("detailTitle").innerText = p.name; document.getElementById("detailPrices").innerHTML = formatStockBilingual(p.purchasePrice, p.sellingPrice, p.mrp); document.getElementById("detailImage").src = p.imageUrl || ""; document.getElementById("productDetailModal").style.display = "flex"; } };
-    window.closeProductDetail = () => document.getElementById("productDetailModal").style.display = "none";
-    window.showDeleteProductModal = (id) => { window.pendingProductDeleteId = id; document.getElementById("deleteProductModal").style.display = "flex"; };
-    window.closeDeleteProductModal = () => document.getElementById("deleteProductModal").style.display = "none";
-    window.showDeleteModal = (catId) => { window.pendingDeleteId = catId; document.getElementById("deleteCategoryModal").style.display = "flex"; };
-    window.closeDeleteModal = () => document.getElementById("deleteCategoryModal").style.display = "none";
-    
-    function renderAll() { renderCategoryChips(); renderHomeProducts(); renderStockList(); updateProfileStats(); }
+    function renderAll() { renderCategoryChips(); renderHomeProducts(); renderStockList(); updateProfileStats(); renderRecycleBin(); }
     function switchScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
         document.getElementById(id + "Screen").classList.add('active-screen');
         document.querySelectorAll('.nav-item').forEach(nav => { if(nav.getAttribute('data-screen') === id) nav.classList.add('active'); else nav.classList.remove('active'); });
         if(id === 'home') renderHomeProducts();
         if(id === 'stock') renderStockList();
-        if(id === 'profile') { updateProfileStats(); updateClickMessage(); renderSavedNotes(); }
+        if(id === 'profile') { updateProfileStats(); renderRecycleBin(); renderSavedNotes(); }
     }
     
     document.getElementById("openProductBtn").onclick = () => { if(categories.length===0){ showToast("Please add a category first"); return; } document.getElementById("addProductInitialView").style.display="none"; document.getElementById("addProductCategoryView").style.display="block"; document.getElementById("categorySelectorList").innerHTML = categories.map(c => `<div class="category-item" data-cat-id="${c.id}">${c.icon||'📦'} ${c.name}</div>`).join(''); document.querySelectorAll(".category-item").forEach(item => item.addEventListener("click", ()=>{ selectedCategoryId = item.getAttribute("data-cat-id"); editingProductId=null; const catName = categories.find(c=>c.id===selectedCategoryId).name; document.getElementById("selectedCategoryDisplay").innerHTML = `📁 Selected: ${catName}`; document.getElementById("addProductCategoryView").style.display="none"; document.getElementById("addProductFormView").style.display="block"; document.getElementById("prodName").value=""; document.getElementById("prodPurchasePrice").value=""; document.getElementById("prodSellingPrice").value=""; document.getElementById("prodMrp").value=""; document.getElementById("imgPreviewContainer").innerHTML=""; document.getElementById("prodImageFile").value=""; })); };
@@ -1773,9 +2184,6 @@
     window.closeCategoryModal = () => document.getElementById("categoryModal").style.display="none";
     document.getElementById("saveCategoryBtn").onclick = () => { let n=document.getElementById("newCategoryName").value.trim(); if(!n) return showToast("Enter name"); let custom=document.getElementById("customIconInput").value.trim(); addCategory(n, custom||selectedIcon); closeCategoryModal(); };
     document.getElementById("openCategoryBtn").onclick = openAddCategoryModal;
-    document.getElementById("confirmDeleteCatBtn").onclick = () => { if(window.pendingDeleteId) deleteCategory(window.pendingDeleteId); closeDeleteModal(); };
-    document.getElementById("confirmDeleteProdBtn").onclick = () => { if(window.pendingProductDeleteId) deleteProduct(window.pendingProductDeleteId); closeDeleteProductModal(); };
-    document.getElementById("resetDataBtn").onclick = deleteAllData;
     document.getElementById("setTpinBtn").onclick = () => { let pin = prompt("Set TPIN (4-6 digits) or empty to disable:"); if(pin===""){ localStorage.removeItem("aamir_tpin"); userTpin=null; showToast("TPIN disabled"); } else if(/^\d{4,6}$/.test(pin)){ localStorage.setItem("aamir_tpin",pin); userTpin=pin; showToast("TPIN set"); } else showToast("Invalid TPIN"); };
     document.getElementById("enableFingerprintBtn").onclick = async () => { await registerFingerprint(); };
     const unlockScr = document.getElementById("unlockScreen");
@@ -1788,6 +2196,40 @@
     document.getElementById("fabBtn").onclick = () => { if(categories.length===0) showToast("Add a category first"); else { editingProductId=null; selectedCategoryId=null; document.getElementById("addProductInitialView").style.display="block"; document.getElementById("addProductCategoryView").style.display="none"; document.getElementById("addProductFormView").style.display="none"; switchScreen('addProduct'); } };
     document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', () => switchScreen(n.getAttribute('data-screen'))));
     function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+    
+    async function registerFingerprint() {
+        if (!window.PublicKeyCredential) { showToast("Fingerprint not supported"); return false; }
+        try {
+            const challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+            const credential = await navigator.credentials.create({
+                publicKey: {
+                    challenge, rp: { name: "Aamir Trading", id: location.hostname },
+                    user: { id: new Uint8Array(16), name: "aamir_user", displayName: "Aamir User" },
+                    pubKeyCredParams: [{ type: "public-key", alg: -7 }],
+                    authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" },
+                    timeout: 60000
+                }
+            });
+            const credId = btoa(String.fromCharCode(...new Uint8Array(credential.rawId)));
+            localStorage.setItem("aamir_fingerprint_id", credId);
+            fingerprintCredentialId = credId;
+            fingerprintEnabled = true;
+            showToast("✅ Fingerprint registered!");
+            return true;
+        } catch (err) { showToast("Registration failed: " + err.message); return false; }
+    }
+    async function authenticateWithFingerprint() {
+        if (!fingerprintCredentialId) return false;
+        try {
+            const challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+            const allowedCredential = { id: Uint8Array.from(atob(fingerprintCredentialId), c=>c.charCodeAt(0)), type: "public-key" };
+            const assertion = await navigator.credentials.get({ publicKey: { challenge, allowCredentials: [allowedCredential], userVerification: "required", timeout: 60000 } });
+            return !!assertion;
+        } catch (err) { return false; }
+    }
+
     startFirestoreListener();
     showUnlockIfNeeded().then(() => switchScreen('home'));
 </script>
