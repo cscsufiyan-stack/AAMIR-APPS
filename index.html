@@ -252,7 +252,7 @@
         
         .note-textarea {
             width: 100%;
-            min-height: 60px;
+            min-height: 80px;
             padding: 10px 12px;
             border: 1.5px solid #e2e8f0;
             border-radius: 12px;
@@ -269,45 +269,88 @@
             box-shadow: 0 0 0 3px rgba(0, 25, 89, 0.1);
         }
         
+        /* ===== PHOTO UPLOAD WITH NAME ===== */
         .note-image-upload {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 8px;
-            padding: 8px 12px;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+            padding: 12px;
             background: white;
-            border-radius: 12px;
+            border-radius: 14px;
             border: 1.5px dashed #cbd5e1;
-            cursor: pointer;
             transition: 0.2s;
         }
         .note-image-upload:hover { border-color: #001959; background: #f8faff; }
-        .note-image-upload label {
+        .note-image-upload .upload-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .note-image-upload .upload-row label {
             font-size: 12px;
             color: #475569;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 6px;
+            white-space: nowrap;
         }
-        .note-image-upload input[type="file"] { display: none; }
+        .note-image-upload .upload-row input[type="file"] { display: none; }
+        .note-image-upload .upload-row .photo-name-input {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 30px;
+            font-size: 12px;
+            background: #f8fafc;
+            transition: 0.2s;
+        }
+        .note-image-upload .upload-row .photo-name-input:focus {
+            border-color: #001959;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 25, 89, 0.1);
+        }
+        .note-image-upload .upload-row .photo-name-input::placeholder {
+            color: #cbd5e1;
+        }
+        .note-image-preview-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 4px;
+        }
         .note-image-preview {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
             object-fit: cover;
             border: 1px solid #e2e8f0;
         }
         .note-image-preview-placeholder {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
             background: #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
+            font-size: 28px;
             color: #94a3b8;
+            border: 1px solid #e2e8f0;
+        }
+        .note-image-name-display {
+            font-size: 13px;
+            font-weight: 500;
+            color: #0f172a;
+        }
+        .note-image-remove {
+            background: none;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 4px;
         }
         
         .note-actions {
@@ -329,7 +372,7 @@
         .btn-save-note { background: #001959; color: white; }
         .btn-clear-note { background: #f1f5f9; color: #475569; }
         
-        /* ===== SAVED NOTES - 2X LARGER THUMBNAILS ===== */
+        /* ===== SAVED NOTES ===== */
         .saved-notes {
             margin-top: 10px;
             max-height: 500px;
@@ -376,6 +419,12 @@
             word-wrap: break-word;
             font-weight: 700;
             line-height: 1.5;
+        }
+        .saved-note-item .note-photo-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: #64748b;
+            margin-top: 4px;
         }
         .saved-note-item .note-meta {
             display: flex;
@@ -614,6 +663,8 @@
         }
         .denom-actions button:active { transform: scale(0.97); }
         .btn-denom-reset { background: #f1f5f9; color: #475569; }
+        .btn-denom-share { background: #001959; color: white; }
+        .btn-denom-share:active { background: #002d8a; }
         
         .simple-calc-section.hidden {
             display: none;
@@ -713,7 +764,7 @@
         .recycle-clear-all:active { transform: scale(0.97); }
         
         /* ============================================================ */
-        /* ===== PRODUCT DETAIL MODAL - EXACTLY AS PER IMAGE ===== */
+        /* ===== PRODUCT DETAIL MODAL ===== */
         /* ============================================================ */
         .product-detail-modal {
             display: none;
@@ -863,6 +914,123 @@
         .product-detail-close-btn:active {
             transform: scale(0.97);
             opacity: 0.8;
+        }
+        
+        /* ============================================================ */
+        /* ===== STYLISH TPIN MODAL ===== */
+        /* ============================================================ */
+        .tpin-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            z-index: 600;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .tpin-modal-overlay.active {
+            display: flex;
+        }
+        .tpin-modal-card {
+            background: white;
+            border-radius: 32px;
+            max-width: 360px;
+            width: 100%;
+            padding: 32px 24px 28px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .tpin-modal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #001959, #dfad47, #001959);
+        }
+        .tpin-modal-icon {
+            font-size: 56px;
+            margin-bottom: 8px;
+        }
+        .tpin-modal-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .tpin-modal-sub {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+        .tpin-input-wrap {
+            position: relative;
+            margin: 12px 0 20px;
+        }
+        .tpin-input-wrap input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 60px;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 12px;
+            font-family: monospace;
+            background: #f8fafc;
+            transition: 0.2s;
+            color: #0f172a;
+        }
+        .tpin-input-wrap input:focus {
+            border-color: #001959;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 25, 89, 0.1);
+        }
+        .tpin-input-wrap input::placeholder {
+            letter-spacing: 2px;
+            font-weight: 400;
+            font-size: 14px;
+            color: #cbd5e1;
+        }
+        .tpin-modal-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .tpin-modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 40px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .tpin-modal-actions button:active { transform: scale(0.97); }
+        .tpin-btn-ok {
+            background: linear-gradient(135deg, #001959, #002d8a);
+            color: white;
+        }
+        .tpin-btn-ok:hover { opacity: 0.9; }
+        .tpin-btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .tpin-btn-cancel:hover { background: #e2e8f0; }
+        .tpin-error {
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 10px;
+            min-height: 20px;
         }
         
         .modal-overlay {
@@ -1156,6 +1324,7 @@
                 <span id="denomModeLabel">💰 Denomination</span>
             </div>
             
+            <!-- ===== CALCULATOR WITH PHOTO NAME ===== -->
             <div class="simple-calc-section" id="calculatorSection">
                 <div class="calc-header">
                     <h4>🧮 Calculator & Notes</h4>
@@ -1195,12 +1364,17 @@
                 
                 <textarea id="noteText" class="note-textarea" placeholder="Write note here... (e.g., 10 × 140 = 1400)"></textarea>
                 
-                <div class="note-image-upload" onclick="document.getElementById('noteImageFile').click()">
-                    <label>📷 Add Photo / फोटो जोड़ें</label>
-                    <div id="noteImagePreviewContainer">
-                        <div class="note-image-preview-placeholder">🖼️</div>
+                <!-- ===== PHOTO UPLOAD WITH NAME ===== -->
+                <div class="note-image-upload">
+                    <div class="upload-row">
+                        <label>📷 <input type="file" id="noteImageFile" accept="image/*"> Add Photo</label>
+                        <input type="text" id="photoNameInput" class="photo-name-input" placeholder="Photo name...">
                     </div>
-                    <input type="file" id="noteImageFile" accept="image/*">
+                    <div class="note-image-preview-wrap" id="imagePreviewWrap">
+                        <div class="note-image-preview-placeholder" id="noteImagePreviewPlaceholder">🖼️</div>
+                        <span class="note-image-name-display" id="photoNameDisplay">No photo selected</span>
+                        <button class="note-image-remove" id="removePhotoBtn" style="display:none;">✕</button>
+                    </div>
                 </div>
                 
                 <div class="note-actions">
@@ -1238,6 +1412,7 @@
                 </div>
                 <div class="denom-actions">
                     <button class="btn-denom-reset" id="denomResetBtn">↺ Reset</button>
+                    <button class="btn-denom-share" id="denomShareBtn">📤 Share</button>
                 </div>
             </div>
             
@@ -1265,11 +1440,27 @@
     <div class="floating-add-btn" id="fabBtn"><span>+</span></div>
     <div id="toastMsg" class="toast-msg"></div>
 
+    <!-- ===== STYLISH TPIN MODAL ===== -->
+    <div id="tpinModal" class="tpin-modal-overlay">
+        <div class="tpin-modal-card">
+            <div class="tpin-modal-icon">🔐</div>
+            <div class="tpin-modal-title">Set TPIN</div>
+            <div class="tpin-modal-sub">Enter 4-6 digit PIN or leave empty to disable</div>
+            <div class="tpin-input-wrap">
+                <input type="password" id="tpinInput" maxlength="6" placeholder="••••••" inputmode="numeric" pattern="[0-9]*">
+            </div>
+            <div class="tpin-error" id="tpinError"></div>
+            <div class="tpin-modal-actions">
+                <button class="tpin-btn-cancel" id="tpinCancelBtn">Cancel</button>
+                <button class="tpin-btn-ok" id="tpinOkBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
     <div id="categoryModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">📁 New Category</div><input type="text" id="newCategoryName" class="modal-input" placeholder="Category name"><div class="icon-grid" id="iconGrid"></div><input type="text" id="customIconInput" class="modal-input" placeholder="Or enter your own emoji" maxlength="2"><div style="display:flex; gap:12px;"><button class="btn-cancel" onclick="closeCategoryModal()">Cancel</button><button class="btn-primary" id="saveCategoryBtn">Save</button></div></div></div>
     <div id="deleteCategoryModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Delete Category?</div><div id="deleteCategoryName"></div><div style="display:flex; gap:12px;"><button class="btn-cancel" onclick="closeDeleteModal()">Cancel</button><button class="btn-primary" id="confirmDeleteCatBtn">Delete</button></div></div></div>
     <div id="deleteProductModal" class="modal-overlay"><div class="modal-card"><div class="modal-title">Delete Product?</div><div id="deleteProductName"></div><div style="display:flex; gap:12px;"><button class="btn-cancel" onclick="closeDeleteProductModal()">Cancel</button><button class="btn-primary" id="confirmDeleteProdBtn">Delete</button></div></div></div>
 
-    <!-- ===== NEW PRODUCT DETAIL MODAL ===== -->
     <div id="productDetailModal" class="product-detail-modal">
         <div class="product-detail-card">
             <div class="product-detail-image" id="detailImageContainer">
@@ -1298,7 +1489,6 @@
         </div>
     </div>
 
-    <!-- Restore Confirm Modal -->
     <div id="restoreConfirmModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-icon">♻️</div>
@@ -1376,6 +1566,54 @@
     let pendingUnlockResolve = null;
     let fingerprintCredentialId = localStorage.getItem("aamir_fingerprint_id");
     let fingerprintEnabled = fingerprintCredentialId !== null;
+
+    // ===== PHOTO WITH NAME =====
+    let noteImageData = null;
+    let photoName = '';
+
+    const noteImageInput = document.getElementById('noteImageFile');
+    const photoNameInput = document.getElementById('photoNameInput');
+    const photoNameDisplay = document.getElementById('photoNameDisplay');
+    const imagePreviewWrap = document.getElementById('imagePreviewWrap');
+    const previewPlaceholder = document.getElementById('noteImagePreviewPlaceholder');
+    const removePhotoBtn = document.getElementById('removePhotoBtn');
+
+    noteImageInput.addEventListener('change', function(e) {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                noteImageData = ev.target.result;
+                previewPlaceholder.innerHTML = `<img src="${noteImageData}" class="note-image-preview">`;
+                // Auto-set photo name from file name
+                if (!photoNameInput.value.trim()) {
+                    photoNameInput.value = file.name.replace(/\.[^/.]+$/, '');
+                }
+                photoName = photoNameInput.value.trim() || file.name.replace(/\.[^/.]+$/, '');
+                photoNameDisplay.textContent = photoName || '📷 ' + file.name;
+                removePhotoBtn.style.display = 'inline';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    photoNameInput.addEventListener('input', function() {
+        photoName = this.value.trim();
+        if (noteImageData) {
+            photoNameDisplay.textContent = photoName || 'No name';
+        }
+    });
+
+    removePhotoBtn.addEventListener('click', function() {
+        noteImageData = null;
+        photoName = '';
+        photoNameInput.value = '';
+        previewPlaceholder.innerHTML = '🖼️';
+        previewPlaceholder.className = 'note-image-preview-placeholder';
+        photoNameDisplay.textContent = 'No photo selected';
+        removePhotoBtn.style.display = 'none';
+        noteImageInput.value = '';
+    });
 
     // ===== RECYCLE BIN =====
     let recycleBin = JSON.parse(localStorage.getItem("aamir_recycle_bin") || "[]");
@@ -1553,7 +1791,7 @@
     let calcExpression = "";
     let calcResult = "0";
     let justEvaluated = false;
-    let noteImageData = null;
+    let lastFullExpression = "";
     
     function updateCalcDisplay(expr, result) {
         calcExprEl.textContent = expr || "";
@@ -1607,9 +1845,11 @@
             if (!calcExpression.trim()) return;
             const result = evaluateCalc(calcExpression);
             if (result !== null) {
+                const fullExpr = calcExpression + " = " + result;
+                lastFullExpression = fullExpr;
                 calcResult = String(result);
                 updateCalcDisplay(calcExpression + " =", result);
-                noteText.value += ` = ${result}`;
+                noteText.value += (noteText.value ? '\n' : '') + fullExpr;
                 calcExpression = "";
                 justEvaluated = true;
             } else {
@@ -1666,23 +1906,7 @@
         if (/^[0-9+\-*/%().]$/.test(key)) { e.preventDefault(); handleCalcInput(key); }
     });
     
-    // ===== NOTE IMAGE UPLOAD =====
-    const noteImageInput = document.getElementById('noteImageFile');
-    const noteImagePreviewContainer = document.getElementById('noteImagePreviewContainer');
-    
-    noteImageInput.addEventListener('change', function(e) {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                noteImageData = ev.target.result;
-                noteImagePreviewContainer.innerHTML = `<img src="${noteImageData}" class="note-image-preview">`;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-    
-    // ===== NOTES =====
+    // ===== NOTES WITH PHOTO NAME =====
     let savedNotes = JSON.parse(localStorage.getItem("aamir_notes") || "[]");
     
     function renderSavedNotes() {
@@ -1701,12 +1925,14 @@
                 if (numMatch) amount = parseFloat(numMatch[1].replace(/,/g, ''));
             }
             const amountBadge = amount > 0 ? `<span class="note-amount-badge">₹${amount}</span>` : '';
+            const photoNameDisplay = note.photoName ? `<div class="note-photo-name">📷 ${escapeHtml(note.photoName)}</div>` : '';
             
             return `
                 <div class="saved-note-item">
                     ${hasImage ? `<img src="${note.image}" class="note-thumb">` : `<div class="note-thumb-placeholder">📄</div>`}
                     <div class="note-content">
                         <div class="note-text-display">${escapeHtml(note.text)} ${amountBadge}</div>
+                        ${photoNameDisplay}
                         <div class="note-meta">
                             <span class="note-time">${note.time}</span>
                             <button class="delete-note-btn" data-index="${index}">✕</button>
@@ -1736,7 +1962,8 @@
         const noteObj = { 
             text: text, 
             time: timeStr,
-            image: noteImageData || null
+            image: noteImageData || null,
+            photoName: photoName || null
         };
         savedNotes.unshift(noteObj);
         localStorage.setItem("aamir_notes", JSON.stringify(savedNotes));
@@ -1747,7 +1974,12 @@
         calcResult = "0";
         updateCalcDisplay("", "0");
         noteImageData = null;
-        noteImagePreviewContainer.innerHTML = `<div class="note-image-preview-placeholder">🖼️</div>`;
+        photoName = '';
+        photoNameInput.value = '';
+        previewPlaceholder.innerHTML = '🖼️';
+        previewPlaceholder.className = 'note-image-preview-placeholder';
+        photoNameDisplay.textContent = 'No photo selected';
+        removePhotoBtn.style.display = 'none';
         noteImageInput.value = '';
     });
     
@@ -1757,7 +1989,12 @@
         calcResult = "0";
         updateCalcDisplay("", "0");
         noteImageData = null;
-        noteImagePreviewContainer.innerHTML = `<div class="note-image-preview-placeholder">🖼️</div>`;
+        photoName = '';
+        photoNameInput.value = '';
+        previewPlaceholder.innerHTML = '🖼️';
+        previewPlaceholder.className = 'note-image-preview-placeholder';
+        photoNameDisplay.textContent = 'No photo selected';
+        removePhotoBtn.style.display = 'none';
         noteImageInput.value = '';
         showToast("Cleared / साफ कर दिया");
     });
@@ -1936,10 +2173,43 @@
         showToast('↺ Reset to zero');
     });
 
+    document.getElementById('denomShareBtn').addEventListener('click', () => {
+        let grandTotal = 0;
+        let lines = [];
+        denominations.forEach(d => {
+            const count = denomCounts[d.value] || 0;
+            if (count > 0) {
+                const subtotal = count * d.value;
+                grandTotal += subtotal;
+                lines.push(`${d.label}: ${count} × ₹${d.value} = ₹${subtotal}`);
+            }
+        });
+        
+        if (lines.length === 0) {
+            showToast('No counts to share!');
+            return;
+        }
+        
+        const shareText = `💰 Cash Denomination Report\n${'─'.repeat(30)}\n${lines.join('\n')}\n${'─'.repeat(30)}\n📊 GRAND TOTAL: ₹${grandTotal.toLocaleString()}\n${document.getElementById('denomWords').textContent}`;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Cash Denomination',
+                text: shareText
+            }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(shareText).then(() => {
+                showToast('📋 Copied to clipboard!');
+            }).catch(() => {
+                prompt('Copy this:', shareText);
+            });
+        }
+    });
+
     renderDenominationTable();
     setMode('calculator');
 
-    // Override delete functions to use recycle bin
+    // Override delete functions
     async function deleteProductWithRecycle(id) {
         const product = products.find(p => p.id === id);
         if (product) {
@@ -1999,9 +2269,7 @@
         closeDeleteModal();
     };
 
-    // ============================================================
-    // ===== PRODUCT DETAIL - NEW DESIGN =====
-    // ============================================================
+    // ===== PRODUCT DETAIL =====
     window.showProductDetail = function(id) {
         const p = products.find(p => p.id === id);
         if (!p) return;
@@ -2017,20 +2285,13 @@
         const mrp = document.getElementById('detailMrp');
         
         title.textContent = p.name || 'Product';
-        
-        // Sub title (if any)
         sub.textContent = p.sub || '';
-        
-        // Category
         const cat = categories.find(c => c.id === p.category);
         category.textContent = cat ? cat.name.toUpperCase() : 'UNCATEGORIZED';
-        
-        // Prices
         purchase.textContent = `₹${p.purchasePrice || 0}`;
         selling.textContent = `₹${p.sellingPrice || 0}`;
         mrp.textContent = `₹${p.mrp || 0}`;
         
-        // Image
         if (p.imageUrl) {
             img.src = p.imageUrl;
             img.style.display = 'block';
@@ -2047,7 +2308,6 @@
         document.getElementById('productDetailModal').classList.remove('active');
     };
 
-    // Close modal on outside click
     document.getElementById('productDetailModal').addEventListener('click', function(e) {
         if (e.target === this) {
             closeProductDetail();
@@ -2184,7 +2444,21 @@
     window.closeCategoryModal = () => document.getElementById("categoryModal").style.display="none";
     document.getElementById("saveCategoryBtn").onclick = () => { let n=document.getElementById("newCategoryName").value.trim(); if(!n) return showToast("Enter name"); let custom=document.getElementById("customIconInput").value.trim(); addCategory(n, custom||selectedIcon); closeCategoryModal(); };
     document.getElementById("openCategoryBtn").onclick = openAddCategoryModal;
-    document.getElementById("setTpinBtn").onclick = () => { let pin = prompt("Set TPIN (4-6 digits) or empty to disable:"); if(pin===""){ localStorage.removeItem("aamir_tpin"); userTpin=null; showToast("TPIN disabled"); } else if(/^\d{4,6}$/.test(pin)){ localStorage.setItem("aamir_tpin",pin); userTpin=pin; showToast("TPIN set"); } else showToast("Invalid TPIN"); };
+    
+    // ===== SET TPIN - STYLISH =====
+    document.getElementById("setTpinBtn").onclick = async () => {
+        const result = await showTpinModal();
+        if (result.action === 'disable') {
+            localStorage.removeItem("aamir_tpin");
+            userTpin = null;
+            showToast('🔓 TPIN disabled');
+        } else if (result.action === 'set') {
+            localStorage.setItem("aamir_tpin", result.value);
+            userTpin = result.value;
+            showToast('✅ TPIN set successfully!');
+        }
+    };
+    
     document.getElementById("enableFingerprintBtn").onclick = async () => { await registerFingerprint(); };
     const unlockScr = document.getElementById("unlockScreen");
     const fingerprintBtn = document.getElementById("fingerprintUnlockBtn");
@@ -2197,6 +2471,56 @@
     document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', () => switchScreen(n.getAttribute('data-screen'))));
     function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
     
+    // ===== STYLISH TPIN MODAL FUNCTIONS =====
+    function showTpinModal() {
+        return new Promise((resolve) => {
+            tpinInput.value = '';
+            tpinError.textContent = '';
+            document.getElementById('tpinModal').classList.add('active');
+            tpinResolve = resolve;
+            setTimeout(() => tpinInput.focus(), 100);
+        });
+    }
+
+    function closeTpinModal(result) {
+        document.getElementById('tpinModal').classList.remove('active');
+        if (tpinResolve) {
+            tpinResolve(result);
+            tpinResolve = null;
+        }
+    }
+
+    let tpinResolve = null;
+    const tpinInput = document.getElementById('tpinInput');
+    const tpinError = document.getElementById('tpinError');
+
+    document.getElementById('tpinOkBtn').addEventListener('click', () => {
+        const val = tpinInput.value.trim();
+        if (val === '') {
+            closeTpinModal({ action: 'disable', value: '' });
+        } else if (/^\d{4,6}$/.test(val)) {
+            closeTpinModal({ action: 'set', value: val });
+        } else {
+            tpinError.textContent = '⚠️ Please enter 4-6 digits or leave empty';
+        }
+    });
+
+    document.getElementById('tpinCancelBtn').addEventListener('click', () => {
+        closeTpinModal({ action: 'cancel' });
+    });
+
+    tpinInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('tpinOkBtn').click();
+        }
+        if (e.key === 'Escape') {
+            document.getElementById('tpinCancelBtn').click();
+        }
+        if (!/^[0-9]$/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Tab' && e.key !== 'Enter' && e.key !== 'Escape') {
+            e.preventDefault();
+        }
+    });
+
     async function registerFingerprint() {
         if (!window.PublicKeyCredential) { showToast("Fingerprint not supported"); return false; }
         try {
