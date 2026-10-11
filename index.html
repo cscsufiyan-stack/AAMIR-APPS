@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Aamir Trading - Premium Inventory</title>
+    <title>Noman Power Tools - Premium Inventory</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f5f7fb; padding-bottom: 85px; }
@@ -572,15 +572,16 @@
             font-size: 12px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            white-space: nowrap;
         }
         .denom-table .denom-label .denom-icon {
-            width: 60px;
-            height: 40px;
+            width: 120px;
+            height: 70px;
             object-fit: contain;
-            border-radius: 6px;
+            border-radius: 9px;
             background: #f1f5f9;
-            padding: 2px;
+            padding: 3px;
             border: 1px solid #e2e8f0;
             flex-shrink: 0;
         }
@@ -1251,7 +1252,7 @@
 <body>
 <div class="app-main">
     <div class="premium-banner">
-        <h1 class="main-title">Aamir Trading</h1>
+        <h1 class="main-title">Noman Power Tools</h1>
         <div class="gold-divider"></div>
         <p class="tagline">
             <span>Quality Products</span>
@@ -1328,7 +1329,6 @@
             <div class="simple-calc-section" id="calculatorSection">
                 <div class="calc-header">
                     <h4>🧮 Calculator & Notes</h4>
-                    <span class="badge">📷 Photo</span>
                 </div>
                 <div class="calc-display" id="calcDisplay">
                     <span class="expr" id="calcExpr"></span>
@@ -1364,18 +1364,6 @@
                 
                 <textarea id="noteText" class="note-textarea" placeholder="Write note here... (e.g., 10 × 140 = 1400)"></textarea>
                 
-                <!-- ===== PHOTO UPLOAD WITH NAME ===== -->
-                <div class="note-image-upload">
-                    <div class="upload-row">
-                        <label>📷 <input type="file" id="noteImageFile" accept="image/*"> Add Photo</label>
-                        <input type="text" id="photoNameInput" class="photo-name-input" placeholder="Photo name...">
-                    </div>
-                    <div class="note-image-preview-wrap" id="imagePreviewWrap">
-                        <div class="note-image-preview-placeholder" id="noteImagePreviewPlaceholder">🖼️</div>
-                        <span class="note-image-name-display" id="photoNameDisplay">No photo selected</span>
-                        <button class="note-image-remove" id="removePhotoBtn" style="display:none;">✕</button>
-                    </div>
-                </div>
                 
                 <div class="note-actions">
                     <button class="btn-save-note" id="saveNoteBtn">💾 Save Note</button>
@@ -1566,54 +1554,6 @@
     let pendingUnlockResolve = null;
     let fingerprintCredentialId = localStorage.getItem("aamir_fingerprint_id");
     let fingerprintEnabled = fingerprintCredentialId !== null;
-
-    // ===== PHOTO WITH NAME =====
-    let noteImageData = null;
-    let photoName = '';
-
-    const noteImageInput = document.getElementById('noteImageFile');
-    const photoNameInput = document.getElementById('photoNameInput');
-    const photoNameDisplay = document.getElementById('photoNameDisplay');
-    const imagePreviewWrap = document.getElementById('imagePreviewWrap');
-    const previewPlaceholder = document.getElementById('noteImagePreviewPlaceholder');
-    const removePhotoBtn = document.getElementById('removePhotoBtn');
-
-    noteImageInput.addEventListener('change', function(e) {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-                noteImageData = ev.target.result;
-                previewPlaceholder.innerHTML = `<img src="${noteImageData}" class="note-image-preview">`;
-                // Auto-set photo name from file name
-                if (!photoNameInput.value.trim()) {
-                    photoNameInput.value = file.name.replace(/\.[^/.]+$/, '');
-                }
-                photoName = photoNameInput.value.trim() || file.name.replace(/\.[^/.]+$/, '');
-                photoNameDisplay.textContent = photoName || '📷 ' + file.name;
-                removePhotoBtn.style.display = 'inline';
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    photoNameInput.addEventListener('input', function() {
-        photoName = this.value.trim();
-        if (noteImageData) {
-            photoNameDisplay.textContent = photoName || 'No name';
-        }
-    });
-
-    removePhotoBtn.addEventListener('click', function() {
-        noteImageData = null;
-        photoName = '';
-        photoNameInput.value = '';
-        previewPlaceholder.innerHTML = '🖼️';
-        previewPlaceholder.className = 'note-image-preview-placeholder';
-        photoNameDisplay.textContent = 'No photo selected';
-        removePhotoBtn.style.display = 'none';
-        noteImageInput.value = '';
-    });
 
     // ===== RECYCLE BIN =====
     let recycleBin = JSON.parse(localStorage.getItem("aamir_recycle_bin") || "[]");
@@ -1912,7 +1852,7 @@
     function renderSavedNotes() {
         const container = document.getElementById("savedNotesContainer");
         if (savedNotes.length === 0) {
-            container.innerHTML = '<div style="color:#94a3b8; font-size:16px; text-align:center; padding:25px;">📝 No saved notes / कोई नोट नहीं</div>';
+            container.innerHTML = '';
             return;
         }
         container.innerHTML = savedNotes.map((note, index) => {
@@ -1959,11 +1899,11 @@
         if (!text) { showToast("Write something first! / कुछ लिखें!"); return; }
         const now = new Date();
         const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-        const noteObj = { 
-            text: text, 
+        const noteObj = {
+            text: text,
             time: timeStr,
-            image: noteImageData || null,
-            photoName: photoName || null
+            image: null,
+            photoName: null
         };
         savedNotes.unshift(noteObj);
         localStorage.setItem("aamir_notes", JSON.stringify(savedNotes));
@@ -1973,29 +1913,13 @@
         calcExpression = '';
         calcResult = "0";
         updateCalcDisplay("", "0");
-        noteImageData = null;
-        photoName = '';
-        photoNameInput.value = '';
-        previewPlaceholder.innerHTML = '🖼️';
-        previewPlaceholder.className = 'note-image-preview-placeholder';
-        photoNameDisplay.textContent = 'No photo selected';
-        removePhotoBtn.style.display = 'none';
-        noteImageInput.value = '';
     });
-    
+
     document.getElementById("clearNoteBtn").addEventListener('click', () => {
         noteText.value = '';
         calcExpression = '';
         calcResult = "0";
         updateCalcDisplay("", "0");
-        noteImageData = null;
-        photoName = '';
-        photoNameInput.value = '';
-        previewPlaceholder.innerHTML = '🖼️';
-        previewPlaceholder.className = 'note-image-preview-placeholder';
-        photoNameDisplay.textContent = 'No photo selected';
-        removePhotoBtn.style.display = 'none';
-        noteImageInput.value = '';
         showToast("Cleared / साफ कर दिया");
     });
     
@@ -2005,6 +1929,7 @@
     // ===== CASH DENOMINATION =====
     // ============================================================
     
+    // ===== DENOMINATION PICTURES =====
     const noteImages = {
         2000: 'https://cdn.phototourl.com/free/2026-07-16-f46ca8b3-e694-48e1-8375-b2377a30bfc8.jpg',
         500: 'https://iili.io/CjHzkSj.jpg',
@@ -2019,16 +1944,16 @@
     };
 
     const denominations = [
-        { value: 2000, label: '₹2000 Note', icon: noteImages[2000] || '🏦' },
-        { value: 500, label: '₹500 Note', icon: noteImages[500] || '🏦' },
-        { value: 200, label: '₹200 Note', icon: noteImages[200] || '🏦' },
-        { value: 100, label: '₹100 Note', icon: noteImages[100] || '🏦' },
-        { value: 50, label: '₹50 Note', icon: noteImages[50] || '🏦' },
-        { value: 20, label: '₹20 Note', icon: noteImages[20] || '🏦' },
-        { value: 10, label: '₹10 Coin', icon: noteImages[10] || '🪙' },
-        { value: 5, label: '₹5 Coin', icon: noteImages[5] || '🪙' },
-        { value: 2, label: '₹2 Coin', icon: noteImages[2] || '🪙' },
-        { value: 1, label: '₹1 Coin', icon: noteImages[1] || '🪙' }
+        { value: 2000, label: '₹2000 Note', icon: noteImages[2000] },
+        { value: 500, label: '₹500 Note', icon: noteImages[500] },
+        { value: 200, label: '₹200 Note', icon: noteImages[200] },
+        { value: 100, label: '₹100 Note', icon: noteImages[100] },
+        { value: 50, label: '₹50 Note', icon: noteImages[50] },
+        { value: 20, label: '₹20 Note', icon: noteImages[20] },
+        { value: 10, label: '₹10 Coin', icon: noteImages[10] },
+        { value: 5, label: '₹5 Coin', icon: noteImages[5] },
+        { value: 2, label: '₹2 Coin', icon: noteImages[2] },
+        { value: 1, label: '₹1 Coin', icon: noteImages[1] }
     ];
 
     let denomCounts = {};
@@ -2051,7 +1976,7 @@
             const tr = document.createElement('tr');
             const isUrl = d.icon && d.icon.startsWith('http');
             const iconHtml = isUrl 
-                ? `<img src="${d.icon}" class="denom-icon" alt="${d.label}" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML+='<span class=\\'denom-emoji\\'>💰</span>'">`
+                ? `<img src="${d.icon}" class="denom-icon" alt="${d.label}" loading="lazy" onerror="this.style.display='none';this.parentElement.insertAdjacentHTML('afterbegin','<span class="denom-emoji">💰</span>')">`
                 : `<span class="denom-emoji">${d.icon || '💰'}</span>`;
             tr.innerHTML = `
                 <td class="denom-label">${iconHtml} ${d.label}</td>
@@ -2528,7 +2453,7 @@
             window.crypto.getRandomValues(challenge);
             const credential = await navigator.credentials.create({
                 publicKey: {
-                    challenge, rp: { name: "Aamir Trading", id: location.hostname },
+                    challenge, rp: { name: "Noman Power Tools", id: location.hostname },
                     user: { id: new Uint8Array(16), name: "aamir_user", displayName: "Aamir User" },
                     pubKeyCredParams: [{ type: "public-key", alg: -7 }],
                     authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" },
