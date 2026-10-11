@@ -2363,7 +2363,7 @@
     };
     document.getElementById("prodImageFile").onchange = e => { let f = e.target.files[0]; if(f){ let reader = new FileReader(); reader.onload = ev => document.getElementById("imgPreviewContainer").innerHTML = `<img src="${ev.target.result}" class="image-preview-sm">`; reader.readAsDataURL(f); } };
     let selectedIcon = "📦";
-    const emojiList = ["📦","🛒","📱","👕","📚","🍕","💻","⚡"];
+    const emojiList = ["🛠️","🔧","🔩","⚙️","🔨","🧰","⚡","🪜","🪓","⛏️","🗜️","🔌","🧲","🏗️"];
     function buildIconGrid(){ let g=document.getElementById("iconGrid"); g.innerHTML=""; emojiList.forEach(icon=>{ let d=document.createElement("div"); d.className="icon-option"; if(icon===selectedIcon) d.classList.add("selected"); d.textContent=icon; d.addEventListener("click",()=>{ document.querySelectorAll("#iconGrid .icon-option").forEach(o=>o.classList.remove("selected")); d.classList.add("selected"); selectedIcon=icon; }); g.appendChild(d); }); }
     window.openAddCategoryModal = () => { document.getElementById("newCategoryName").value=""; selectedIcon="📦"; buildIconGrid(); document.getElementById("categoryModal").style.display="flex"; };
     window.closeCategoryModal = () => document.getElementById("categoryModal").style.display="none";
