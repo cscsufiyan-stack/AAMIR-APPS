@@ -3,13 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#ffbf00">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="manifest" href="./manifest.json">
-    <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
-    <link rel="apple-touch-icon" href="./icon-192.png">
     <title>Noman Power Tools - Premium Inventory</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -56,31 +49,6 @@
             gap: 6px;
         }
         .gold-dot { color: #dfad47; }
-        .install-app-btn {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            margin-top: 10px;
-            padding: 8px 18px;
-            border: 1px solid rgba(255,255,255,.75);
-            border-radius: 30px;
-            color: #111827;
-            background: linear-gradient(135deg, #fff3a6, #ffbf00);
-            font-size: 13px;
-            font-weight: 800;
-            box-shadow: 0 4px 12px rgba(0,0,0,.18);
-            cursor: pointer;
-        }
-        .install-app-btn:active { transform: scale(.97); }
-        .install-app-hint {
-            display: none;
-            margin: 8px auto 0;
-            max-width: 300px;
-            font-size: 11px;
-            line-height: 1.4;
-            color: #fff;
-        }
         .curve-wrapper {
             position: absolute;
             bottom: -2px;
@@ -1293,8 +1261,6 @@
             <span class="gold-dot">•</span>
             <span>Since 2024</span>
         </p>
-        <button type="button" id="installAppBtn" class="install-app-btn">⬇️ Install App</button>
-        <div id="installAppHint" class="install-app-hint">Install option नहीं दिख रहा? Chrome के ⋮ मेनू में “Install app” या “Add to Home screen” चुनें।</div>
         <div class="curve-wrapper">
             <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
                 <path d="M0,30 Q720,115 1440,30 L1440,120 L0,120 Z" class="curve-white-stroke"></path>
@@ -2406,15 +2372,21 @@
     
     // ===== SET TPIN - STYLISH =====
     document.getElementById("setTpinBtn").onclick = async () => {
-        const result = await showTpinModal();
-        if (result.action === 'disable') {
-            localStorage.removeItem("aamir_tpin");
-            userTpin = null;
-            showToast('🔓 TPIN disabled');
-        } else if (result.action === 'set') {
-            localStorage.setItem("aamir_tpin", result.value);
-            userTpin = result.value;
-            showToast('✅ TPIN set successfully!');
+        try {
+            const result = await showTpinModal();
+            if (!result || result.action === 'cancel') return;
+            if (result.action === 'disable') {
+                localStorage.removeItem("aamir_tpin");
+                userTpin = null;
+                showToast('🔓 TPIN removed');
+            } else if (result.action === 'set') {
+                localStorage.setItem("aamir_tpin", result.value);
+                userTpin = result.value;
+                showToast('✅ TPIN set successfully!');
+            }
+        } catch (err) {
+            console.error("Set TPIN error:", err);
+            showToast("TPIN error: " + (err.message || "Please try again"));
         }
     };
     
@@ -2481,78 +2453,89 @@
     });
 
     async function registerFingerprint() {
-        if (!window.PublicKeyCredential) { showToast("Fingerprint not supported"); return false; }
+        if (!window.isSecureContext || !window.PublicKeyCredential || !navigator.credentials) {
+            showToast("Fingerprint needs HTTPS and a supported browser");
+            return false;
+        }
         try {
-            const challenge = new Uint8Array(32);
-            window.crypto.getRandomValues(challenge);
-            const credential = await navigator.credentials.create({
-                publicKey: {
-                    challenge, rp: { name: "Noman Power Tools", id: location.hostname },
-                    user: { id: new Uint8Array(16), name: "aamir_user", displayName: "Aamir User" },
-                    pubKeyCredParams: [{ type: "public-key", alg: -7 }],
-                    authenticatorSelection: { authenticatorAttachment: "platform", userVerification: "required" },
-                    timeout: 60000
-                }
-            });
+            if (fingerprintCredentialId) {
+                const replace = confirm("Fingerprint is already enabled. Register it again?");
+                if (!replace) return false;
+            }
+
+            const challenge = crypto.getRandomValues(new Uint8Array(32));
+            const userId = crypto.getRandomValues(new Uint8Array(16));
+            const publicKey = {
+                challenge: challenge,
+                rp: { name: "NOMAN APPS" },
+                user: {
+                    id: userId,
+                    name: "noman-app-user",
+                    displayName: "NOMAN APPS User"
+                },
+                pubKeyCredParams: [
+                    { type: "public-key", alg: -7 },
+                    { type: "public-key", alg: -257 }
+                ],
+                authenticatorSelection: {
+                    authenticatorAttachment: "platform",
+                    userVerification: "required",
+                    residentKey: "preferred"
+                },
+                timeout: 60000,
+                attestation: "none"
+            };
+
+            const credential = await navigator.credentials.create({ publicKey });
+            if (!credential) {
+                showToast("Fingerprint registration cancelled");
+                return false;
+            }
+
             const credId = btoa(String.fromCharCode(...new Uint8Array(credential.rawId)));
             localStorage.setItem("aamir_fingerprint_id", credId);
             fingerprintCredentialId = credId;
             fingerprintEnabled = true;
-            showToast("✅ Fingerprint registered!");
+            showToast("✅ Fingerprint / device lock enabled!");
             return true;
-        } catch (err) { showToast("Registration failed: " + err.message); return false; }
+        } catch (err) {
+            console.error("Fingerprint registration error:", err);
+            const message = err.name === "NotAllowedError"
+                ? "Cancelled or screen lock/biometric not available"
+                : (err.message || "Registration failed");
+            showToast("Fingerprint: " + message);
+            return false;
+        }
     }
+
     async function authenticateWithFingerprint() {
-        if (!fingerprintCredentialId) return false;
+        if (!window.isSecureContext || !window.PublicKeyCredential || !navigator.credentials || !fingerprintCredentialId) {
+            showToast("Enable fingerprint again in this browser");
+            return false;
+        }
         try {
-            const challenge = new Uint8Array(32);
-            window.crypto.getRandomValues(challenge);
-            const allowedCredential = { id: Uint8Array.from(atob(fingerprintCredentialId), c=>c.charCodeAt(0)), type: "public-key" };
-            const assertion = await navigator.credentials.get({ publicKey: { challenge, allowCredentials: [allowedCredential], userVerification: "required", timeout: 60000 } });
+            const challenge = crypto.getRandomValues(new Uint8Array(32));
+            const rawId = Uint8Array.from(atob(fingerprintCredentialId), c => c.charCodeAt(0));
+            const assertion = await navigator.credentials.get({
+                publicKey: {
+                    challenge: challenge,
+                    allowCredentials: [{ id: rawId, type: "public-key" }],
+                    userVerification: "required",
+                    timeout: 60000
+                }
+            });
             return !!assertion;
-        } catch (err) { return false; }
+        } catch (err) {
+            console.error("Fingerprint authentication error:", err);
+            showToast(err.name === "NotAllowedError"
+                ? "Authentication cancelled or timed out"
+                : "Fingerprint error: " + (err.message || "Try TPIN"));
+            return false;
+        }
     }
 
     startFirestoreListener();
     showUnlockIfNeeded().then(() => switchScreen('home'));
-
-    // ===== PWA INSTALL BUTTON =====
-    let deferredInstallPrompt = null;
-    const installAppBtn = document.getElementById('installAppBtn');
-    const installAppHint = document.getElementById('installAppHint');
-    const isRunningStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    if (isRunningStandalone) {
-        installAppBtn.style.display = 'none';
-    } else {
-        installAppBtn.style.display = 'inline-flex';
-        installAppHint.style.display = 'block';
-    }
-    window.addEventListener('beforeinstallprompt', (event) => {
-        event.preventDefault();
-        deferredInstallPrompt = event;
-        installAppBtn.style.display = 'inline-flex';
-        installAppHint.style.display = 'none';
-    });
-    installAppBtn.addEventListener('click', async () => {
-        if (deferredInstallPrompt) {
-            deferredInstallPrompt.prompt();
-            await deferredInstallPrompt.userChoice;
-            deferredInstallPrompt = null;
-            installAppBtn.style.display = 'none';
-            return;
-        }
-        installAppHint.style.display = installAppHint.style.display === 'block' ? 'none' : 'block';
-    });
-    window.addEventListener('appinstalled', () => {
-        installAppBtn.style.display = 'none';
-        installAppHint.style.display = 'none';
-        deferredInstallPrompt = null;
-    });
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js').catch(err => console.error('Service worker registration failed:', err));
-        });
-    }
 </script>
 </body>
 </html>
