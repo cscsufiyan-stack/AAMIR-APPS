@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#ffbf00">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+    <link rel="apple-touch-icon" href="./icon-192.png">
     <title>Noman Power Tools - Premium Inventory</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -49,6 +56,31 @@
             gap: 6px;
         }
         .gold-dot { color: #dfad47; }
+        .install-app-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            margin-top: 10px;
+            padding: 8px 18px;
+            border: 1px solid rgba(255,255,255,.75);
+            border-radius: 30px;
+            color: #111827;
+            background: linear-gradient(135deg, #fff3a6, #ffbf00);
+            font-size: 13px;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(0,0,0,.18);
+            cursor: pointer;
+        }
+        .install-app-btn:active { transform: scale(.97); }
+        .install-app-hint {
+            display: none;
+            margin: 8px auto 0;
+            max-width: 300px;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #fff;
+        }
         .curve-wrapper {
             position: absolute;
             bottom: -2px;
@@ -1261,6 +1293,8 @@
             <span class="gold-dot">•</span>
             <span>Since 2024</span>
         </p>
+        <button type="button" id="installAppBtn" class="install-app-btn">⬇️ Install App</button>
+        <div id="installAppHint" class="install-app-hint">Install option नहीं दिख रहा? Chrome के ⋮ मेनू में “Install app” या “Add to Home screen” चुनें।</div>
         <div class="curve-wrapper">
             <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
                 <path d="M0,30 Q720,115 1440,30 L1440,120 L0,120 Z" class="curve-white-stroke"></path>
@@ -2481,6 +2515,44 @@
 
     startFirestoreListener();
     showUnlockIfNeeded().then(() => switchScreen('home'));
+
+    // ===== PWA INSTALL BUTTON =====
+    let deferredInstallPrompt = null;
+    const installAppBtn = document.getElementById('installAppBtn');
+    const installAppHint = document.getElementById('installAppHint');
+    const isRunningStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (isRunningStandalone) {
+        installAppBtn.style.display = 'none';
+    } else {
+        installAppBtn.style.display = 'inline-flex';
+        installAppHint.style.display = 'block';
+    }
+    window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        installAppBtn.style.display = 'inline-flex';
+        installAppHint.style.display = 'none';
+    });
+    installAppBtn.addEventListener('click', async () => {
+        if (deferredInstallPrompt) {
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice;
+            deferredInstallPrompt = null;
+            installAppBtn.style.display = 'none';
+            return;
+        }
+        installAppHint.style.display = installAppHint.style.display === 'block' ? 'none' : 'block';
+    });
+    window.addEventListener('appinstalled', () => {
+        installAppBtn.style.display = 'none';
+        installAppHint.style.display = 'none';
+        deferredInstallPrompt = null;
+    });
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js').catch(err => console.error('Service worker registration failed:', err));
+        });
+    }
 </script>
 </body>
 </html>
